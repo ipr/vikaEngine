@@ -32,7 +32,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     instInfo.enabledLayerCount = 0;
     instInfo.ppEnabledLayerNames = NULL;
 
+    VkInstance inst;
+    VkResult res = vkCreateInstance(&instInfo, NULL, &inst);
+    if (res == VK_ERROR_INCOMPATIBLE_DRIVER) 
+	{}
 
-	return 0;
+    vkDestroyInstance(inst, NULL);
+
+	return (int)res;
 }
 
