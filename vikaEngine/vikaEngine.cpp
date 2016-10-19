@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
-#include <vulkan/vulkan.h>
-#include "vikaApp.h"
+#include "vikaCode/vikaApp.h"
 
 HINSTANCE g_hInst;                                // current instance
 

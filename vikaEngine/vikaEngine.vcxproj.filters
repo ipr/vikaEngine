@@ -16,6 +16,9 @@
     <Filter Include="vikaCode">
       <UniqueIdentifier>{0e0e0dd8-2dbe-48f2-a315-4a68f0dc2de9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dependencies">
+      <UniqueIdentifier>{be7c894d-c672-4c46-a837-0ebef5d4fa2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,8 +30,11 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vikaApp.h">
+    <ClInclude Include="vikaCode\vikaApp.h">
       <Filter>vikaCode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\VulkanSDK\1.0.30.0\Include\vulkan\vulkan.h">
+      <Filter>dependencies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,7 +44,7 @@
     <ClCompile Include="vikaEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vikaApp.cpp">
+    <ClCompile Include="vikaCode\vikaApp.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
