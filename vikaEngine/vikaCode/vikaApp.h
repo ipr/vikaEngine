@@ -18,6 +18,9 @@ public:
 	vikaApp(const char *appName);
 	~vikaApp();
 
+	bool create();
+	void destroy();
+
 	VkResult getResult() const { return m_res; };
 };
 

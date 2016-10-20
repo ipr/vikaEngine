@@ -2,7 +2,9 @@
 #include "vikaApp.h"
 #include <vulkan/vulkan.h>
 
-vikaApp::vikaApp(const char *appName)
+vikaApp::vikaApp(const char *appName) :
+	m_instance(VK_NULL_HANDLE),
+	m_res(VK_SUCCESS)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -20,14 +22,32 @@ vikaApp::vikaApp(const char *appName)
     m_instInfo.ppEnabledExtensionNames = NULL;
     m_instInfo.enabledLayerCount = 0;
     m_instInfo.ppEnabledLayerNames = NULL;
-
-    m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
-    if (m_res == VK_ERROR_INCOMPATIBLE_DRIVER) 
-	{}
 }
 
 
 vikaApp::~vikaApp()
 {
-    vkDestroyInstance(m_instance, NULL);
+	destroy();
+}
+
+bool vikaApp::create()
+{
+    m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
+    if (m_res == VK_ERROR_INCOMPATIBLE_DRIVER) 
+	{}
+
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+
+void vikaApp::destroy()
+{
+	if (m_instance != VK_NULL_HANDLE)
+	{
+	    vkDestroyInstance(m_instance, NULL);
+		m_instance = VK_NULL_HANDLE;
+	}
 }

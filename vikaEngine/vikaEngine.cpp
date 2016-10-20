@@ -14,8 +14,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	g_hInst = hInstance;
 
 	vikaApp app(pShortName);
-	//if (app.getResult() ...
-
+	if (app.create() == true)
+	{
+		// do stuff
+	}
+	app.destroy();
 	return app.getResult();
 }
 
