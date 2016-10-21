@@ -17,6 +17,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	if (app.create() == true)
 	{
 		// do stuff
+		app.enumerateDevices();
 	}
 	app.destroy();
 	return app.getResult();
