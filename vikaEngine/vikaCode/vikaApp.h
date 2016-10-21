@@ -19,17 +19,21 @@ protected:
     VkInstance m_instance;
 	VkResult m_res;
 
+	size_t m_deviceIndex;
+
 	std::string m_appName;
 	std::vector<VkPhysicalDevice> m_devices;
+	std::vector<VkQueueFamilyProperties> m_properties;
 
 public:
-	vikaApp(const char *appName);
+	vikaApp(const char *appName, uint32_t appVersion = 1);
 	~vikaApp();
 
 	bool create();
 	void destroy();
 
 	bool enumerateDevices();
+	bool getDeviceProperties();
 
 	VkResult getResult() const { return m_res; };
 };

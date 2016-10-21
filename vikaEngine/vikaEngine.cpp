@@ -20,6 +20,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	{
 		// do stuff
 		app.enumerateDevices();
+		app.getDeviceProperties();
 	}
 	app.destroy();
 	return app.getResult();

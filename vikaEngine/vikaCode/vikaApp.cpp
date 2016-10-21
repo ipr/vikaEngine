@@ -4,17 +4,18 @@
 #include "vikaApp.h"
 #include <vulkan/vulkan.h>
 
-vikaApp::vikaApp(const char *appName) :
+vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_instance(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
-	m_appName(appName)
+	m_appName(appName),
+	m_deviceIndex(0)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
     m_appInfo.pApplicationName = m_appName.c_str(); // freeform
-    m_appInfo.applicationVersion = 1;				// freeform
+    m_appInfo.applicationVersion = appVersion;		// freeform
     m_appInfo.pEngineName = m_appName.c_str();		// freeform
-    m_appInfo.engineVersion = 1;					// freeform
+    m_appInfo.engineVersion = appVersion;			// freeform
     m_appInfo.apiVersion = VK_API_VERSION_1_0;
 
     m_instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -75,5 +76,36 @@ bool vikaApp::enumerateDevices()
 	{
 		return false;
 	}
+
+	// this could select some other device if multiple/necessary..
+	m_deviceIndex = 0;
+	return true;
+}
+
+// again, pretty obvious: locate properties of devices
+bool vikaApp::getDeviceProperties()
+{
+	uint32_t propCount = 1;
+
+	// first call: retrieve count
+    vkGetPhysicalDeviceQueueFamilyProperties(m_devices[m_deviceIndex], // assume this is fine
+											&propCount, 
+											NULL);
+	if (propCount < 1)
+	{
+		return false;
+	}
+
+	m_properties.reserve(propCount);
+
+	// second call: retrieve data
+    vkGetPhysicalDeviceQueueFamilyProperties(m_devices[m_deviceIndex], // assume this is fine
+											&propCount, 
+											m_properties.data());
+	if (propCount < 1)
+	{
+		return false;
+	}
+
 	return true;
 }
