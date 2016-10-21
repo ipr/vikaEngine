@@ -39,6 +39,9 @@
     <ClInclude Include="vikaCode\vikaDevice.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="vikaCode\vikaSurface.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -51,6 +54,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaDevice.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="vikaCode\vikaSurface.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>

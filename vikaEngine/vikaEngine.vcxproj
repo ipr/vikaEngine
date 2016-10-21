@@ -153,6 +153,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="vikaCode\vikaApp.h" />
     <ClInclude Include="vikaCode\vikaDevice.h" />
+    <ClInclude Include="vikaCode\vikaSurface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -163,6 +164,7 @@
     </ClCompile>
     <ClCompile Include="vikaCode\vikaApp.cpp" />
     <ClCompile Include="vikaCode\vikaDevice.cpp" />
+    <ClCompile Include="vikaCode\vikaSurface.cpp" />
     <ClCompile Include="vikaEngine.cpp" />
   </ItemGroup>
   <ItemGroup>

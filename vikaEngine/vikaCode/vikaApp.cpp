@@ -160,10 +160,12 @@ bool vikaApp::prepareLogicalDevice()
 	{
 		return false;
 	}
+	/*
 	if (m_logicalDevice->createCommandBuffer() == false)
 	{
 		return false;
 	}
+	*/
 	return true;
 }
 

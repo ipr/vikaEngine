@@ -11,9 +11,7 @@
 vikaDevice::vikaDevice(const uint32_t queueIndex) :
 	m_device(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
-	m_queueIndex(queueIndex),
-	m_cmdPool(VK_NULL_HANDLE),
-	m_cmdBuffer(VK_NULL_HANDLE)
+	m_surface(queueIndex)
 {
 	m_queuePriorities.push_back(0.0);
 
@@ -40,8 +38,14 @@ vikaDevice::~vikaDevice()
 
 bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 {
+	// create logical device from the physical device
     m_res = vkCreateDevice(physicalDevice, &m_deviceInfo, NULL, &m_device);
 	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	if (m_surface.createCommandBuffer(m_device) == false)
 	{
 		return false;
 	}
@@ -50,53 +54,11 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 
 void vikaDevice::destroy()
 {
-	destroyCommandBuffer();
-
 	if (m_device != VK_NULL_HANDLE)
 	{
+		m_surface.destroyCommandBuffer(m_device);
+
 	    vkDestroyDevice(m_device, NULL);
 		m_device = VK_NULL_HANDLE;
-	}
-}
-
-bool vikaDevice::createCommandBuffer()
-{
-	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	m_cmdPoolInfo.pNext = NULL;
-	m_cmdPoolInfo.queueFamilyIndex = m_queueIndex;
-	m_cmdPoolInfo.flags = 0;
-
-	m_res = vkCreateCommandPool(m_device, &m_cmdPoolInfo, NULL, &m_cmdPool);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	m_cmdBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	m_cmdBufferInfo.pNext = NULL;
-	m_cmdBufferInfo.commandPool = m_cmdPool;
-	m_cmdBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	m_cmdBufferInfo.commandBufferCount = 1;
-
-	m_res = vkAllocateCommandBuffers(m_device, &m_cmdBufferInfo, &m_cmdBuffer);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-void vikaDevice::destroyCommandBuffer()
-{
-	if (m_cmdBuffer != VK_NULL_HANDLE)
-	{
-		vkFreeCommandBuffers(m_device, m_cmdPool, m_cmdBufferInfo.commandBufferCount, &m_cmdBuffer);
-		m_cmdBuffer = VK_NULL_HANDLE;
-	}
-	if (m_cmdPool != VK_NULL_HANDLE)
-	{
-		vkDestroyCommandPool(m_device, m_cmdPool, NULL);
-		m_cmdPool = VK_NULL_HANDLE;
 	}
 }
