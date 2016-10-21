@@ -156,6 +156,14 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 bool vikaApp::prepareLogicalDevice()
 {
 	m_logicalDevice = new vikaDevice(m_queueIndex);
-	return m_logicalDevice->create(m_devices[m_deviceIndex]);
+	if (m_logicalDevice->create(m_devices[m_deviceIndex]) == false)
+	{
+		return false;
+	}
+	if (m_logicalDevice->createCommandBuffer() == false)
+	{
+		return false;
+	}
+	return true;
 }
 
