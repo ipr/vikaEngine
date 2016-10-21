@@ -55,6 +55,7 @@ void vikaApp::destroy()
 {
 	if (m_logicalDevice != nullptr)
 	{
+		m_logicalDevice->destroy();
 		delete m_logicalDevice;
 		m_logicalDevice = nullptr;
 	}
@@ -111,18 +112,14 @@ bool vikaApp::getDeviceQueueProperties()
 	// locate command queue "family" suitable for graphics
 	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
 	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
-	auto it = m_queueProperties.begin();
-	auto itEnd = m_queueProperties.end();
-	while (it != itEnd)
+	for (uint32_t i = 0; i < m_queueProperties.size(); i++)
 	{
-		VkQueueFamilyProperties &prop = (*it);
+		VkQueueFamilyProperties &prop = m_queueProperties[i];
 		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
-			//m_queueIndex = i;
+			m_queueIndex = i;
 			return true;
 		}
-
-		++it;
 	}
 	return false;
 }
@@ -158,7 +155,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 // TODO: multi-gpu support?
 bool vikaApp::prepareLogicalDevice()
 {
-	m_logicalDevice = new vikaDevice();
+	m_logicalDevice = new vikaDevice(m_queueIndex);
 	return m_logicalDevice->create(m_devices[m_deviceIndex]);
 }
 

@@ -25,7 +25,7 @@ protected:
 
 	// TODO: multi-gpu support?
 	size_t m_deviceIndex;
-	size_t m_queueIndex;
+	uint32_t m_queueIndex;
 
 	std::string m_appName;
 	std::vector<VkPhysicalDevice> m_devices;

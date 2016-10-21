@@ -21,14 +21,23 @@ protected:
     VkDevice m_device;
 	VkResult m_res;
 
+	uint32_t m_queueIndex;
 	std::vector<float> m_queuePriorities;
 
+    VkCommandPoolCreateInfo m_cmdPoolInfo = {};
+	VkCommandPool m_cmdPool;
+    VkCommandBufferAllocateInfo m_cmdBufferInfo = {};
+	VkCommandBuffer m_cmdBuffer;
+
 public:
-	vikaDevice();
+	vikaDevice(const uint32_t queueIndex);
 	~vikaDevice();
 
 	bool create(VkPhysicalDevice &physicalDevice);
 	void destroy();
+
+	bool createCommandBuffer();
+	void destroyCommandBuffer();
 
 	VkResult getResult() const { return m_res; };
 };

@@ -21,6 +21,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		// do stuff
 		app.enumeratePhysicalDevices();
 		app.getDeviceQueueProperties();
+		app.prepareLogicalDevice();
+		app.getLogicalDevice()->createCommandBuffer();
 	}
 	app.destroy();
 	return app.getResult();
