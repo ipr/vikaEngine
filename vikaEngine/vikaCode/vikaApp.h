@@ -19,6 +19,7 @@ protected:
     VkInstance m_instance;
 	VkResult m_res;
 
+	// TODO: multi-gpu support?
 	size_t m_deviceIndex;
 
 	std::string m_appName;
@@ -34,6 +35,7 @@ public:
 
 	bool enumerateDevices();
 	bool getDeviceProperties();
+	bool getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
 };

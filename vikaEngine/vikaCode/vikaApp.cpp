@@ -78,6 +78,7 @@ bool vikaApp::enumerateDevices()
 	}
 
 	// this could select some other device if multiple/necessary..
+	// assume first is fine for now
 	m_deviceIndex = 0;
 	return true;
 }
@@ -85,10 +86,16 @@ bool vikaApp::enumerateDevices()
 // again, pretty obvious: locate properties of devices
 bool vikaApp::getDeviceProperties()
 {
+	// assume the device is fine
+	return getDeviceProperties(m_devices[m_deviceIndex], m_properties);
+}
+
+bool vikaApp::getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
+{
 	uint32_t propCount = 1;
 
 	// first call: retrieve count
-    vkGetPhysicalDeviceQueueFamilyProperties(m_devices[m_deviceIndex], // assume this is fine
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, 
 											&propCount, 
 											NULL);
 	if (propCount < 1)
@@ -96,16 +103,15 @@ bool vikaApp::getDeviceProperties()
 		return false;
 	}
 
-	m_properties.reserve(propCount);
+	props.reserve(propCount);
 
 	// second call: retrieve data
-    vkGetPhysicalDeviceQueueFamilyProperties(m_devices[m_deviceIndex], // assume this is fine
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, 
 											&propCount, 
-											m_properties.data());
+											props.data());
 	if (propCount < 1)
 	{
 		return false;
 	}
-
 	return true;
 }
