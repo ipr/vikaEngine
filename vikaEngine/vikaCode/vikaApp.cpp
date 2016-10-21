@@ -8,7 +8,8 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_instance(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
 	m_appName(appName),
-	m_deviceIndex(0)
+	m_deviceIndex(0),
+	m_queueIndex(0)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -87,9 +88,27 @@ bool vikaApp::enumerateDevices()
 bool vikaApp::getDeviceProperties()
 {
 	// assume the device is fine
-	return getDeviceProperties(m_devices[m_deviceIndex], m_properties);
+	if (getDeviceProperties(m_devices[m_deviceIndex], m_properties) == false)
+	{
+		return false;
+	}
+
+	auto it = m_properties.begin();
+	auto itEnd = m_properties.end();
+	while (it != itEnd)
+	{
+		if ((*it).queueFlags & VK_QUEUE_GRAPHICS_BIT)
+		{
+			//m_queueIndex = i;
+			return true;
+		}
+
+		++it;
+	}
+	return false;
 }
 
+// again, pretty obvious: locate properties of devices
 bool vikaApp::getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
 {
 	uint32_t propCount = 1;
