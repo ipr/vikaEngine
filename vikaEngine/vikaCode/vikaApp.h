@@ -32,6 +32,8 @@ protected:
 	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
+	vikaDevice *m_logicalDevice;
+
 public:
 	vikaApp(const char *appName, uint32_t appVersion = 1);
 	~vikaApp();
@@ -45,7 +47,8 @@ public:
 
 	VkResult getResult() const { return m_res; };
 
-	//vikaDevice* prepareDevice();
+	bool prepareLogicalDevice();
+	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 };
 
 #endif // _VIKAAPP_H_

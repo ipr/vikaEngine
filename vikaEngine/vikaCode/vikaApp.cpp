@@ -11,7 +11,8 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_res(VK_SUCCESS),
 	m_appName(appName),
 	m_deviceIndex(0),
-	m_queueIndex(0)
+	m_queueIndex(0),
+	m_logicalDevice(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -52,6 +53,12 @@ bool vikaApp::create()
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	if (m_logicalDevice != nullptr)
+	{
+		delete m_logicalDevice;
+		m_logicalDevice = nullptr;
+	}
+
 	if (m_instance != VK_NULL_HANDLE)
 	{
 	    vkDestroyInstance(m_instance, NULL);
@@ -147,3 +154,10 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 	props.resize(propCount);
 	return true;
 }
+
+bool vikaApp::prepareLogicalDevice()
+{
+	m_logicalDevice = new vikaDevice();
+	return m_logicalDevice->create(m_devices[m_deviceIndex]);
+}
+
