@@ -25,7 +25,8 @@ protected:
 
 	std::string m_appName;
 	std::vector<VkPhysicalDevice> m_devices;
-	std::vector<VkQueueFamilyProperties> m_properties;
+	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
+	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 public:
 	vikaApp(const char *appName, uint32_t appVersion = 1);
@@ -34,9 +35,9 @@ public:
 	bool create();
 	void destroy();
 
-	bool enumerateDevices();
-	bool getDeviceProperties();
-	bool getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
+	bool enumeratePhysicalDevices();
+	bool getDeviceQueueProperties();
+	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
 };

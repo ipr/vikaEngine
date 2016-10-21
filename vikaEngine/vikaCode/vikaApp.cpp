@@ -58,7 +58,7 @@ void vikaApp::destroy()
 }
 
 // also pretty obvious: after initializing, locate a suitable gpu
-bool vikaApp::enumerateDevices()
+bool vikaApp::enumeratePhysicalDevices()
 {
     uint32_t devCount = 1; // aka. gpu count
 
@@ -82,20 +82,28 @@ bool vikaApp::enumerateDevices()
 	// this could select some other device if multiple/necessary..
 	// assume first is fine for now
 	m_deviceIndex = 0;
+
+	// get actual properties of the physical device
+	m_deviceProperties.reserve(1);
+	vkGetPhysicalDeviceProperties(m_devices[m_deviceIndex], m_deviceProperties.data());
+	m_deviceProperties.resize(1);
 	return true;
 }
 
 // again, pretty obvious: locate properties of devices
-bool vikaApp::getDeviceProperties()
+bool vikaApp::getDeviceQueueProperties()
 {
 	// assume the device is fine
-	if (getDeviceProperties(m_devices[m_deviceIndex], m_properties) == false)
+	if (getDeviceQueueProperties(m_devices[m_deviceIndex], m_queueProperties) == false)
 	{
 		return false;
 	}
 
-	auto it = m_properties.begin();
-	auto itEnd = m_properties.end();
+	// locate command queue "family" suitable for graphics
+	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
+	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
+	auto it = m_queueProperties.begin();
+	auto itEnd = m_queueProperties.end();
 	while (it != itEnd)
 	{
 		VkQueueFamilyProperties &prop = (*it);
@@ -111,7 +119,7 @@ bool vikaApp::getDeviceProperties()
 }
 
 // again, pretty obvious: locate properties of devices
-bool vikaApp::getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
+bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
 {
 	uint32_t propCount = 1;
 
