@@ -1,3 +1,5 @@
+// vikaApp : main entry point of application
+//
 // Ilkka Prusi 2016 <ilkka.prusi@gmail.com>
 
 #include "stdafx.h"

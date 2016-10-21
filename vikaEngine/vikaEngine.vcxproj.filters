@@ -36,6 +36,9 @@
     <ClInclude Include="..\..\..\VulkanSDK\1.0.30.0\Include\vulkan\vulkan.h">
       <Filter>dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="vikaCode\vikaDevice.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaApp.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="vikaCode\vikaDevice.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>

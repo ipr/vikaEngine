@@ -1,3 +1,5 @@
+// vikaApp : main entry point of application
+//
 // Ilkka Prusi 2016 <ilkka.prusi@gmail.com>
 
 #ifndef _VIKAAPP_H_
@@ -9,6 +11,8 @@
 #include <vector>
 
 #include <vulkan/vulkan.h>
+
+#include "vikaDevice.h"
 
 class vikaApp
 {
@@ -40,6 +44,8 @@ public:
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
+
+	//vikaDevice* prepareDevice();
 };
 
 #endif // _VIKAAPP_H_
