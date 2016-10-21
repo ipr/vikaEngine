@@ -155,6 +155,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 	return true;
 }
 
+// TODO: multi-gpu support?
 bool vikaApp::prepareLogicalDevice()
 {
 	m_logicalDevice = new vikaDevice();

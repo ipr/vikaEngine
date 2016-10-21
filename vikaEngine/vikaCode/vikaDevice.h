@@ -21,9 +21,6 @@ protected:
     VkDevice m_device;
 	VkResult m_res;
 
-	//size_t queuePriorityCount;
-    //float *queuePriorities;[1] = {0.0};
-
 	std::vector<float> m_queuePriorities;
 
 public:
