@@ -24,12 +24,24 @@ protected:
     VkCommandBufferAllocateInfo m_cmdBufferInfo = {};
 	VkCommandBuffer m_cmdBuffer;
 
+// VK_USE_PLATFORM_WIN32_KHR
+	// TODO: add in derived class
+    //VkWin32SurfaceCreateInfoKHR m_createInfo;
+
+	VkSurfaceKHR m_surface;
+
 public:
 	vikaSurface(const uint32_t queueIndex);
 	~vikaSurface();
 
 	bool createCommandBuffer(VkDevice &device);
 	void destroyCommandBuffer(VkDevice &device);
+
+	/*
+	//bool createSurface(VkDevice &device); // TODO: make pure virtual
+	bool createSurface(VkInstance &vkInstance, VkDevice &device, HINSTANCE hInstance, HWND hWnd);
+	void destroySurface(VkDevice &device);
+	*/
 
 	VkResult getResult() const { return m_res; };
 };

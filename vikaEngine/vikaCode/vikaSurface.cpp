@@ -11,7 +11,8 @@
 vikaSurface::vikaSurface(const uint32_t queueIndex) :
 	m_queueIndex(queueIndex),
 	m_cmdPool(VK_NULL_HANDLE),
-	m_cmdBuffer(VK_NULL_HANDLE)
+	m_cmdBuffer(VK_NULL_HANDLE),
+	m_surface(VK_NULL_HANDLE)
 {
 }
 
@@ -61,3 +62,27 @@ void vikaSurface::destroyCommandBuffer(VkDevice &device)
 		m_cmdPool = VK_NULL_HANDLE;
 	}
 }
+
+/*
+// first platform-dependant thing:
+// could make this pure virtual in future
+bool vikaSurface::createSurface(VkInstance &vkInstance, VkDevice &device, HINSTANCE hInstance, HWND hWnd)
+{
+    m_createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    m_createInfo.pNext = NULL;
+    m_createInfo.hinstance = hInstance;
+    m_createInfo.hwnd = hWnd;
+
+    m_res = vkCreateWin32SurfaceKHR(vkInstance, &m_createInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+
+void vikaSurface::destroySurface(VkDevice &device)
+{
+	//vkDestroySwapchainKHR();
+}
+*/
