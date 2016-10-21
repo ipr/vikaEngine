@@ -1,3 +1,5 @@
+// Ilkka Prusi 2016 <ilkka.prusi@gmail.com>
+
 #include "stdafx.h"
 #include "vikaApp.h"
 #include <vulkan/vulkan.h>
@@ -9,10 +11,10 @@ vikaApp::vikaApp(const char *appName) :
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
-    m_appInfo.pApplicationName = m_appName.c_str();
-    m_appInfo.applicationVersion = 1;
-    m_appInfo.pEngineName = m_appName.c_str();
-    m_appInfo.engineVersion = 1;
+    m_appInfo.pApplicationName = m_appName.c_str(); // freeform
+    m_appInfo.applicationVersion = 1;				// freeform
+    m_appInfo.pEngineName = m_appName.c_str();		// freeform
+    m_appInfo.engineVersion = 1;					// freeform
     m_appInfo.apiVersion = VK_API_VERSION_1_0;
 
     m_instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;

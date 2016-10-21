@@ -1,3 +1,5 @@
+// Ilkka Prusi 2016 <ilkka.prusi@gmail.com>
+
 #include "stdafx.h"
 
 #include "vikaCode/vikaApp.h"

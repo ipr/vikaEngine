@@ -1,3 +1,5 @@
+// Ilkka Prusi 2016 <ilkka.prusi@gmail.com>
+
 #ifndef _VIKAAPP_H_
 #define _VIKAAPP_H_
 
