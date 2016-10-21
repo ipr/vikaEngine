@@ -77,6 +77,7 @@ bool vikaApp::enumerateDevices()
 	{
 		return false;
 	}
+	m_devices.resize(devCount);
 
 	// this could select some other device if multiple/necessary..
 	// assume first is fine for now
@@ -97,7 +98,8 @@ bool vikaApp::getDeviceProperties()
 	auto itEnd = m_properties.end();
 	while (it != itEnd)
 	{
-		if ((*it).queueFlags & VK_QUEUE_GRAPHICS_BIT)
+		VkQueueFamilyProperties &prop = (*it);
+		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
 			//m_queueIndex = i;
 			return true;
@@ -132,5 +134,6 @@ bool vikaApp::getDeviceProperties(VkPhysicalDevice &physicalDevice, std::vector<
 	{
 		return false;
 	}
+	props.resize(propCount);
 	return true;
 }
