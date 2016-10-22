@@ -58,7 +58,7 @@ void vikaCommandBuffer::destroy(VkDevice &device)
 	if (m_cmdBuffers.size() > 0)
 	{
 		vkFreeCommandBuffers(device, m_cmdPool, m_cmdBufferInfo.commandBufferCount, m_cmdBuffers.data());
-		m_cmdBuffers.clear();
+		//m_cmdBuffers.clear();
 	}
 	if (m_cmdPool != VK_NULL_HANDLE)
 	{

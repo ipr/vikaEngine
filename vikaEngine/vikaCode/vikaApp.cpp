@@ -10,8 +10,8 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_instance(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
 	m_appName(appName),
-	m_deviceIndex(0),
 	m_queueIndex(0),
+	m_deviceIndex(0),
 	m_logicalDevice(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -94,9 +94,14 @@ bool vikaApp::enumeratePhysicalDevices()
 	m_deviceIndex = 0;
 
 	// get actual properties of the physical device
+	VkPhysicalDevice &physDev = m_devices[m_deviceIndex];
+	vkGetPhysicalDeviceProperties(physDev, &m_devProp);
+
+	/*
 	m_deviceProperties.reserve(1);
 	vkGetPhysicalDeviceProperties(m_devices[m_deviceIndex], m_deviceProperties.data());
 	m_deviceProperties.resize(1);
+	*/
 	return true;
 }
 

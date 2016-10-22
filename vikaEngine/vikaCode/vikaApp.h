@@ -23,15 +23,16 @@ protected:
     VkInstance m_instance;
 	VkResult m_res;
 
-	// TODO: multi-gpu support?
-	size_t m_deviceIndex;
 	uint32_t m_queueIndex;
 
 	std::string m_appName;
 	std::vector<VkPhysicalDevice> m_devices;
-	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
+	// TODO: multi-gpu support?
+	size_t m_deviceIndex;
+
+	VkPhysicalDeviceProperties m_devProp = {};
 	vikaDevice *m_logicalDevice;
 
 public:
