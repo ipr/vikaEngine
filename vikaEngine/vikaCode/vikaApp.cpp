@@ -87,27 +87,23 @@ bool vikaApp::enumeratePhysicalDevices()
 	{
 		return false;
 	}
-	m_devices.resize(devCount);
+
+	m_deviceProperties.resize(devCount);
+	for (uint32_t i = 0; i < devCount; i++)
+	{
+		vkGetPhysicalDeviceProperties(m_devices[i], &m_deviceProperties[i]);
+	}
 
 	// this could select some other device if multiple/necessary..
 	// assume first is fine for now
 	m_deviceIndex = 0;
-
-	// get actual properties of the physical device
-	VkPhysicalDevice &physDev = m_devices[m_deviceIndex];
-	vkGetPhysicalDeviceProperties(physDev, &m_devProp);
-
-	/*
-	m_deviceProperties.resize(1);
-	vkGetPhysicalDeviceProperties(m_devices[m_deviceIndex], m_deviceProperties.data());
-	*/
 	return true;
 }
 
 // again, pretty obvious: locate properties of devices
 bool vikaApp::getQueueProperties()
 {
-	// assume the device is fine
+	// assume the selected device is fine
 	VkPhysicalDevice &dev = m_devices[m_deviceIndex];
 	if (getDeviceQueueProperties(dev, m_queueProperties) == false)
 	{
@@ -135,25 +131,22 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 	uint32_t propCount = 1;
 
 	// first call: retrieve count
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, 
-											&propCount, 
-											NULL);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &propCount, NULL);
 	if (propCount < 1)
 	{
 		return false;
 	}
 
+	// remember: proper allocating, don't just mark for capacity
+	// when calling direct access to buffer below
 	props.resize(propCount);
 
 	// second call: retrieve data
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, 
-											&propCount, 
-											props.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &propCount, props.data());
 	if (propCount < 1)
 	{
 		return false;
 	}
-	//props.resize(propCount);
 	return true;
 }
 

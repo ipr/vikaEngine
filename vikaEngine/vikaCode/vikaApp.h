@@ -27,12 +27,12 @@ protected:
 
 	std::string m_appName;
 	std::vector<VkPhysicalDevice> m_devices;
+	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 	// TODO: multi-gpu support?
-	size_t m_deviceIndex;
+	uint32_t m_deviceIndex;
 
-	VkPhysicalDeviceProperties m_devProp = {};
 	vikaDevice *m_logicalDevice;
 
 public:
@@ -43,6 +43,10 @@ public:
 	void destroy();
 
 	bool enumeratePhysicalDevices();
+
+	// caller can select different physical device by looking at m_deviceProperties
+	bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
+
 	bool getQueueProperties();
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
