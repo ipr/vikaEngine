@@ -46,7 +46,7 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 		return false;
 	}
 
-	if (m_commandBuffer.createCommandBuffer(m_device) == false)
+	if (m_commandBuffer.create(m_device) == false)
 	{
 		return false;
 	}
@@ -59,7 +59,7 @@ void vikaDevice::destroy()
 {
 	if (m_device != VK_NULL_HANDLE)
 	{
-		m_commandBuffer.destroyCommandBuffer(m_device);
+		m_commandBuffer.destroy(m_device);
 
 	    vkDestroyDevice(m_device, NULL);
 		m_device = VK_NULL_HANDLE;

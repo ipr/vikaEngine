@@ -22,7 +22,7 @@ vikaCommandBuffer::~vikaCommandBuffer()
 {
 }
 
-bool vikaCommandBuffer::createCommandBuffer(VkDevice &device)
+bool vikaCommandBuffer::create(VkDevice &device)
 {
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	m_cmdPoolInfo.pNext = NULL;
@@ -53,7 +53,7 @@ bool vikaCommandBuffer::createCommandBuffer(VkDevice &device)
 	return true;
 }
 
-void vikaCommandBuffer::destroyCommandBuffer(VkDevice &device)
+void vikaCommandBuffer::destroy(VkDevice &device)
 {
 	if (m_cmdBuffers.size() > 0)
 	{

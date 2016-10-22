@@ -31,8 +31,8 @@ public:
 	vikaCommandBuffer(const uint32_t queueIndex, uint32_t bufferCount = 1);
 	~vikaCommandBuffer();
 
-	bool createCommandBuffer(VkDevice &device);
-	void destroyCommandBuffer(VkDevice &device);
+	bool create(VkDevice &device);
+	void destroy(VkDevice &device);
 
 	bool resetPool(VkDevice &device);
 	bool resetBuffer(VkDevice &device, uint32_t bufferIndex = 0);
