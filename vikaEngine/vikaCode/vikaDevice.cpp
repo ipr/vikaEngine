@@ -11,6 +11,7 @@
 vikaDevice::vikaDevice(const uint32_t queueIndex) :
 	m_device(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
+	m_commandBuffer(queueIndex),
 	m_surface(queueIndex)
 {
 	m_queuePriorities.push_back(0.0);
@@ -45,10 +46,12 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 		return false;
 	}
 
-	if (m_surface.createCommandBuffer(m_device) == false)
+	if (m_commandBuffer.createCommandBuffer(m_device) == false)
 	{
 		return false;
 	}
+
+	//if (m_surface
 	return true;
 }
 
@@ -56,7 +59,7 @@ void vikaDevice::destroy()
 {
 	if (m_device != VK_NULL_HANDLE)
 	{
-		m_surface.destroyCommandBuffer(m_device);
+		m_commandBuffer.destroyCommandBuffer(m_device);
 
 	    vkDestroyDevice(m_device, NULL);
 		m_device = VK_NULL_HANDLE;

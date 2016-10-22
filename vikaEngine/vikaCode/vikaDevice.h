@@ -11,6 +11,7 @@
 
 #include <vulkan/vulkan.h>
 
+#include "vikaCommandBuffer.h"
 #include "vikaSurface.h"
 
 
@@ -24,6 +25,7 @@ protected:
 	VkResult m_res;
 
 	std::vector<float> m_queuePriorities;
+	vikaCommandBuffer m_commandBuffer;
 	vikaSurface m_surface;
 
 public:

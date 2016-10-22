@@ -42,6 +42,9 @@
     <ClInclude Include="vikaCode\vikaSurface.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="vikaCode\vikaCommandBuffer.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +60,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaSurface.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="vikaCode\vikaCommandBuffer.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>

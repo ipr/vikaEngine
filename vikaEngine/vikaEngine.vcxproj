@@ -152,6 +152,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="vikaCode\vikaApp.h" />
+    <ClInclude Include="vikaCode\vikaCommandBuffer.h" />
     <ClInclude Include="vikaCode\vikaDevice.h" />
     <ClInclude Include="vikaCode\vikaSurface.h" />
   </ItemGroup>
@@ -163,6 +164,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaApp.cpp" />
+    <ClCompile Include="vikaCode\vikaCommandBuffer.cpp" />
     <ClCompile Include="vikaCode\vikaDevice.cpp" />
     <ClCompile Include="vikaCode\vikaSurface.cpp" />
     <ClCompile Include="vikaEngine.cpp" />
