@@ -43,7 +43,7 @@ public:
 	void destroy();
 
 	bool enumeratePhysicalDevices();
-	bool getDeviceQueueProperties();
+	bool getQueueProperties();
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };

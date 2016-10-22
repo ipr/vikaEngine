@@ -41,24 +41,21 @@ bool vikaCommandBuffer::create(VkDevice &device)
 	m_cmdBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	m_cmdBufferInfo.commandBufferCount = m_bufferCount;
 
-	m_cmdBuffers.reserve(m_bufferCount);
-
+	m_cmdBuffers.resize(m_bufferCount);
 	m_res = vkAllocateCommandBuffers(device, &m_cmdBufferInfo, m_cmdBuffers.data());
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
-
-	m_cmdBuffers.resize(m_bufferCount);
 	return true;
 }
 
 void vikaCommandBuffer::destroy(VkDevice &device)
 {
-	if (m_cmdBuffers.size() > 0)
+	if (m_cmdBuffers.empty() == false)
 	{
 		vkFreeCommandBuffers(device, m_cmdPool, m_cmdBufferInfo.commandBufferCount, m_cmdBuffers.data());
-		//m_cmdBuffers.clear();
+		m_cmdBuffers.clear();
 	}
 	if (m_cmdPool != VK_NULL_HANDLE)
 	{

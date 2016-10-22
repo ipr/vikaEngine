@@ -98,18 +98,18 @@ bool vikaApp::enumeratePhysicalDevices()
 	vkGetPhysicalDeviceProperties(physDev, &m_devProp);
 
 	/*
-	m_deviceProperties.reserve(1);
-	vkGetPhysicalDeviceProperties(m_devices[m_deviceIndex], m_deviceProperties.data());
 	m_deviceProperties.resize(1);
+	vkGetPhysicalDeviceProperties(m_devices[m_deviceIndex], m_deviceProperties.data());
 	*/
 	return true;
 }
 
 // again, pretty obvious: locate properties of devices
-bool vikaApp::getDeviceQueueProperties()
+bool vikaApp::getQueueProperties()
 {
 	// assume the device is fine
-	if (getDeviceQueueProperties(m_devices[m_deviceIndex], m_queueProperties) == false)
+	VkPhysicalDevice &dev = m_devices[m_deviceIndex];
+	if (getDeviceQueueProperties(dev, m_queueProperties) == false)
 	{
 		return false;
 	}
@@ -143,7 +143,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 		return false;
 	}
 
-	props.reserve(propCount);
+	props.resize(propCount);
 
 	// second call: retrieve data
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, 
@@ -153,7 +153,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 	{
 		return false;
 	}
-	props.resize(propCount);
+	//props.resize(propCount);
 	return true;
 }
 

@@ -20,7 +20,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	{
 		// do stuff
 		app.enumeratePhysicalDevices();
-		app.getDeviceQueueProperties();
+		app.getQueueProperties();
 		app.prepareLogicalDevice();
 	}
 	app.destroy();
