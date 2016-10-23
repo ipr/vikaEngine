@@ -13,10 +13,13 @@
 
 #include <vulkan/vulkan.h>
 
+class vikaDevice;
+
 class vikaCommandBuffer
 {
 protected:
 	VkResult m_res;
+	vikaDevice *m_parent;
 
 	uint32_t m_queueIndex;
 	uint32_t m_bufferCount;
@@ -28,14 +31,14 @@ protected:
 	std::vector<VkCommandBuffer> m_cmdBuffers;
 
 public:
-	vikaCommandBuffer(const uint32_t queueIndex, uint32_t bufferCount = 1);
+	vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex, uint32_t bufferCount = 1);
 	~vikaCommandBuffer();
 
-	bool create(VkDevice &device);
-	void destroy(VkDevice &device);
+	bool create();
+	void destroy();
 
-	bool resetPool(VkDevice &device);
-	bool resetBuffer(VkDevice &device, uint32_t bufferIndex = 0);
+	bool resetPool();
+	bool resetBuffer(uint32_t bufferIndex = 0);
 };
 
 #endif

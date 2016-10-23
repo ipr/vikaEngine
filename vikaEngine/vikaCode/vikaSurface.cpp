@@ -4,13 +4,15 @@
 
 #include "stdafx.h"
 #include "vikaSurface.h"
+#include "vikaDevice.h"
 
 #include <vulkan/vulkan.h>
 
 
-vikaSurface::vikaSurface(const uint32_t queueIndex) :
-	m_queueIndex(queueIndex),
-	m_res(VK_SUCCESS)
+vikaSurface::vikaSurface(vikaDevice *parent, const uint32_t queueIndex) :
+	m_res(VK_SUCCESS),
+	m_parent(parent),
+	m_queueIndex(queueIndex)
 {
 }
 

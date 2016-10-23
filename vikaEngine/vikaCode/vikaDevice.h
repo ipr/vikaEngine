@@ -36,7 +36,8 @@ public:
 	void destroy();
 
 	VkResult getResult() const { return m_res; };
-	vikaSurface* getSurface() { return &m_surface; };
+	VkDevice& getDevice() { return m_device; };
+	vikaSurface& getSurface() { return m_surface; };
 };
 
 #endif // _VIKADEVICE_H_

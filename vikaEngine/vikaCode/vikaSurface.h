@@ -11,11 +11,13 @@
 
 #include <vulkan/vulkan.h>
 
+class vikaDevice;
 
 class vikaSurface
 {
 protected:
 	VkResult m_res;
+	vikaDevice *m_parent;
 
 	uint32_t m_queueIndex;
 
@@ -26,7 +28,7 @@ protected:
 	VkSurfaceKHR m_surface;
 
 public:
-	vikaSurface(const uint32_t queueIndex);
+	vikaSurface(vikaDevice *parent, const uint32_t queueIndex);
 	~vikaSurface();
 
 	/*

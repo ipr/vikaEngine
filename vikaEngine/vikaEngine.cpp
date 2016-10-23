@@ -16,13 +16,27 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	g_hInst = hInstance;
 
 	vikaApp app(pShortName);
-	if (app.create() == true)
+	if (app.create() == false)
 	{
-		// do stuff
-		app.enumeratePhysicalDevices();
-		app.getQueueProperties();
-		app.prepareLogicalDevice();
+		app.destroy();
+		return app.getResult();
 	}
+
+	// do stuff
+	app.enumeratePhysicalDevices();
+	app.getQueueProperties();
+	app.prepareLogicalDevice();
+
+	/*
+    // Main message loop:
+    MSG msg;
+    while (GetMessage(&msg, nullptr, 0, 0))
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+	*/
+
 	app.destroy();
 	return app.getResult();
 }
