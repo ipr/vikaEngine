@@ -14,7 +14,7 @@ vikaDevice::vikaDevice(const uint32_t queueIndex) :
 	m_commandBuffer(this, queueIndex),
 	m_surface(this, queueIndex)
 {
-	m_queuePriorities.push_back(0.0);
+	m_queuePriorities = {0.0};
 
     m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     m_queueInfo.pNext = NULL;
