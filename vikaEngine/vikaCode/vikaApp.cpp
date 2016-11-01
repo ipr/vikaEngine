@@ -175,5 +175,5 @@ bool vikaApp::prepareLogicalDevice()
 bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 {
 	vikaSurface &srf = m_logicalDevice->getSurface();
-	return srf.createSurface(hInstance, hWnd);
+	return srf.createSurface(m_instance, hInstance, hWnd);
 }
