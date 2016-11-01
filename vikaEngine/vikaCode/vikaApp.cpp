@@ -13,7 +13,8 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_queueIndex(0),
 	m_queuePropCount(0),
 	m_deviceIndex(0),
-	m_logicalDevice(nullptr)
+	m_logicalDevice(nullptr),
+	m_surface(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -54,6 +55,13 @@ bool vikaApp::create()
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	if (m_surface != nullptr)
+	{
+		m_surface->destroy();
+		delete m_surface;
+		m_surface = nullptr;
+	}
+
 	if (m_logicalDevice != nullptr)
 	{
 		m_logicalDevice->destroy();
@@ -173,13 +181,13 @@ bool vikaApp::prepareLogicalDevice()
 // for Win32
 bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 {
-	vikaSurface &srf = m_logicalDevice->getSurface();
-	if (srf.createSurface(m_instance, hInstance, hWnd) == false)
+	m_surface = new vikaSurface(this);
+	if (m_surface->createSurface(m_instance, hInstance, hWnd) == false)
 	{
 		return false;
 	}
 
-	if (srf.enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount, m_queueProperties) == false)
+	if (m_surface->enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount, m_queueProperties) == false)
 	{
 		return false;
 	}

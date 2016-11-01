@@ -4,16 +4,14 @@
 
 #include "stdafx.h"
 #include "vikaSurface.h"
-#include "vikaDevice.h"
 #include "vikaApp.h"
 
 #include <vulkan/vulkan.h>
 
 
-vikaSurface::vikaSurface(vikaDevice *parent, const uint32_t queueIndex) :
+vikaSurface::vikaSurface(vikaApp *parent) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
-	m_queueIndex(queueIndex),
 	m_surface(VK_NULL_HANDLE)
 {
 }
@@ -47,7 +45,7 @@ bool vikaSurface::createSurface(VkInstance &instance, HINSTANCE hInstance, HWND 
 }
 #endif
 
-void vikaSurface::destroySurface()
+void vikaSurface::destroy()
 {
 }
 

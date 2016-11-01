@@ -13,6 +13,7 @@
 #include <vulkan/vulkan.h>
 
 #include "vikaDevice.h"
+#include "vikaSurface.h"
 
 class vikaApp
 {
@@ -35,6 +36,8 @@ protected:
 	uint32_t m_deviceIndex;
 
 	vikaDevice *m_logicalDevice;
+
+	vikaSurface *m_surface;
 
 public:
 	vikaApp(const char *appName, uint32_t appVersion = 1);
@@ -59,7 +62,7 @@ public:
 
 	// for Win32
 	bool createSurface(HINSTANCE hInstance, HWND hWnd);
-
+	vikaSurface* getSurface() { return m_surface; };
 };
 
 #endif // _VIKAAPP_H_

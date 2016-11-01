@@ -13,8 +13,7 @@ vikaDevice::vikaDevice(vikaApp *parent, const uint32_t queueIndex) :
 	m_parent(parent),
 	m_res(VK_SUCCESS),
 	m_device(VK_NULL_HANDLE),
-	m_commandBuffer(this, queueIndex),
-	m_surface(this, queueIndex)
+	m_commandBuffer(this, queueIndex)
 {
 	m_queuePriorities = {0.0};
 
@@ -54,7 +53,6 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCoun
 		return false;
 	}
 
-	//if (m_surface
 	return true;
 }
 

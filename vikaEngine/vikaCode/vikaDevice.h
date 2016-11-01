@@ -12,7 +12,6 @@
 #include <vulkan/vulkan.h>
 
 #include "vikaCommandBuffer.h"
-#include "vikaSurface.h"
 
 class vikaApp;
 
@@ -28,7 +27,6 @@ protected:
 
 	std::vector<float> m_queuePriorities;
 	vikaCommandBuffer m_commandBuffer;
-	vikaSurface m_surface;
 
 public:
 	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
@@ -41,7 +39,6 @@ public:
 	VkResult getResult() const { return m_res; };
 	VkDevice& getDevice() { return m_device; };
 	vikaCommandBuffer& getCommandBuffer() { return m_commandBuffer; };
-	vikaSurface& getSurface() { return m_surface; };
 };
 
 #endif // _VIKADEVICE_H_

@@ -16,15 +16,13 @@
 #include <vulkan/vulkan.h>
 
 
-class vikaDevice;
+class vikaApp;
 
 class vikaSurface
 {
 protected:
 	VkResult m_res;
-	vikaDevice *m_parent;
-
-	uint32_t m_queueIndex;
+	vikaApp *m_parent;
 
 // VK_USE_PLATFORM_WIN32_KHR
 	// TODO: add in derived class
@@ -36,7 +34,7 @@ protected:
 	std::vector<VkBool32> m_supports;
 
 public:
-	vikaSurface(vikaDevice *parent, const uint32_t queueIndex);
+	vikaSurface(vikaApp *parent);
 	~vikaSurface();
 
 	/*
@@ -48,7 +46,7 @@ public:
 #ifdef _WINDOWS
 	bool createSurface(VkInstance &instance, HINSTANCE hInstance, HWND hWnd);
 #endif
-	void destroySurface();
+	void destroy();
 
 	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props);
 
