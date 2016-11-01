@@ -192,5 +192,10 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 	{
 		return false;
 	}
+
+	if (m_surface->getFormats(m_devices[m_deviceIndex]) == false)
+	{
+		return false;
+	}
 	return true;
 }

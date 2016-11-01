@@ -32,6 +32,12 @@ protected:
 	VkSurfaceKHR m_surface;
 
 	std::vector<VkBool32> m_supports;
+	std::vector<VkSurfaceFormatKHR> m_formats;
+
+	uint32_t m_formatCount;
+
+	// format selected
+	VkFormat m_format;
 
 public:
 	vikaSurface(vikaApp *parent);
@@ -49,6 +55,8 @@ public:
 	void destroy();
 
 	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props);
+
+	bool getFormats(VkPhysicalDevice &physDevice);
 
 	VkResult getResult() const { return m_res; };
 };

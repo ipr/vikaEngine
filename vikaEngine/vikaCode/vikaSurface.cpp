@@ -12,7 +12,9 @@
 vikaSurface::vikaSurface(vikaApp *parent) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
-	m_surface(VK_NULL_HANDLE)
+	m_surface(VK_NULL_HANDLE),
+	m_formatCount(0),
+	m_format(VK_FORMAT_UNDEFINED)
 {
 }
 
@@ -76,5 +78,37 @@ bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint3
 	{
 		return false;
 	}
+	return true;
+}
+
+bool vikaSurface::getFormats(VkPhysicalDevice &physDevice)
+{
+	// first call: get count
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, m_surface, &m_formatCount, NULL);
+	if (m_res != VK_SUCCESS || m_formatCount < 1)
+	{
+		return false;
+	}
+
+	m_formats.resize(m_formatCount);
+
+	// second call: get data
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, m_surface, &m_formatCount, m_formats.data());
+	if (m_res != VK_SUCCESS || m_formatCount < 1)
+	{
+		return false;
+	}
+
+	if (m_formatCount == 1 && m_formats[0].format == VK_FORMAT_UNDEFINED)
+	{
+		// no preferred format defined -> select something
+		m_format = VK_FORMAT_B8G8R8A8_UNORM;
+	}
+	else
+	{
+		// just select first one
+		m_format = m_formats[0].format;
+	}
+
 	return true;
 }
