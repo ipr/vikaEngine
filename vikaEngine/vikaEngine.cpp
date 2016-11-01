@@ -34,10 +34,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	app.enumeratePhysicalDevices();
 	app.getQueueProperties();
 	app.prepareLogicalDevice();
-
 	//app.createSurface(g_hInst, g_hWnd);
 
-	/*
     // Main message loop:
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -45,7 +43,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-	*/
 
 	app.destroy();
 	return app.getResult();
@@ -89,6 +86,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+		/*
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -97,6 +95,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+		*/
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
