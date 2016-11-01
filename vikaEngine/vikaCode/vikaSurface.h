@@ -33,6 +33,8 @@ protected:
 	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
 	VkSurfaceKHR m_surface;
 
+	std::vector<VkBool32> m_supports;
+
 public:
 	vikaSurface(vikaDevice *parent, const uint32_t queueIndex);
 	~vikaSurface();
@@ -48,10 +50,7 @@ public:
 #endif
 	void destroySurface();
 
-	/*
-	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice);
-	*/
-
+	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount);
 
 	VkResult getResult() const { return m_res; };
 };

@@ -39,7 +39,7 @@ vikaDevice::~vikaDevice()
 	destroy();
 }
 
-bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
+bool vikaDevice::create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCount)
 {
 	// create logical device from the physical device
     m_res = vkCreateDevice(physicalDevice, &m_deviceInfo, NULL, &m_device);
@@ -49,7 +49,7 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 	}
 
 	// assume one command buffer for now
-	if (m_commandBuffer.create(1) == false)
+	if (m_commandBuffer.create(cmdBufferCount) == false)
 	{
 		return false;
 	}

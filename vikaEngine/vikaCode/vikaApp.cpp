@@ -11,6 +11,7 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
 	m_res(VK_SUCCESS),
 	m_appName(appName),
 	m_queueIndex(0),
+	m_queuePropCount(0),
 	m_deviceIndex(0),
 	m_logicalDevice(nullptr)
 {
@@ -128,22 +129,20 @@ bool vikaApp::getQueueProperties()
 // again, pretty obvious: locate properties of devices
 bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
 {
-	uint32_t propCount = 1;
-
 	// first call: retrieve count
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &propCount, NULL);
-	if (propCount < 1)
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &m_queuePropCount, NULL);
+	if (m_queuePropCount < 1)
 	{
 		return false;
 	}
 
 	// remember: proper allocating, don't just mark for capacity
 	// when calling direct access to buffer below
-	props.resize(propCount);
+	props.resize(m_queuePropCount);
 
 	// second call: retrieve data
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &propCount, props.data());
-	if (propCount < 1)
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &m_queuePropCount, props.data());
+	if (m_queuePropCount < 1)
 	{
 		return false;
 	}
@@ -154,7 +153,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 bool vikaApp::prepareLogicalDevice()
 {
 	m_logicalDevice = new vikaDevice(this, m_queueIndex);
-	if (m_logicalDevice->create(m_devices[m_deviceIndex]) == false)
+	if (m_logicalDevice->create(m_devices[m_deviceIndex], 1) == false)
 	{
 		return false;
 	}
@@ -175,5 +174,14 @@ bool vikaApp::prepareLogicalDevice()
 bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 {
 	vikaSurface &srf = m_logicalDevice->getSurface();
-	return srf.createSurface(m_instance, hInstance, hWnd);
+	if (srf.createSurface(m_instance, hInstance, hWnd) == false)
+	{
+		return false;
+	}
+
+	if (srf.enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount) == false)
+	{
+		return false;
+	}
+	return true;
 }

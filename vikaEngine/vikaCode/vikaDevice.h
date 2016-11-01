@@ -34,7 +34,7 @@ public:
 	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
 	~vikaDevice();
 
-	bool create(VkPhysicalDevice &physicalDevice);
+	bool create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCount = 1);
 	void destroy();
 
 	vikaApp *getApp() { return m_parent; };

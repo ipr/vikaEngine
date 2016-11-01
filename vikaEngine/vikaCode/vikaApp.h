@@ -24,9 +24,10 @@ protected:
 	VkResult m_res;
 
 	uint32_t m_queueIndex;
+	uint32_t m_queuePropCount;
 
 	std::string m_appName;
-	std::vector<VkPhysicalDevice> m_devices;
+	std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
