@@ -160,14 +160,14 @@ bool vikaApp::prepareLogicalDevice()
 	}
 
 	/*
-	if (m_logicalDevice->createCommandBuffer() == false)
+	vikaCommandBuffer &cmdbuf = m_logicalDevice->getCommandBuffer();
+	if (cmdbuf.create() == false)
 	{
 		return false;
 	}
 	*/
 
 	//app.getLogicalDevice()->getSurface()->createSurface();
-
 	return true;
 }
 

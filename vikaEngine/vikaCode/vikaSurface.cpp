@@ -42,6 +42,7 @@ bool vikaSurface::createSurface(VkInstance &instance, HINSTANCE hInstance, HWND 
 	{
 		return false;
 	}
+
 	return true;
 }
 #endif
@@ -49,3 +50,12 @@ bool vikaSurface::createSurface(VkInstance &instance, HINSTANCE hInstance, HWND 
 void vikaSurface::destroySurface()
 {
 }
+
+/*
+bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice)
+{
+	//if (vkGetPhysicalDeviceWin32PresentationSupportKHR(phys, m_queueIndex) == )
+
+	vkGetPhysicalDeviceSurfaceSupportKHR()
+}
+*/

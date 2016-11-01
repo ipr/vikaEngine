@@ -11,11 +11,10 @@
 #include <vulkan/vulkan.h>
 
 
-vikaCommandBuffer::vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex, uint32_t bufferCount) :
+vikaCommandBuffer::vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_queueIndex(queueIndex),
-	m_bufferCount(bufferCount),
 	m_cmdPool(VK_NULL_HANDLE)
 {
 }
@@ -25,8 +24,10 @@ vikaCommandBuffer::~vikaCommandBuffer()
 	destroy();
 }
 
-bool vikaCommandBuffer::create()
+bool vikaCommandBuffer::create(uint32_t bufferCount)
 {
+	m_cmdBuffers.resize(bufferCount);
+
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	m_cmdPoolInfo.pNext = NULL;
 	m_cmdPoolInfo.queueFamilyIndex = m_queueIndex;
@@ -42,9 +43,8 @@ bool vikaCommandBuffer::create()
 	m_cmdBufferInfo.pNext = NULL;
 	m_cmdBufferInfo.commandPool = m_cmdPool;
 	m_cmdBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	m_cmdBufferInfo.commandBufferCount = m_bufferCount;
+	m_cmdBufferInfo.commandBufferCount = bufferCount;
 
-	m_cmdBuffers.resize(m_bufferCount);
 	m_res = vkAllocateCommandBuffers(m_parent->getDevice(), &m_cmdBufferInfo, m_cmdBuffers.data());
 	if (m_res != VK_SUCCESS)
 	{

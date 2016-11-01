@@ -22,7 +22,7 @@ protected:
 	vikaDevice *m_parent;
 
 	uint32_t m_queueIndex;
-	uint32_t m_bufferCount;
+	//uint32_t m_bufferCount;
 
     VkCommandPoolCreateInfo m_cmdPoolInfo = {};
 	VkCommandPool m_cmdPool;
@@ -31,10 +31,10 @@ protected:
 	std::vector<VkCommandBuffer> m_cmdBuffers;
 
 public:
-	vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex, uint32_t bufferCount = 1);
+	vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex);
 	~vikaCommandBuffer();
 
-	bool create();
+	bool create(uint32_t bufferCount = 1);
 	void destroy();
 
 	bool resetPool();

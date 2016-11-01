@@ -48,7 +48,8 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice)
 		return false;
 	}
 
-	if (m_commandBuffer.create() == false)
+	// assume one command buffer for now
+	if (m_commandBuffer.create(1) == false)
 	{
 		return false;
 	}

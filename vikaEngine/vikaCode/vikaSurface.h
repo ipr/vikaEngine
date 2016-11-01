@@ -48,6 +48,11 @@ public:
 #endif
 	void destroySurface();
 
+	/*
+	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice);
+	*/
+
+
 	VkResult getResult() const { return m_res; };
 };
 

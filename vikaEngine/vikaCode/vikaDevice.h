@@ -40,6 +40,7 @@ public:
 	vikaApp *getApp() { return m_parent; };
 	VkResult getResult() const { return m_res; };
 	VkDevice& getDevice() { return m_device; };
+	vikaCommandBuffer& getCommandBuffer() { return m_commandBuffer; };
 	vikaSurface& getSurface() { return m_surface; };
 };
 
