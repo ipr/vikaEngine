@@ -4,3 +4,4 @@ vikaEngine/vikaEngine.VC.db
 *.opendb
 *.ipch
 vikaEngine/Debug/
+vikaEngine/x64/

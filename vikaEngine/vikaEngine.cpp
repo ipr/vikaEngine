@@ -63,7 +63,7 @@ bool createWindow(TCHAR *className, TCHAR *title)
 	wcex.cbWndExtra     = 0;
 	wcex.hInstance      = g_hInst;
 	wcex.hIcon          = NULL;
-	wcex.hCursor        = NULL;
+    wcex.hCursor		= LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wcex.lpszMenuName   = NULL;
 	wcex.lpszClassName  = className;
@@ -73,8 +73,10 @@ bool createWindow(TCHAR *className, TCHAR *title)
 
 	g_hWnd = CreateWindow(className, title, 
 						WS_OVERLAPPEDWINDOW,
-						CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 
-						nullptr, nullptr, g_hInst, nullptr);
+						CW_USEDEFAULT, 0, 
+						CW_USEDEFAULT, 0, 
+						nullptr, nullptr, 
+						g_hInst, nullptr);
 
 	if (!g_hWnd)
 	{
