@@ -7,7 +7,7 @@
 HINSTANCE g_hInst;                                // current instance
 HWND g_hWnd;
 
-bool createWindow(HINSTANCE hInstance, TCHAR *className, TCHAR *title);
+bool createWindow(TCHAR *className, TCHAR *title);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 const char *pShortName = "vikaEngine";
@@ -18,10 +18,14 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                      int       nCmdShow)
 {
 	g_hInst = hInstance;
-	if (createWindow(hInstance, _T("vikaEngine"), _T("vika")) == false)
+	if (createWindow(_T("vikaEngine"), _T("vika")) == false)
 	{
 		return 0;
 	}
+
+	LARGE_INTEGER liStartClock, liPerfFreq;
+	::QueryPerformanceCounter(&liStartClock);
+	::QueryPerformanceFrequency(&liPerfFreq);
 
 	vikaApp app(pShortName);
 	if (app.create() == false)
@@ -48,7 +52,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	return app.getResult();
 }
 
-bool createWindow(HINSTANCE hInstance, TCHAR *className, TCHAR *title)
+bool createWindow(TCHAR *className, TCHAR *title)
 {
 	WNDCLASSEXW wcex;
 
@@ -57,7 +61,7 @@ bool createWindow(HINSTANCE hInstance, TCHAR *className, TCHAR *title)
 	wcex.lpfnWndProc    = WndProc;
 	wcex.cbClsExtra     = 0;
 	wcex.cbWndExtra     = 0;
-	wcex.hInstance      = hInstance;
+	wcex.hInstance      = g_hInst;
 	wcex.hIcon          = NULL;
 	wcex.hCursor        = NULL;
 	wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -70,7 +74,7 @@ bool createWindow(HINSTANCE hInstance, TCHAR *className, TCHAR *title)
 	g_hWnd = CreateWindow(className, title, 
 						WS_OVERLAPPEDWINDOW,
 						CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 
-						nullptr, nullptr, hInstance, nullptr);
+						nullptr, nullptr, g_hInst, nullptr);
 
 	if (!g_hWnd)
 	{
@@ -86,19 +90,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-		/*
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
         break;
-		*/
+
+	case WM_ERASEBKGND:
+		return -1;
+		break;
+
+	case WM_CLOSE:
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+
+		/* stuff that is usually needed for windowed mode
+    case WM_SIZE:
+	case WM_ENTERSIZEMOVE:
+	case WM_EXITSIZEMOVE:
+	case WM_MOVE:
+		break;
+		*/
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
