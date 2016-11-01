@@ -14,6 +14,7 @@
 #include "vikaCommandBuffer.h"
 #include "vikaSurface.h"
 
+class vikaApp;
 
 class vikaDevice
 {
@@ -21,20 +22,22 @@ protected:
     VkDeviceQueueCreateInfo m_queueInfo = {};
     VkDeviceCreateInfo m_deviceInfo = {};
 
-    VkDevice m_device;
+	vikaApp *m_parent;
 	VkResult m_res;
+    VkDevice m_device;
 
 	std::vector<float> m_queuePriorities;
 	vikaCommandBuffer m_commandBuffer;
 	vikaSurface m_surface;
 
 public:
-	vikaDevice(const uint32_t queueIndex);
+	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
 	~vikaDevice();
 
 	bool create(VkPhysicalDevice &physicalDevice);
 	void destroy();
 
+	vikaApp *getApp() { return m_parent; };
 	VkResult getResult() const { return m_res; };
 	VkDevice& getDevice() { return m_device; };
 	vikaSurface& getSurface() { return m_surface; };

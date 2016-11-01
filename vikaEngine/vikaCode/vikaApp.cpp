@@ -153,7 +153,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 // TODO: multi-gpu support?
 bool vikaApp::prepareLogicalDevice()
 {
-	m_logicalDevice = new vikaDevice(m_queueIndex);
+	m_logicalDevice = new vikaDevice(this, m_queueIndex);
 	if (m_logicalDevice->create(m_devices[m_deviceIndex]) == false)
 	{
 		return false;
@@ -171,3 +171,9 @@ bool vikaApp::prepareLogicalDevice()
 	return true;
 }
 
+// for Win32
+bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
+{
+	vikaSurface &srf = m_logicalDevice->getSurface();
+	return srf.createSurface(hInstance, hWnd);
+}

@@ -11,6 +11,10 @@
 // Windows Header Files:
 #include <windows.h>
 
+#ifndef VK_USE_PLATFORM_WIN32_KHR
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif
+
 // C RunTime Header Files
 #include <stdlib.h>
 #include <malloc.h>

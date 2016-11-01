@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "vikaSurface.h"
 #include "vikaDevice.h"
+#include "vikaApp.h"
 
 #include <vulkan/vulkan.h>
 
@@ -44,3 +45,25 @@ void vikaSurface::destroySurface(VkDevice &device)
 	//vkDestroySwapchainKHR();
 }
 */
+
+#ifdef _WINDOWS
+bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
+{
+    m_srfInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    m_srfInfo.pNext = NULL;
+    m_srfInfo.hinstance = hInstance;
+    m_srfInfo.hwnd = hWnd;
+
+    m_res = vkCreateWin32SurfaceKHR(m_parent->getApp()->getInstance(), 
+									&m_srfInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+#endif
+
+void vikaSurface::destroySurface()
+{
+}

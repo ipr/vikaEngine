@@ -7,9 +7,14 @@
 
 #pragma once
 
+#ifdef _WINDOWS
+#include <Windows.h>
+#endif
+
 #include <vector>
 
 #include <vulkan/vulkan.h>
+
 
 class vikaDevice;
 
@@ -25,6 +30,7 @@ protected:
 	// TODO: add in derived class
     //VkWin32SurfaceCreateInfoKHR m_createInfo;
 
+	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
 	VkSurfaceKHR m_surface;
 
 public:
@@ -36,6 +42,11 @@ public:
 	bool createSurface(VkInstance &vkInstance, VkDevice &device, HINSTANCE hInstance, HWND hWnd);
 	void destroySurface(VkDevice &device);
 	*/
+
+#ifdef _WINDOWS
+	bool createSurface(HINSTANCE hInstance, HWND hWnd);
+#endif
+	void destroySurface();
 
 	VkResult getResult() const { return m_res; };
 };

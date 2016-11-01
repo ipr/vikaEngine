@@ -51,9 +51,14 @@ public:
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
+	VkInstance& getInstance() { return m_instance; };
 
 	bool prepareLogicalDevice();
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
+
+	// for Win32
+	bool createSurface(HINSTANCE hInstance, HWND hWnd);
+
 };
 
 #endif // _VIKAAPP_H_
