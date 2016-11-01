@@ -5,6 +5,7 @@
 #include "vikaCode/vikaApp.h"
 
 HINSTANCE g_hInst;                                // current instance
+HWND g_hWnd;
 
 const char *pShortName = "vikaEngine";
 
@@ -26,6 +27,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	app.enumeratePhysicalDevices();
 	app.getQueueProperties();
 	app.prepareLogicalDevice();
+
+	//app.createSurface(g_hInst, g_hWnd);
 
 	/*
     // Main message loop:
