@@ -18,7 +18,7 @@ vikaSurface::vikaSurface(vikaApp *parent) :
 
 vikaSurface::~vikaSurface()
 {
-	//destroyCommandBuffer();
+	destroy();
 }
 
 /*

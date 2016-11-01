@@ -6,10 +6,11 @@
 #include "vikaApp.h"
 #include <vulkan/vulkan.h>
 
-vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
+vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVersion, uint32_t appVersion) :
 	m_instance(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
 	m_appName(appName),
+	m_engineName(engineName),
 	m_queueIndex(0),
 	m_queuePropCount(0),
 	m_deviceIndex(0),
@@ -20,8 +21,8 @@ vikaApp::vikaApp(const char *appName, uint32_t appVersion) :
     m_appInfo.pNext = NULL;
     m_appInfo.pApplicationName = m_appName.c_str(); // freeform
     m_appInfo.applicationVersion = appVersion;		// freeform
-    m_appInfo.pEngineName = m_appName.c_str();		// freeform
-    m_appInfo.engineVersion = appVersion;			// freeform
+    m_appInfo.pEngineName = m_engineName.c_str();		// freeform
+    m_appInfo.engineVersion = engineVersion;			// freeform
     m_appInfo.apiVersion = VK_API_VERSION_1_0;
 
     m_instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -158,7 +159,7 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 }
 
 // TODO: multi-gpu support?
-bool vikaApp::prepareLogicalDevice()
+bool vikaApp::createLogicalDevice()
 {
 	m_logicalDevice = new vikaDevice(this, m_queueIndex);
 	if (m_logicalDevice->create(m_devices[m_deviceIndex], 1) == false)

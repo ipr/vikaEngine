@@ -7,10 +7,13 @@
 HINSTANCE g_hInst;                                // current instance
 HWND g_hWnd;
 
-bool createWindow(TCHAR *className, TCHAR *title);
+bool createWindow(const TCHAR *className, const TCHAR *title);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 const char *pShortName = "vikaEngine";
+const char *pEngineName = "vikaEngine";
+const TCHAR *wClassName = _T("vikaEngine");
+const TCHAR *wTitleName = _T("vika");
 
 int APIENTRY wWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -18,7 +21,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                      int       nCmdShow)
 {
 	g_hInst = hInstance;
-	if (createWindow(_T("vikaEngine"), _T("vika")) == false)
+	if (createWindow(wClassName, wTitleName) == false)
 	{
 		return 0;
 	}
@@ -27,7 +30,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	::QueryPerformanceCounter(&liStartClock);
 	::QueryPerformanceFrequency(&liPerfFreq);
 
-	vikaApp app(pShortName);
+	vikaApp app(pShortName, pEngineName);
 	if (app.create() == false)
 	{
 		app.destroy();
@@ -37,8 +40,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	// do stuff
 	app.enumeratePhysicalDevices();
 	app.getQueueProperties();
-	app.prepareLogicalDevice();
+
+	// creating surface is currently crashing, something uninitialized still?
 	//app.createSurface(g_hInst, g_hWnd);
+
+	app.createLogicalDevice();
 
     // Main message loop:
     MSG msg;
@@ -52,7 +58,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	return app.getResult();
 }
 
-bool createWindow(TCHAR *className, TCHAR *title)
+bool createWindow(const TCHAR *className, const TCHAR *title)
 {
 	WNDCLASSEXW wcex;
 

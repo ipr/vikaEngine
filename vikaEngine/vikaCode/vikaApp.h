@@ -28,6 +28,8 @@ protected:
 	uint32_t m_queuePropCount;
 
 	std::string m_appName;
+	std::string m_engineName;
+
 	std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
@@ -40,7 +42,7 @@ protected:
 	vikaSurface *m_surface;
 
 public:
-	vikaApp(const char *appName, uint32_t appVersion = 1);
+	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
 	~vikaApp();
 
 	bool create();
@@ -57,7 +59,7 @@ public:
 	VkResult getResult() const { return m_res; };
 	VkInstance& getInstance() { return m_instance; };
 
-	bool prepareLogicalDevice();
+	bool createLogicalDevice();
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
 	// for Win32
