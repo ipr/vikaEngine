@@ -51,9 +51,9 @@ public:
 	bool enumeratePhysicalDevices();
 
 	// caller can select different physical device by looking at m_deviceProperties
-	bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
+	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
 
-	bool getQueueProperties();
+	bool getQueueProperties(const uint32_t deviceIndex);
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };

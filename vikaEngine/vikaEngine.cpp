@@ -39,7 +39,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	// do stuff
 	app.enumeratePhysicalDevices();
-	app.getQueueProperties();
 
 	// creating surface is currently crashing, something uninitialized still?
 	//app.createSurface(g_hInst, g_hWnd);
