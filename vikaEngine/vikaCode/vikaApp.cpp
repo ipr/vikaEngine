@@ -179,7 +179,7 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 		return false;
 	}
 
-	if (srf.enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount) == false)
+	if (srf.enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount, m_queueProperties) == false)
 	{
 		return false;
 	}

@@ -50,7 +50,7 @@ public:
 #endif
 	void destroySurface();
 
-	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount);
+	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
 };

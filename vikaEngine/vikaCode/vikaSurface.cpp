@@ -51,14 +51,32 @@ void vikaSurface::destroySurface()
 {
 }
 
-bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount)
+bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props)
 {
 	//if (vkGetPhysicalDeviceWin32PresentationSupportKHR(phys, m_queueIndex) == )
+
+	uint32_t graphicsIndex = UINT32_MAX;
+	uint32_t presentIndex = UINT32_MAX;
 
 	m_supports.resize(queueCount);
 	for (uint32_t i = 0; i < queueCount; i++)
 	{
 		VkResult res = vkGetPhysicalDeviceSurfaceSupportKHR(physDevice, i, m_surface, &m_supports[i]);
+	}
+
+	for (uint32_t i = 0; i < queueCount; i++)
+	{
+		if ((props[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && m_supports[i] == VK_TRUE)
+		{
+			graphicsIndex = i;
+			presentIndex = i;
+			break;
+		}
+	}
+
+	if (graphicsIndex == UINT32_MAX || presentIndex == UINT32_MAX)
+	{
+		return false;
 	}
 	return true;
 }
