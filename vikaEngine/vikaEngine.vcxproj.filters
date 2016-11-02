@@ -48,6 +48,9 @@
     <ClInclude Include="vikaCode\vikaSwapChain.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="vikaCode\vikaDepthBuffer.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +72,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaSwapChain.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="vikaCode\vikaDepthBuffer.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
