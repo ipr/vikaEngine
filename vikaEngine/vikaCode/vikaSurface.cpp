@@ -52,7 +52,7 @@ void vikaSurface::destroy()
 {
 }
 
-bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props)
+bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, const std::vector<VkQueueFamilyProperties> &props)
 {
 	//if (vkGetPhysicalDeviceWin32PresentationSupportKHR(phys, m_queueIndex) == )
 

@@ -57,7 +57,7 @@ public:
 #endif
 	void destroy();
 
-	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props);
+	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, const std::vector<VkQueueFamilyProperties> &props);
 
 	bool getFormats(VkPhysicalDevice &physDevice);
 	bool getCapabilities(VkPhysicalDevice &physDevice);

@@ -200,12 +200,22 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 		return false;
 	}
 
-	if (m_surface->enumeratePhysDeviceSupport(m_devices[m_deviceIndex], m_queuePropCount, m_queueProperties) == false)
+	VkPhysicalDevice &physDevice = m_devices[m_deviceIndex];
+
+	if (m_surface->enumeratePhysDeviceSupport(physDevice, m_queuePropCount, m_queueProperties) == false)
 	{
 		return false;
 	}
 
-	if (m_surface->getFormats(m_devices[m_deviceIndex]) == false)
+	if (m_surface->getFormats(physDevice) == false)
+	{
+		return false;
+	}
+	if (m_surface->getCapabilities(physDevice) == false)
+	{
+		return false;
+	}
+	if (m_surface->getPresentModes(physDevice) == false)
 	{
 		return false;
 	}
