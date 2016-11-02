@@ -19,6 +19,9 @@ protected:
 	vikaDevice *m_parent;
 	VkResult m_res;
 
+    VkImageCreateInfo m_imageInfo = {};
+	VkImage m_image;
+
 public:
 	vikaDepthBuffer(vikaDevice *parent);
 	virtual ~vikaDepthBuffer();

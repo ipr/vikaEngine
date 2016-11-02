@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 #include "vikaCommandBuffer.h"
+#include "vikaDepthBuffer.h"
 #include "vikaSwapChain.h"
 
 class vikaApp;
@@ -28,6 +29,7 @@ protected:
 
 	std::vector<float> m_queuePriorities;
 	vikaCommandBuffer m_commandBuffer;
+	vikaDepthBuffer m_depthBuffer;
 	vikaSwapChain m_swapChain;
 
 public:
