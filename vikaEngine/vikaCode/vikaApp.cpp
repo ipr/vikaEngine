@@ -194,7 +194,7 @@ bool vikaApp::createLogicalDevice()
 bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 {
 	m_surface = new vikaSurface(this);
-	if (m_surface->createSurface(m_instance, hInstance, hWnd) == false)
+	if (m_surface->createSurface(hInstance, hWnd) == false)
 	{
 		return false;
 	}

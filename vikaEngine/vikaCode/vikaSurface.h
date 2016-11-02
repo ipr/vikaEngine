@@ -53,7 +53,7 @@ public:
 	*/
 
 #ifdef _WINDOWS
-	bool createSurface(VkInstance &instance, HINSTANCE hInstance, HWND hWnd);
+	bool createSurface(HINSTANCE hInstance, HWND hWnd);
 #endif
 	void destroy();
 
