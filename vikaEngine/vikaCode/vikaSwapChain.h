@@ -11,17 +11,28 @@
 
 #include <vulkan/vulkan.h>
 
-class vikaApp;
+class vikaDevice;
 
 class vikaSwapChain
 {
 protected:
-	vikaApp *m_parent;
+	vikaDevice *m_parent;
 	VkResult m_res;
 
+	uint32_t m_swapchainImageCount;
+
+    VkSwapchainCreateInfoKHR m_swapchainInfo = {};
+	VkSwapchainKHR m_swapchain;
+
+	std::vector<VkImage> m_swapchainImages;
+
+
 public:
-	vikaSwapChain(vikaApp *parent);
+	vikaSwapChain(vikaDevice *parent);
 	virtual ~vikaSwapChain();
+
+	bool create(VkSurfaceKHR &surface);
+	void destroy();
 };
 
 #endif

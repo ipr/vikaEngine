@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 #include "vikaCommandBuffer.h"
+#include "vikaSwapChain.h"
 
 class vikaApp;
 
@@ -27,6 +28,7 @@ protected:
 
 	std::vector<float> m_queuePriorities;
 	vikaCommandBuffer m_commandBuffer;
+	vikaSwapChain m_swapChain;
 
 public:
 	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
