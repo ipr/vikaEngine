@@ -54,6 +54,13 @@ bool vikaDevice::create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCoun
 	{
 		return false;
 	}
+
+	/*
+	if (m_swapChain.create(m_parent->getSurface()->getSurface()) == false)
+	{
+		return false;
+	}
+	*/
 	/*
 	if (m_depthBuffer.create() == false)
 	{

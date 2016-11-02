@@ -64,6 +64,7 @@ public:
 	bool getPresentModes(VkPhysicalDevice &physDevice);
 
 	VkResult getResult() const { return m_res; };
+	VkSurfaceKHR& getSurface() { return m_surface; };
 };
 
 #endif // _VIKASURFACE_H_
