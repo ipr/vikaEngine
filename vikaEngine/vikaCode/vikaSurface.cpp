@@ -14,7 +14,8 @@ vikaSurface::vikaSurface(vikaApp *parent) :
 	m_parent(parent),
 	m_surface(VK_NULL_HANDLE),
 	m_formatCount(0),
-	m_format(VK_FORMAT_UNDEFINED)
+	m_format(VK_FORMAT_UNDEFINED),
+	m_presentModeCount(0)
 {
 }
 
@@ -112,3 +113,41 @@ bool vikaSurface::getFormats(VkPhysicalDevice &physDevice)
 
 	return true;
 }
+
+bool vikaSurface::getCapabilities(VkPhysicalDevice &physDevice)
+{
+	m_res = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physDevice, m_surface, &m_caps);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	/*
+    // width and height are either both 0xFFFFFFFF, or both not 0xFFFFFFFF.
+    if (m_caps.currentExtent.width == 0xFFFFFFFF)
+	{}
+	*/
+
+	return true;
+}
+
+bool vikaSurface::getPresentModes(VkPhysicalDevice &physDevice)
+{
+	// first call: get count
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, m_surface, &m_presentModeCount, NULL);
+	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
+	{
+		return false;
+	}
+
+	m_presents.resize(m_presentModeCount);
+	
+	// second call: get data
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, m_surface, &m_presentModeCount, m_presents.data());
+	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
+	{
+		return false;
+	}
+	return true;
+}
+

@@ -35,9 +35,12 @@ protected:
 	std::vector<VkSurfaceFormatKHR> m_formats;
 
 	uint32_t m_formatCount;
+	VkFormat m_format; // format selected
 
-	// format selected
-	VkFormat m_format;
+	VkSurfaceCapabilitiesKHR m_caps = {};
+
+	uint32_t m_presentModeCount;
+	std::vector<VkPresentModeKHR> m_presents;
 
 public:
 	vikaSurface(vikaApp *parent);
@@ -57,6 +60,8 @@ public:
 	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, std::vector<VkQueueFamilyProperties> &props);
 
 	bool getFormats(VkPhysicalDevice &physDevice);
+	bool getCapabilities(VkPhysicalDevice &physDevice);
+	bool getPresentModes(VkPhysicalDevice &physDevice);
 
 	VkResult getResult() const { return m_res; };
 };
