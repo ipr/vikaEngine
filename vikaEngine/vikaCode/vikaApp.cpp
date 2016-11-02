@@ -50,6 +50,18 @@ bool vikaApp::create()
 	{
 		return false;
 	}
+
+	if (enumeratePhysicalDevices() == false)
+	{
+		return false;
+	}
+
+	// assume first is fine for now
+	m_deviceIndex = 0;
+	if (getQueueProperties(m_deviceIndex) == false)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -107,10 +119,6 @@ bool vikaApp::enumeratePhysicalDevices()
 	// this could select some other device if multiple/necessary..
 	// assume first is fine for now
 	m_deviceIndex = 0;
-	if (getQueueProperties(m_deviceIndex) == false)
-	{
-		return false;
-	}
 	return true;
 }
 
