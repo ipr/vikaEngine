@@ -34,6 +34,7 @@ bool vikaSurface::createSurface(VkInstance &instance, HINSTANCE hInstance, HWND 
 {
     m_srfInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
     m_srfInfo.pNext = NULL;
+	m_srfInfo.flags = 0;
     m_srfInfo.hinstance = hInstance;
     m_srfInfo.hwnd = hWnd;
 
@@ -50,6 +51,11 @@ bool vikaSurface::createSurface(VkInstance &instance, HINSTANCE hInstance, HWND 
 
 void vikaSurface::destroy()
 {
+	if (m_surface != VK_NULL_HANDLE)
+	{
+		vkDestroySurfaceKHR(m_parent->getInstance(), m_surface, NULL);
+		m_surface = VK_NULL_HANDLE;
+	}
 }
 
 bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, const std::vector<VkQueueFamilyProperties> &props)
