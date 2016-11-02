@@ -32,7 +32,7 @@ protected:
 
 public:
 	vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex);
-	~vikaCommandBuffer();
+	virtual ~vikaCommandBuffer();
 
 	bool create(uint32_t bufferCount = 1);
 	void destroy();

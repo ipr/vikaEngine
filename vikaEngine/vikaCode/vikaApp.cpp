@@ -58,7 +58,8 @@ bool vikaApp::create()
 
 	// assume first is fine for now
 	m_deviceIndex = 0;
-	if (getQueueProperties(m_deviceIndex) == false)
+	// assume the selected device is fine
+	if (getQueueProperties(m_devices[m_deviceIndex]) == false)
 	{
 		return false;
 	}
@@ -123,11 +124,9 @@ bool vikaApp::enumeratePhysicalDevices()
 }
 
 // again, pretty obvious: locate properties of devices
-bool vikaApp::getQueueProperties(const uint32_t deviceIndex)
+bool vikaApp::getQueueProperties(VkPhysicalDevice &physicalDevice)
 {
-	// assume the selected device is fine
-	VkPhysicalDevice &dev = m_devices[deviceIndex];
-	if (getDeviceQueueProperties(dev, m_queueProperties) == false)
+	if (getDeviceQueueProperties(physicalDevice, m_queueProperties) == false)
 	{
 		return false;
 	}

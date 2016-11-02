@@ -44,7 +44,7 @@ protected:
 
 public:
 	vikaSurface(vikaApp *parent);
-	~vikaSurface();
+	virtual ~vikaSurface();
 
 	/*
 	//bool createSurface(VkDevice &device); // TODO: make pure virtual

@@ -30,7 +30,7 @@ protected:
 
 public:
 	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
-	~vikaDevice();
+	virtual ~vikaDevice();
 
 	bool create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCount = 1);
 	void destroy();

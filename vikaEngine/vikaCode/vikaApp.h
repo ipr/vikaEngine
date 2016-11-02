@@ -43,7 +43,7 @@ protected:
 
 public:
 	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
-	~vikaApp();
+	virtual ~vikaApp();
 
 	bool create();
 	void destroy();
@@ -53,7 +53,7 @@ public:
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
 
-	bool getQueueProperties(const uint32_t deviceIndex);
+	bool getQueueProperties(VkPhysicalDevice &physicalDevice);
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };
