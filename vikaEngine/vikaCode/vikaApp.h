@@ -32,6 +32,7 @@ protected:
 
 	std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
+	std::vector<VkPhysicalDeviceMemoryProperties> m_memoryProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 	// TODO: multi-gpu support?
@@ -53,7 +54,6 @@ public:
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
 
-	bool getQueueProperties(VkPhysicalDevice &physicalDevice);
 	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
 
 	VkResult getResult() const { return m_res; };

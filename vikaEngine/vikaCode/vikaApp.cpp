@@ -58,12 +58,26 @@ bool vikaApp::create()
 
 	// assume first is fine for now
 	m_deviceIndex = 0;
+
 	// assume the selected device is fine
-	if (getQueueProperties(m_devices[m_deviceIndex]) == false)
+	if (getDeviceQueueProperties(m_devices[m_deviceIndex], m_queueProperties) == false)
 	{
 		return false;
 	}
-	return true;
+
+	// locate command queue "family" suitable for graphics
+	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
+	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
+	for (uint32_t i = 0; i < m_queueProperties.size(); i++)
+	{
+		VkQueueFamilyProperties &prop = m_queueProperties[i];
+		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+		{
+			m_queueIndex = i;
+			return true;
+		}
+	}
+	return false;
 }
 
 // obvious, last method to call to cleanup
@@ -112,9 +126,13 @@ bool vikaApp::enumeratePhysicalDevices()
 	}
 
 	m_deviceProperties.resize(devCount);
+	m_memoryProperties.resize(devCount);
 	for (uint32_t i = 0; i < devCount; i++)
 	{
-		vkGetPhysicalDeviceProperties(m_devices[i], &m_deviceProperties[i]);
+		VkPhysicalDevice &physDevice = m_devices[i];
+
+	    vkGetPhysicalDeviceMemoryProperties(physDevice, &m_memoryProperties[i]);
+		vkGetPhysicalDeviceProperties(physDevice, &m_deviceProperties[i]);
 	}
 
 	// this could select some other device if multiple/necessary..
@@ -123,30 +141,7 @@ bool vikaApp::enumeratePhysicalDevices()
 	return true;
 }
 
-// again, pretty obvious: locate properties of devices
-bool vikaApp::getQueueProperties(VkPhysicalDevice &physicalDevice)
-{
-	if (getDeviceQueueProperties(physicalDevice, m_queueProperties) == false)
-	{
-		return false;
-	}
-
-	// locate command queue "family" suitable for graphics
-	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
-	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
-	for (uint32_t i = 0; i < m_queueProperties.size(); i++)
-	{
-		VkQueueFamilyProperties &prop = m_queueProperties[i];
-		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-		{
-			m_queueIndex = i;
-			return true;
-		}
-	}
-	return false;
-}
-
-// again, pretty obvious: locate properties of devices
+// locate properties of devices
 bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
 {
 	// first call: retrieve count
