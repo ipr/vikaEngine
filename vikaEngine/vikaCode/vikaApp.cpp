@@ -139,8 +139,8 @@ bool vikaApp::createLogicalDevice(uint32_t deviceIndex)
 	m_physDevice->getQueueProperties();
 
 	// after checking properties, create logical device from physical device
-	m_logicalDevice = new vikaDevice(this, m_physDevice->getQueueIndex());
-	if (m_logicalDevice->create(physDevice, 1) == false)
+	m_logicalDevice = new vikaDevice(this, m_physDevice, m_physDevice->getQueueIndex());
+	if (m_logicalDevice->create(1) == false)
 	{
 		return false;
 	}

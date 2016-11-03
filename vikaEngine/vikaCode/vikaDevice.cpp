@@ -5,13 +5,15 @@
 #include "stdafx.h"
 #include "vikaDevice.h"
 #include "vikaApp.h"
+#include "vikaPhysDevice.h"
 
 #include <vulkan/vulkan.h>
 
 
-vikaDevice::vikaDevice(vikaApp *parent, const uint32_t queueIndex) :
-	m_parent(parent),
+vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, const uint32_t queueIndex) :
 	m_res(VK_SUCCESS),
+	m_parent(parent),
+	m_physDevice(physDevice),
 	m_device(VK_NULL_HANDLE),
 	m_commandBuffer(this, queueIndex),
 	m_depthBuffer(this),
@@ -40,10 +42,10 @@ vikaDevice::~vikaDevice()
 	destroy();
 }
 
-bool vikaDevice::create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCount)
+bool vikaDevice::create(uint32_t cmdBufferCount)
 {
 	// create logical device from the physical device
-    m_res = vkCreateDevice(physicalDevice, &m_deviceInfo, NULL, &m_device);
+    m_res = vkCreateDevice(m_physDevice->getPhysDev(), &m_deviceInfo, NULL, &m_device);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;

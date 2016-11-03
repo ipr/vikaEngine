@@ -16,6 +16,7 @@
 #include "vikaSwapChain.h"
 
 class vikaApp;
+class vikaPhysDevice;
 
 class vikaDevice
 {
@@ -23,9 +24,11 @@ protected:
     VkDeviceQueueCreateInfo m_queueInfo = {};
     VkDeviceCreateInfo m_deviceInfo = {};
 
-	vikaApp *m_parent;
 	VkResult m_res;
-    VkDevice m_device;
+	vikaApp *m_parent;
+	vikaPhysDevice *m_physDevice;
+
+    VkDevice m_device; // logical handle
 
 	std::vector<float> m_queuePriorities;
 	vikaCommandBuffer m_commandBuffer;
@@ -33,10 +36,10 @@ protected:
 	vikaSwapChain m_swapChain;
 
 public:
-	vikaDevice(vikaApp *parent, const uint32_t queueIndex);
+	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, const uint32_t queueIndex);
 	virtual ~vikaDevice();
 
-	bool create(VkPhysicalDevice &physicalDevice, uint32_t cmdBufferCount = 1);
+	bool create(uint32_t cmdBufferCount = 1);
 	void destroy();
 
 	vikaApp *getApp() { return m_parent; };
