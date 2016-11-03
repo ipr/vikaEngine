@@ -23,6 +23,9 @@ protected:
 
 	uint32_t m_swapchainImageCount;
 
+	VkPresentModeKHR m_swapchainPresentMode;
+	//VkExtent2D m_swapchainExtent = {};
+
     VkSwapchainCreateInfoKHR m_swapchainInfo = {};
 	VkSwapchainKHR m_swapchain;
 

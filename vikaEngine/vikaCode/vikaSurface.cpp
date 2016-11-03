@@ -56,15 +56,15 @@ bool vikaSurface::createInternals()
 	{
 		return false;
 	}
-	if (getFormats() == false)
+	if (enumerateFormats() == false)
 	{
 		return false;
 	}
-	if (getCapabilities() == false)
+	if (enumerateCapabilities() == false)
 	{
 		return false;
 	}
-	if (getPresentModes() == false)
+	if (enumeratePresentModes() == false)
 	{
 		return false;
 	}
@@ -108,7 +108,7 @@ bool vikaSurface::enumeratePhysDeviceSupport()
 	return true;
 }
 
-bool vikaSurface::getFormats()
+bool vikaSurface::enumerateFormats()
 {
 	// first call: get count
 	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &m_formatCount, NULL);
@@ -140,7 +140,7 @@ bool vikaSurface::getFormats()
 	return true;
 }
 
-bool vikaSurface::getCapabilities()
+bool vikaSurface::enumerateCapabilities()
 {
 	m_res = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physDevice->getPhysDev(), m_surface, &m_caps);
 	if (m_res != VK_SUCCESS)
@@ -157,7 +157,7 @@ bool vikaSurface::getCapabilities()
 	return true;
 }
 
-bool vikaSurface::getPresentModes()
+bool vikaSurface::enumeratePresentModes()
 {
 	// first call: get count
 	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &m_presentModeCount, NULL);

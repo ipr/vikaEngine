@@ -63,12 +63,13 @@ public:
 
 	bool enumeratePhysDeviceSupport();
 
-	bool getFormats();
-	bool getCapabilities();
-	bool getPresentModes();
+	bool enumerateFormats();
+	bool enumerateCapabilities();
+	bool enumeratePresentModes();
 
 	VkResult getResult() const { return m_res; };
 	VkSurfaceKHR& getSurface() { return m_surface; };
+	VkSurfaceCapabilitiesKHR& getCaps() { return m_caps; };
 };
 
 #endif // _VIKASURFACE_H_
