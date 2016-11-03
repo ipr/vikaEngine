@@ -135,6 +135,9 @@ bool vikaApp::enumeratePhysicalDevices()
 		vkGetPhysicalDeviceProperties(physDevice, &m_deviceProperties[i]);
 	}
 
+	// TODO: overwritable device selection method?
+	// -> consider memory, capabilities etc.?
+
 	// this could select some other device if multiple/necessary..
 	// assume first is fine for now
 	m_deviceIndex = 0;
