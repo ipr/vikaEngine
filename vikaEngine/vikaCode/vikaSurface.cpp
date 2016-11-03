@@ -38,8 +38,7 @@ bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
     m_srfInfo.hinstance = hInstance;
     m_srfInfo.hwnd = hWnd;
 
-    m_res = vkCreateWin32SurfaceKHR(m_parent->getInstance(), 
-									&m_srfInfo, NULL, &m_surface);
+    m_res = vkCreateWin32SurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;

@@ -13,6 +13,7 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_engineName(engineName),
 	m_queueIndex(0),
 	m_queuePropCount(0),
+	m_devCount(0),
 	m_deviceIndex(0),
 	m_logicalDevice(nullptr),
 	m_surface(nullptr)
@@ -56,28 +57,7 @@ bool vikaApp::create()
 		return false;
 	}
 
-	// assume first is fine for now
-	m_deviceIndex = 0;
-
-	// assume the selected device is fine
-	if (getDeviceQueueProperties(m_devices[m_deviceIndex], m_queueProperties) == false)
-	{
-		return false;
-	}
-
-	// locate command queue "family" suitable for graphics
-	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
-	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
-	for (uint32_t i = 0; i < m_queueProperties.size(); i++)
-	{
-		VkQueueFamilyProperties &prop = m_queueProperties[i];
-		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-		{
-			m_queueIndex = i;
-			return true;
-		}
-	}
-	return false;
+	return true;
 }
 
 // obvious, last method to call to cleanup
@@ -107,48 +87,48 @@ void vikaApp::destroy()
 // also pretty obvious: after initializing, locate a suitable gpu
 bool vikaApp::enumeratePhysicalDevices()
 {
-    uint32_t devCount = 1; // aka. gpu count
-
 	// first call: retrieve amount of gpu available
-    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, NULL);
-	if (m_res != VK_SUCCESS || devCount < 1)
+    m_res = vkEnumeratePhysicalDevices(m_instance, &m_devCount, NULL);
+	if (m_res != VK_SUCCESS || m_devCount < 1)
 	{
 		return false;
 	}
 
-	m_devices.resize(devCount);
+	m_devices.resize(m_devCount);
 
 	// second call: retrieve actual data of all gpu available (handles)
-    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, m_devices.data());
-	if (m_res != VK_SUCCESS || devCount < 1)
+    m_res = vkEnumeratePhysicalDevices(m_instance, &m_devCount, m_devices.data());
+	if (m_res != VK_SUCCESS || m_devCount < 1)
 	{
 		return false;
 	}
 
-	m_deviceProperties.resize(devCount);
-	m_memoryProperties.resize(devCount);
-	for (uint32_t i = 0; i < devCount; i++)
+	m_deviceProperties.resize(m_devCount);
+	m_memoryProperties.resize(m_devCount);
+	for (uint32_t i = 0; i < m_devCount; i++)
 	{
 		VkPhysicalDevice &physDevice = m_devices[i];
 
 	    vkGetPhysicalDeviceMemoryProperties(physDevice, &m_memoryProperties[i]);
 		vkGetPhysicalDeviceProperties(physDevice, &m_deviceProperties[i]);
 	}
-
-	// TODO: overwritable device selection method?
-	// -> consider memory, capabilities etc.?
-
-	// this could select some other device if multiple/necessary..
-	// assume first is fine for now
-	m_deviceIndex = 0;
 	return true;
 }
 
-// locate properties of devices
-bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props)
+// TODO: multi-gpu support?
+bool vikaApp::createLogicalDevice(uint32_t deviceIndex)
 {
+	// TODO: overwritable device selection method?
+	// -> consider memory, capabilities etc.?
+	// this could select some other device if multiple/necessary..
+	// assume first is fine for now
+	m_deviceIndex = deviceIndex;
+
+	// assume the selected device is fine
+	VkPhysicalDevice &physDevice = m_devices[m_deviceIndex];
+
 	// first call: retrieve count
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &m_queuePropCount, NULL);
+    vkGetPhysicalDeviceQueueFamilyProperties(physDevice, &m_queuePropCount, NULL);
 	if (m_queuePropCount < 1)
 	{
 		return false;
@@ -156,38 +136,45 @@ bool vikaApp::getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::ve
 
 	// remember: proper allocating, don't just mark for capacity
 	// when calling direct access to buffer below
-	props.resize(m_queuePropCount);
+	m_queueProperties.resize(m_queuePropCount);
 
 	// second call: retrieve data
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &m_queuePropCount, props.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(physDevice, &m_queuePropCount, m_queueProperties.data());
 	if (m_queuePropCount < 1)
 	{
 		return false;
 	}
-	return true;
-}
 
-// TODO: multi-gpu support?
-bool vikaApp::createLogicalDevice()
-{
+	// locate command queue "family" suitable for graphics
+	// (might have another queue set for blits with VK_QUEUE_TRANSFER_BIT?)
+	// (compute queue support would have VK_QUEUE_COMPUTE_BIT?)
+	bool found = false;
+	for (uint32_t i = 0; i < m_queueProperties.size(); i++)
+	{
+		VkQueueFamilyProperties &prop = m_queueProperties[i];
+		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+		{
+			m_queueIndex = i;
+			found = true;
+			break;
+		}
+	}
+	if (found == false)
+	{
+		return false;
+	}
+
+	// after checking properties, create logical device from physical device
 	m_logicalDevice = new vikaDevice(this, m_queueIndex);
-	if (m_logicalDevice->create(m_devices[m_deviceIndex], 1) == false)
+	if (m_logicalDevice->create(physDevice, 1) == false)
 	{
 		return false;
 	}
 
-	/*
-	vikaCommandBuffer &cmdbuf = m_logicalDevice->getCommandBuffer();
-	if (cmdbuf.create() == false)
-	{
-		return false;
-	}
-	*/
-
-	//app.getLogicalDevice()->getSurface()->createSurface();
 	return true;
 }
 
+// note: physical device needs to be selected before this, do we need logical device too?
 // for Win32
 bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 {

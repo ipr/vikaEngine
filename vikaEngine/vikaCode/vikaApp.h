@@ -35,6 +35,8 @@ protected:
 	std::vector<VkPhysicalDeviceMemoryProperties> m_memoryProperties;
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
+	uint32_t m_devCount; // aka. gpu count
+
 	// TODO: multi-gpu support?
 	uint32_t m_deviceIndex;
 
@@ -54,14 +56,13 @@ public:
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
 
-	bool getDeviceQueueProperties(VkPhysicalDevice &physicalDevice, std::vector<VkQueueFamilyProperties> &props);
-
 	VkResult getResult() const { return m_res; };
 	VkInstance& getInstance() { return m_instance; };
 
-	bool createLogicalDevice();
+	bool createLogicalDevice(uint32_t deviceIndex = 0);
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
+	// note: physical device needs to be selected before this, do we need logical device too?
 	// for Win32
 	bool createSurface(HINSTANCE hInstance, HWND hWnd);
 	vikaSurface* getSurface() { return m_surface; };

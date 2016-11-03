@@ -36,12 +36,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		app.destroy();
 		return app.getResult();
 	}
-
-	// do stuff
-	// creating surface is currently crashing, something uninitialized still?
-	//app.createSurface(g_hInst, g_hWnd);
-
 	app.createLogicalDevice();
+
+	// creating surface is currently crashing, something uninitialized still?
+	app.createSurface(g_hInst, g_hWnd);
 
     // Main message loop:
     MSG msg;
@@ -52,6 +50,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     }
 
 	app.destroy();
+	::DestroyWindow(g_hWnd);
 	return app.getResult();
 }
 
@@ -66,8 +65,8 @@ bool createWindow(const TCHAR *className, const TCHAR *title)
 	wcex.cbWndExtra     = 0;
 	wcex.hInstance      = g_hInst;
 	wcex.hIcon          = NULL;
-    wcex.hCursor		= LoadCursor(nullptr, IDC_ARROW);
-	wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wcex.hCursor		= NULL; //LoadCursor(g_hInst, IDC_ARROW);
+	wcex.hbrBackground  = NULL; //(HBRUSH)GetStockObject(BLACK_BRUSH);
 	wcex.lpszMenuName   = NULL;
 	wcex.lpszClassName  = className;
 	wcex.hIconSm        = NULL;
@@ -76,8 +75,8 @@ bool createWindow(const TCHAR *className, const TCHAR *title)
 
 	g_hWnd = CreateWindow(className, title, 
 						WS_OVERLAPPEDWINDOW,
-						CW_USEDEFAULT, 0, 
-						CW_USEDEFAULT, 0, 
+						CW_USEDEFAULT, CW_USEDEFAULT, 
+						CW_USEDEFAULT, CW_USEDEFAULT, 
 						nullptr, nullptr, 
 						g_hInst, nullptr);
 
@@ -98,14 +97,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
+			//if (ps.fErase == TRUE) -> erase background
             HDC hdc = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
         }
         break;
 
+		/* erase background
 	case WM_ERASEBKGND:
 		return -1;
 		break;
+		*/
 
 	case WM_CLOSE:
     case WM_DESTROY:
