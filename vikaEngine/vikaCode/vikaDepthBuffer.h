@@ -12,22 +12,35 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaPhysDevice;
 
 class vikaDepthBuffer
 {
 protected:
-	vikaDevice *m_parent;
 	VkResult m_res;
+	vikaDevice *m_logDevice;
+	vikaPhysDevice *m_physDevice;
 
-    VkImageCreateInfo m_imageInfo = {};
+	VkFormatProperties m_formatProp = {};
+
 	VkImage m_image;
+    VkImageCreateInfo m_imageInfo = {};
+
+	VkImageView m_view;
+	VkImageViewCreateInfo m_viewInfo = {};
+
+	VkDeviceMemory m_devMemory;
+	VkMemoryRequirements m_memReqs = {};
+	VkMemoryAllocateInfo m_memInfo = {};
 
 public:
-	vikaDepthBuffer(vikaDevice *parent);
+	vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaDepthBuffer();
 
 	bool create();
 	void destroy();
+
+	bool memtypeBitsToIndex(VkFlags reqMask = 0);
 };
 
 #endif
