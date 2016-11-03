@@ -5,13 +5,15 @@
 #include "stdafx.h"
 #include "vikaSurface.h"
 #include "vikaApp.h"
+#include "vikaPhysDevice.h"
 
 #include <vulkan/vulkan.h>
 
 
-vikaSurface::vikaSurface(vikaApp *parent) :
+vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
+	m_physDevice(physDevice),
 	m_surface(VK_NULL_HANDLE),
 	m_formatCount(0),
 	m_format(VK_FORMAT_UNDEFINED),
@@ -57,26 +59,24 @@ void vikaSurface::destroy()
 	}
 }
 
-bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, const std::vector<VkQueueFamilyProperties> &props)
+bool vikaSurface::enumeratePhysDeviceSupport()
 {
 	//if (vkGetPhysicalDeviceWin32PresentationSupportKHR(phys, m_queueIndex) == )
 
 	uint32_t graphicsIndex = UINT32_MAX;
 	uint32_t presentIndex = UINT32_MAX;
 
-	m_supports.resize(queueCount);
-	for (uint32_t i = 0; i < queueCount; i++)
+	m_supports.resize(m_physDevice->m_queuePropCount);
+	for (uint32_t i = 0; i < m_physDevice->m_queuePropCount; i++)
 	{
-		VkResult res = vkGetPhysicalDeviceSurfaceSupportKHR(physDevice, i, m_surface, &m_supports[i]);
-	}
-
-	for (uint32_t i = 0; i < queueCount; i++)
-	{
-		if ((props[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && m_supports[i] == VK_TRUE)
+		VkResult res = vkGetPhysicalDeviceSurfaceSupportKHR(m_physDevice->getPhysDev(), i, m_surface, &m_supports[i]);
+		if (res == VK_SUCCESS)
 		{
-			graphicsIndex = i;
-			presentIndex = i;
-			break;
+			if ((m_physDevice->m_queueProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && m_supports[i] == VK_TRUE)
+			{
+				graphicsIndex = i;
+				presentIndex = i;
+			}
 		}
 	}
 
@@ -87,10 +87,10 @@ bool vikaSurface::enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint3
 	return true;
 }
 
-bool vikaSurface::getFormats(VkPhysicalDevice &physDevice)
+bool vikaSurface::getFormats()
 {
 	// first call: get count
-	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, m_surface, &m_formatCount, NULL);
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &m_formatCount, NULL);
 	if (m_res != VK_SUCCESS || m_formatCount < 1)
 	{
 		return false;
@@ -99,7 +99,7 @@ bool vikaSurface::getFormats(VkPhysicalDevice &physDevice)
 	m_formats.resize(m_formatCount);
 
 	// second call: get data
-	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, m_surface, &m_formatCount, m_formats.data());
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &m_formatCount, m_formats.data());
 	if (m_res != VK_SUCCESS || m_formatCount < 1)
 	{
 		return false;
@@ -119,9 +119,9 @@ bool vikaSurface::getFormats(VkPhysicalDevice &physDevice)
 	return true;
 }
 
-bool vikaSurface::getCapabilities(VkPhysicalDevice &physDevice)
+bool vikaSurface::getCapabilities()
 {
-	m_res = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physDevice, m_surface, &m_caps);
+	m_res = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physDevice->getPhysDev(), m_surface, &m_caps);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -136,10 +136,10 @@ bool vikaSurface::getCapabilities(VkPhysicalDevice &physDevice)
 	return true;
 }
 
-bool vikaSurface::getPresentModes(VkPhysicalDevice &physDevice)
+bool vikaSurface::getPresentModes()
 {
 	// first call: get count
-	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, m_surface, &m_presentModeCount, NULL);
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &m_presentModeCount, NULL);
 	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
 	{
 		return false;
@@ -148,7 +148,7 @@ bool vikaSurface::getPresentModes(VkPhysicalDevice &physDevice)
 	m_presents.resize(m_presentModeCount);
 	
 	// second call: get data
-	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(physDevice, m_surface, &m_presentModeCount, m_presents.data());
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &m_presentModeCount, m_presents.data());
 	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
 	{
 		return false;

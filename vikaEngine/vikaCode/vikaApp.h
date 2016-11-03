@@ -12,6 +12,7 @@
 
 #include <vulkan/vulkan.h>
 
+#include "vikaPhysDevice.h"
 #include "vikaDevice.h"
 #include "vikaSurface.h"
 
@@ -24,24 +25,18 @@ protected:
     VkInstance m_instance;
 	VkResult m_res;
 
-	uint32_t m_queueIndex;
-	uint32_t m_queuePropCount;
-
 	std::string m_appName;
 	std::string m_engineName;
 
 	std::vector<VkPhysicalDevice> m_devices; // actual gpus
-	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
-	std::vector<VkPhysicalDeviceMemoryProperties> m_memoryProperties;
-	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 	uint32_t m_devCount; // aka. gpu count
 
 	// TODO: multi-gpu support?
 	uint32_t m_deviceIndex;
 
+	vikaPhysDevice *m_physDevice;
 	vikaDevice *m_logicalDevice;
-
 	vikaSurface *m_surface;
 
 public:

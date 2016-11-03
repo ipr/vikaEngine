@@ -17,12 +17,14 @@
 
 
 class vikaApp;
+class vikaPhysDevice;
 
 class vikaSurface
 {
 protected:
 	VkResult m_res;
 	vikaApp *m_parent;
+	vikaPhysDevice *m_physDevice;
 
 // VK_USE_PLATFORM_WIN32_KHR
 	// TODO: add in derived class
@@ -43,7 +45,7 @@ protected:
 	std::vector<VkPresentModeKHR> m_presents;
 
 public:
-	vikaSurface(vikaApp *parent);
+	vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice);
 	virtual ~vikaSurface();
 
 	/*
@@ -57,11 +59,11 @@ public:
 #endif
 	void destroy();
 
-	bool enumeratePhysDeviceSupport(VkPhysicalDevice &physDevice, uint32_t queueCount, const std::vector<VkQueueFamilyProperties> &props);
+	bool enumeratePhysDeviceSupport();
 
-	bool getFormats(VkPhysicalDevice &physDevice);
-	bool getCapabilities(VkPhysicalDevice &physDevice);
-	bool getPresentModes(VkPhysicalDevice &physDevice);
+	bool getFormats();
+	bool getCapabilities();
+	bool getPresentModes();
 
 	VkResult getResult() const { return m_res; };
 	VkSurfaceKHR& getSurface() { return m_surface; };

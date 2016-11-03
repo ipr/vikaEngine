@@ -159,6 +159,7 @@
     <ClInclude Include="vikaCode\vikaCommandBuffer.h" />
     <ClInclude Include="vikaCode\vikaDepthBuffer.h" />
     <ClInclude Include="vikaCode\vikaDevice.h" />
+    <ClInclude Include="vikaCode\vikaPhysDevice.h" />
     <ClInclude Include="vikaCode\vikaSurface.h" />
     <ClInclude Include="vikaCode\vikaSwapChain.h" />
   </ItemGroup>
@@ -173,6 +174,7 @@
     <ClCompile Include="vikaCode\vikaCommandBuffer.cpp" />
     <ClCompile Include="vikaCode\vikaDepthBuffer.cpp" />
     <ClCompile Include="vikaCode\vikaDevice.cpp" />
+    <ClCompile Include="vikaCode\vikaPhysDevice.cpp" />
     <ClCompile Include="vikaCode\vikaSurface.cpp" />
     <ClCompile Include="vikaCode\vikaSwapChain.cpp" />
     <ClCompile Include="vikaEngine.cpp" />

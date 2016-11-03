@@ -11,18 +11,34 @@
 
 #include <vulkan/vulkan.h>
 
+class vikaApp;
+
 class vikaPhysDevice
 {
 protected:
-	uint32_t m_deviceIndex;
+	VkResult m_res;
+	vikaApp *m_parent;
 
-	std::vector<VkPhysicalDeviceProperties> m_deviceProperties;
-	std::vector<VkPhysicalDeviceMemoryProperties> m_memoryProperties;
+public: // make things simpler..
+	uint32_t m_deviceIndex;
+	uint32_t m_queuePropCount;
+	uint32_t m_queueIndex;
+
+	VkPhysicalDevice m_physDevice;
+
+	VkPhysicalDeviceProperties m_deviceProperties = {};
+	VkPhysicalDeviceMemoryProperties m_memoryProperties = {};
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 public:
-	vikaPhysDevice(uint32_t deviceIndex);
+	vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint32_t deviceIndex);
 	~vikaPhysDevice();
+
+	bool getPhysProperties();
+	bool getQueueProperties();
+
+	uint32_t getQueueIndex() const { return m_queueIndex; };
+	VkPhysicalDevice& getPhysDev() { return m_physDevice; }; 
 };
 
 #endif

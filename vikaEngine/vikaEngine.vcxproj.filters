@@ -51,6 +51,9 @@
     <ClInclude Include="vikaCode\vikaDepthBuffer.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="vikaCode\vikaPhysDevice.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -75,6 +78,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="vikaCode\vikaDepthBuffer.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="vikaCode\vikaPhysDevice.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
