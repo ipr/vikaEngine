@@ -8,7 +8,7 @@
 
 #include <vulkan/vulkan.h>
 
-vikaSwapChain::vikaSwapChain(vikaDevice *parent) :
+vikaSwapChain::vikaSwapChain(vikaDevice *parent, VkSurfaceKHR &surface) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_swapchainImageCount(0),
@@ -16,6 +16,7 @@ vikaSwapChain::vikaSwapChain(vikaDevice *parent) :
 {
     m_swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     m_swapchainInfo.pNext = NULL;
+	m_swapchainInfo.surface = surface;
 }
 
 vikaSwapChain::~vikaSwapChain()
@@ -23,10 +24,8 @@ vikaSwapChain::~vikaSwapChain()
 	destroy();
 }
 
-bool vikaSwapChain::create(VkSurfaceKHR &surface)
+bool vikaSwapChain::create()
 {
-	m_swapchainInfo.surface = surface;
-
 	m_res = vkCreateSwapchainKHR(m_parent->getDevice(), &m_swapchainInfo, NULL, &m_swapchain);
 	if (m_res != VK_SUCCESS)
 	{

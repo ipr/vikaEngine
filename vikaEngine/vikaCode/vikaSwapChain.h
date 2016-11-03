@@ -28,10 +28,10 @@ protected:
 
 
 public:
-	vikaSwapChain(vikaDevice *parent);
+	vikaSwapChain(vikaDevice *parent, VkSurfaceKHR &surface);
 	virtual ~vikaSwapChain();
 
-	bool create(VkSurfaceKHR &surface);
+	bool create();
 	void destroy();
 };
 
