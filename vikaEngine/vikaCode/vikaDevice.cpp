@@ -16,8 +16,8 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_parent(parent),
 	m_physDevice(physDevice),
 	m_device(VK_NULL_HANDLE),
-	m_commandBuffer(nullptr)
-	//m_depthBuffer(nullptr),
+	m_commandBuffer(nullptr),
+	m_depthBuffer(nullptr)
 {
 	m_queuePriorities = {0.0};
 
@@ -58,13 +58,11 @@ bool vikaDevice::create(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	/*
-	m_depthBuffer = new vikaDepthBuffer(this);
+	m_depthBuffer = new vikaDepthBuffer(this, m_physDevice);
 	if (m_depthBuffer->create() == false)
 	{
 		return false;
 	}
-	*/
 	return true;
 }
 
@@ -72,14 +70,12 @@ void vikaDevice::destroy()
 {
 	if (m_device != VK_NULL_HANDLE)
 	{
-		/*
 		if (m_depthBuffer != nullptr)
 		{
 			m_depthBuffer->destroy();
 			delete m_depthBuffer;
 			m_depthBuffer = nullptr;
 		}
-		*/
 		if (m_commandBuffer != nullptr)
 		{
 			m_commandBuffer->destroy();

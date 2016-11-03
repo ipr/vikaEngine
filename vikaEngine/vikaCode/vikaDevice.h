@@ -32,7 +32,7 @@ protected:
 	std::vector<float> m_queuePriorities;
 
 	vikaCommandBuffer *m_commandBuffer;
-	//vikaDepthBuffer *m_depthBuffer;
+	vikaDepthBuffer *m_depthBuffer;
 
 public:
 	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);

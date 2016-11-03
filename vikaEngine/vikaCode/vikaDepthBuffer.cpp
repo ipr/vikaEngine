@@ -24,6 +24,10 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
 
     m_imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     m_imageInfo.pNext = NULL;
+	m_imageInfo.imageType = VK_IMAGE_TYPE_2D;
+
+	m_viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	m_viewInfo.pNext = NULL;
 }
 
 vikaDepthBuffer::~vikaDepthBuffer()
@@ -31,9 +35,11 @@ vikaDepthBuffer::~vikaDepthBuffer()
 	destroy();
 }
 
+// structures not finished yet.. plenty of parameters
 bool vikaDepthBuffer::create()
 {
-	vkGetPhysicalDeviceFormatProperties(m_physDevice->getPhysDev(), VK_FORMAT_D16_UNORM, &m_formatProp);
+	VkFormat depthFormat = VK_FORMAT_D16_UNORM;
+	vkGetPhysicalDeviceFormatProperties(m_physDevice->getPhysDev(), depthFormat, &m_formatProp);
 	if (m_formatProp.linearTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
 	{
 		m_imageInfo.tiling = VK_IMAGE_TILING_LINEAR;
@@ -47,6 +53,8 @@ bool vikaDepthBuffer::create()
 		// or try other formats..
 		return false;
 	}
+	m_imageInfo.format = depthFormat;
+	m_viewInfo.format = depthFormat;
 
     m_res = vkCreateImage(m_logDevice->getDevice(), &m_imageInfo, NULL, &m_image);
 	if (m_res != VK_SUCCESS)
