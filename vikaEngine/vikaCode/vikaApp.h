@@ -54,7 +54,9 @@ public:
 	VkResult getResult() const { return m_res; };
 	VkInstance& getInstance() { return m_instance; };
 
-	bool createLogicalDevice(uint32_t deviceIndex = 0);
+	// just internal thing for now..
+	bool createDevice(uint32_t deviceIndex = 0);
+	bool createLogicalDevice();
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
 	// note: physical device needs to be selected before this, do we need logical device too?

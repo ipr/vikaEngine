@@ -108,23 +108,12 @@ bool vikaApp::enumeratePhysicalDevices()
 	{
 		return false;
 	}
-
-	/*
-	m_deviceProperties.resize(m_devCount);
-	m_memoryProperties.resize(m_devCount);
-	for (uint32_t i = 0; i < m_devCount; i++)
-	{
-		VkPhysicalDevice &physDevice = m_devices[i];
-
-	    vkGetPhysicalDeviceMemoryProperties(physDevice, &m_memoryProperties[i]);
-		vkGetPhysicalDeviceProperties(physDevice, &m_deviceProperties[i]);
-	}
-	*/
 	return true;
 }
 
+// just internal thing for now..
 // TODO: multi-gpu support?
-bool vikaApp::createLogicalDevice(uint32_t deviceIndex)
+bool vikaApp::createDevice(uint32_t deviceIndex)
 {
 	// TODO: overwritable device selection method?
 	// -> consider memory, capabilities etc.?
@@ -138,8 +127,19 @@ bool vikaApp::createLogicalDevice(uint32_t deviceIndex)
 	m_physDevice->getPhysProperties();
 	m_physDevice->getQueueProperties();
 
+	return createLogicalDevice();
+}
+
+// TODO: multi-gpu support?
+bool vikaApp::createLogicalDevice()
+{
+	if (m_physDevice == nullptr)
+	{
+		return false;
+	}
+
 	// after checking properties, create logical device from physical device
-	m_logicalDevice = new vikaDevice(this, m_physDevice, m_physDevice->getQueueIndex());
+	m_logicalDevice = new vikaDevice(this, m_physDevice);
 	if (m_logicalDevice->create(1) == false)
 	{
 		return false;
@@ -159,23 +159,6 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 
 	m_surface = new vikaSurface(this, m_physDevice);
 	if (m_surface->createSurface(hInstance, hWnd) == false)
-	{
-		return false;
-	}
-
-	if (m_surface->enumeratePhysDeviceSupport() == false)
-	{
-		return false;
-	}
-	if (m_surface->getFormats() == false)
-	{
-		return false;
-	}
-	if (m_surface->getCapabilities() == false)
-	{
-		return false;
-	}
-	if (m_surface->getPresentModes() == false)
 	{
 		return false;
 	}

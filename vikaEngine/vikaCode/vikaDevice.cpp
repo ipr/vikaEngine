@@ -10,14 +10,14 @@
 #include <vulkan/vulkan.h>
 
 
-vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, const uint32_t queueIndex) :
+vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_physDevice(physDevice),
 	m_device(VK_NULL_HANDLE),
-	m_commandBuffer(this, queueIndex),
-	m_depthBuffer(this),
-	m_swapChain(this)
+	m_commandBuffer(nullptr)
+	//m_depthBuffer(nullptr),
+	//m_swapChain(nullptr),
 {
 	m_queuePriorities = {0.0};
 
@@ -52,19 +52,21 @@ bool vikaDevice::create(uint32_t cmdBufferCount)
 	}
 
 	// assume one command buffer for now
-	if (m_commandBuffer.create(cmdBufferCount) == false)
+	m_commandBuffer = new vikaCommandBuffer(this, m_physDevice->getQueueIndex());
+	if (m_commandBuffer->create(cmdBufferCount) == false)
 	{
 		return false;
 	}
 
 	/*
-	if (m_swapChain.create(m_parent->getSurface()->getSurface()) == false)
+	m_swapChain = new vikaSwapChain(this);
+	if (m_swapChain->create(m_parent->getSurface()->getSurface()) == false)
 	{
 		return false;
 	}
-	*/
-	/*
-	if (m_depthBuffer.create() == false)
+
+	m_depthBuffer = new vikaDepthBuffer(this);
+	if (m_depthBuffer->create() == false)
 	{
 		return false;
 	}
@@ -76,9 +78,26 @@ void vikaDevice::destroy()
 {
 	if (m_device != VK_NULL_HANDLE)
 	{
-		m_swapChain.destroy();
-		m_depthBuffer.destroy();
-		m_commandBuffer.destroy();
+		/*
+		if (m_swapChain != nullptr)
+		{
+			m_swapChain->destroy();
+			delete m_swapChain;
+			m_swapChain = nullptr;
+		}
+		if (m_depthBuffer != nullptr)
+		{
+			m_depthBuffer->destroy();
+			delete m_depthBuffer;
+			m_depthBuffer = nullptr;
+		}
+		*/
+		if (m_commandBuffer != nullptr)
+		{
+			m_commandBuffer->destroy();
+			delete m_commandBuffer;
+			m_commandBuffer = nullptr;
+		}
 
 	    vkDestroyDevice(m_device, NULL);
 		m_device = VK_NULL_HANDLE;

@@ -57,6 +57,8 @@ public:
 #ifdef _WINDOWS
 	bool createSurface(HINSTANCE hInstance, HWND hWnd);
 #endif
+
+	bool createInternals();
 	void destroy();
 
 	bool enumeratePhysDeviceSupport();

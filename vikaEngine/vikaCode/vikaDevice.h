@@ -31,12 +31,15 @@ protected:
     VkDevice m_device; // logical handle
 
 	std::vector<float> m_queuePriorities;
-	vikaCommandBuffer m_commandBuffer;
-	vikaDepthBuffer m_depthBuffer;
-	vikaSwapChain m_swapChain;
+
+	vikaCommandBuffer *m_commandBuffer;
+	/*
+	vikaDepthBuffer *m_depthBuffer;
+	vikaSwapChain *m_swapChain;
+	*/
 
 public:
-	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, const uint32_t queueIndex);
+	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
 	virtual ~vikaDevice();
 
 	bool create(uint32_t cmdBufferCount = 1);
@@ -45,7 +48,6 @@ public:
 	vikaApp *getApp() { return m_parent; };
 	VkResult getResult() const { return m_res; };
 	VkDevice& getDevice() { return m_device; };
-	vikaCommandBuffer& getCommandBuffer() { return m_commandBuffer; };
 };
 
 #endif // _VIKADEVICE_H_

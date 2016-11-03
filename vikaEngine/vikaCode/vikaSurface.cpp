@@ -46,9 +46,30 @@ bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
 		return false;
 	}
 
-	return true;
+	return createInternals();
 }
 #endif
+
+bool vikaSurface::createInternals()
+{
+	if (enumeratePhysDeviceSupport() == false)
+	{
+		return false;
+	}
+	if (getFormats() == false)
+	{
+		return false;
+	}
+	if (getCapabilities() == false)
+	{
+		return false;
+	}
+	if (getPresentModes() == false)
+	{
+		return false;
+	}
+	return true;
+}
 
 void vikaSurface::destroy()
 {
