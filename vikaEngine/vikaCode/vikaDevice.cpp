@@ -6,6 +6,7 @@
 #include "vikaDevice.h"
 #include "vikaApp.h"
 #include "vikaPhysDevice.h"
+#include "vikaSurface.h"
 
 #include <vulkan/vulkan.h>
 
@@ -17,7 +18,6 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_device(VK_NULL_HANDLE),
 	m_commandBuffer(nullptr)
 	//m_depthBuffer(nullptr),
-	//m_swapChain(nullptr),
 {
 	m_queuePriorities = {0.0};
 
@@ -59,12 +59,6 @@ bool vikaDevice::create(uint32_t cmdBufferCount)
 	}
 
 	/*
-	m_swapChain = new vikaSwapChain(this);
-	if (m_swapChain->create(m_parent->getSurface()->getSurface()) == false)
-	{
-		return false;
-	}
-
 	m_depthBuffer = new vikaDepthBuffer(this);
 	if (m_depthBuffer->create() == false)
 	{
@@ -79,12 +73,6 @@ void vikaDevice::destroy()
 	if (m_device != VK_NULL_HANDLE)
 	{
 		/*
-		if (m_swapChain != nullptr)
-		{
-			m_swapChain->destroy();
-			delete m_swapChain;
-			m_swapChain = nullptr;
-		}
 		if (m_depthBuffer != nullptr)
 		{
 			m_depthBuffer->destroy();
@@ -103,3 +91,4 @@ void vikaDevice::destroy()
 		m_device = VK_NULL_HANDLE;
 	}
 }
+

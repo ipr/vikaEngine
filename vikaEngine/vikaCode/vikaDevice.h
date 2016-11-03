@@ -13,7 +13,6 @@
 
 #include "vikaCommandBuffer.h"
 #include "vikaDepthBuffer.h"
-#include "vikaSwapChain.h"
 
 class vikaApp;
 class vikaPhysDevice;
@@ -33,10 +32,7 @@ protected:
 	std::vector<float> m_queuePriorities;
 
 	vikaCommandBuffer *m_commandBuffer;
-	/*
-	vikaDepthBuffer *m_depthBuffer;
-	vikaSwapChain *m_swapChain;
-	*/
+	//vikaDepthBuffer *m_depthBuffer;
 
 public:
 	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);

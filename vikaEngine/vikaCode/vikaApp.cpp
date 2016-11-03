@@ -15,7 +15,8 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_deviceIndex(0),
 	m_physDevice(nullptr),
 	m_logicalDevice(nullptr),
-	m_surface(nullptr)
+	m_surface(nullptr),
+	m_swapChain(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -62,6 +63,13 @@ bool vikaApp::create()
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	if (m_swapChain != nullptr)
+	{
+		m_swapChain->destroy();
+		delete m_swapChain;
+		m_swapChain = nullptr;
+	}
+
 	if (m_surface != nullptr)
 	{
 		m_surface->destroy();
@@ -159,6 +167,16 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 
 	m_surface = new vikaSurface(this, m_physDevice);
 	if (m_surface->createSurface(hInstance, hWnd) == false)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool vikaApp::createSwapChain()
+{
+	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface);
+	if (m_swapChain->create() == false)
 	{
 		return false;
 	}

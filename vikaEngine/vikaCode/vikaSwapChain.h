@@ -12,12 +12,14 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaSurface;
 
 class vikaSwapChain
 {
 protected:
-	vikaDevice *m_parent;
 	VkResult m_res;
+	vikaDevice *m_logicalDev;
+	vikaSurface *m_surface;
 
 	uint32_t m_swapchainImageCount;
 
@@ -28,7 +30,7 @@ protected:
 
 
 public:
-	vikaSwapChain(vikaDevice *parent, VkSurfaceKHR &surface);
+	vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface);
 	virtual ~vikaSwapChain();
 
 	bool create();

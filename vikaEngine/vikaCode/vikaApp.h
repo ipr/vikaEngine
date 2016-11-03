@@ -15,6 +15,7 @@
 #include "vikaPhysDevice.h"
 #include "vikaDevice.h"
 #include "vikaSurface.h"
+#include "vikaSwapChain.h"
 
 class vikaApp
 {
@@ -38,6 +39,7 @@ protected:
 	vikaPhysDevice *m_physDevice;
 	vikaDevice *m_logicalDevice;
 	vikaSurface *m_surface;
+	vikaSwapChain *m_swapChain;
 
 public:
 	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
@@ -63,6 +65,8 @@ public:
 	// for Win32
 	bool createSurface(HINSTANCE hInstance, HWND hWnd);
 	vikaSurface* getSurface() { return m_surface; };
+
+	bool createSwapChain();
 };
 
 #endif // _VIKAAPP_H_

@@ -5,18 +5,20 @@
 #include "stdafx.h"
 #include "vikaSwapChain.h"
 #include "vikaDevice.h"
+#include "vikaSurface.h"
 
 #include <vulkan/vulkan.h>
 
-vikaSwapChain::vikaSwapChain(vikaDevice *parent, VkSurfaceKHR &surface) :
+vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface) :
 	m_res(VK_SUCCESS),
-	m_parent(parent),
+	m_logicalDev(logicalDev),
+	m_surface(surface),
 	m_swapchainImageCount(0),
 	m_swapchain(VK_NULL_HANDLE)
 {
     m_swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     m_swapchainInfo.pNext = NULL;
-	m_swapchainInfo.surface = surface;
+	m_swapchainInfo.surface = m_surface->getSurface();
 }
 
 vikaSwapChain::~vikaSwapChain()
@@ -26,21 +28,21 @@ vikaSwapChain::~vikaSwapChain()
 
 bool vikaSwapChain::create()
 {
-	m_res = vkCreateSwapchainKHR(m_parent->getDevice(), &m_swapchainInfo, NULL, &m_swapchain);
+	m_res = vkCreateSwapchainKHR(m_logicalDev->getDevice(), &m_swapchainInfo, NULL, &m_swapchain);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
 
 	// get count
-	m_res = vkGetSwapchainImagesKHR(m_parent->getDevice(), m_swapchain, &m_swapchainImageCount, NULL);
+	m_res = vkGetSwapchainImagesKHR(m_logicalDev->getDevice(), m_swapchain, &m_swapchainImageCount, NULL);
 	if (m_res != VK_SUCCESS || m_swapchainImageCount < 1)
 	{
 		return false;
 	}
 
 	m_swapchainImages.resize(m_swapchainImageCount);
-	m_res = vkGetSwapchainImagesKHR(m_parent->getDevice(), m_swapchain, &m_swapchainImageCount, m_swapchainImages.data());
+	m_res = vkGetSwapchainImagesKHR(m_logicalDev->getDevice(), m_swapchain, &m_swapchainImageCount, m_swapchainImages.data());
 	if (m_res != VK_SUCCESS || m_swapchainImageCount < 1)
 	{
 		return false;
@@ -53,7 +55,7 @@ void vikaSwapChain::destroy()
 {
 	if (m_swapchain != VK_NULL_HANDLE)
 	{
-		vkDestroySwapchainKHR(m_parent->getDevice(), m_swapchain, NULL);
+		vkDestroySwapchainKHR(m_logicalDev->getDevice(), m_swapchain, NULL);
 		m_swapchain = VK_NULL_HANDLE;
 	}
 }
