@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#include "vikaCode/vikaApp.h"
+#include "../vikaCode/vikaApp.h"
 
 HINSTANCE g_hInst;                                // current instance
 HWND g_hWnd;
