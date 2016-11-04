@@ -30,28 +30,28 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaApp.h">
+    <ClInclude Include="..\vikaCode\vikaApp.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\VulkanSDK\1.0.30.0\Include\vulkan\vulkan.h">
       <Filter>dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaDevice.h">
+    <ClInclude Include="..\vikaCode\vikaDevice.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaSurface.h">
+    <ClInclude Include="..\vikaCode\vikaSurface.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaCommandBuffer.h">
+    <ClInclude Include="..\vikaCode\vikaCommandBuffer.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaSwapChain.h">
+    <ClInclude Include="..\vikaCode\vikaSwapChain.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaDepthBuffer.h">
+    <ClInclude Include="..\vikaCode\vikaDepthBuffer.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
-    <ClInclude Include="vikaCode\vikaPhysDevice.h">
+    <ClInclude Include="..\vikaCode\vikaPhysDevice.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,25 +62,25 @@
     <ClCompile Include="vikaEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaApp.cpp">
+    <ClCompile Include="..\vikaCode\vikaApp.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaDevice.cpp">
+    <ClCompile Include="..\vikaCode\vikaDevice.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaSurface.cpp">
+    <ClCompile Include="..\vikaCode\vikaSurface.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaCommandBuffer.cpp">
+    <ClCompile Include="..\vikaCode\vikaCommandBuffer.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaSwapChain.cpp">
+    <ClCompile Include="..\vikaCode\vikaSwapChain.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaDepthBuffer.cpp">
+    <ClCompile Include="..\vikaCode\vikaDepthBuffer.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
-    <ClCompile Include="vikaCode\vikaPhysDevice.cpp">
+    <ClCompile Include="..\vikaCode\vikaPhysDevice.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
