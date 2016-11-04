@@ -36,9 +36,9 @@ vikaDepthBuffer::~vikaDepthBuffer()
 }
 
 // structures not finished yet.. plenty of parameters
-bool vikaDepthBuffer::create()
+bool vikaDepthBuffer::create(VkFormat depthFormat)
 {
-	VkFormat depthFormat = VK_FORMAT_D16_UNORM;
+	//VkFormat depthFormat = VK_FORMAT_D16_UNORM;
 	vkGetPhysicalDeviceFormatProperties(m_physDevice->getPhysDev(), depthFormat, &m_formatProp);
 	if (m_formatProp.linearTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
 	{

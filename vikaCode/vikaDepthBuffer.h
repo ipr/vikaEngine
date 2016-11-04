@@ -37,7 +37,7 @@ public:
 	vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaDepthBuffer();
 
-	bool create();
+	bool create(VkFormat depthFormat = VK_FORMAT_D16_UNORM);
 	void destroy();
 
 	bool memtypeBitsToIndex(VkFlags reqMask = 0);
