@@ -16,6 +16,7 @@
 #include "vikaDevice.h"
 #include "vikaSurface.h"
 #include "vikaSwapChain.h"
+#include "vikaRenderPass.h"
 
 class vikaApp
 {
@@ -40,6 +41,7 @@ protected:
 	vikaDevice *m_logicalDevice;
 	vikaSurface *m_surface;
 	vikaSwapChain *m_swapChain;
+	vikaRenderPass *m_renderPass;
 
 public:
 	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);

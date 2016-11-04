@@ -35,7 +35,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *parent) :
     m_renderpassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     m_renderpassInfo.pNext = NULL;
     m_renderpassInfo.attachmentCount = 2;
-    m_renderpassInfo.pAttachments = attachments;
+    m_renderpassInfo.pAttachments = m_attachments.data();
     m_renderpassInfo.subpassCount = 1;
     m_renderpassInfo.pSubpasses = &m_subpassDesc;
     m_renderpassInfo.dependencyCount = 0;

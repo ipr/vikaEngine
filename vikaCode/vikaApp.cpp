@@ -16,7 +16,8 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_physDevice(nullptr),
 	m_logicalDevice(nullptr),
 	m_surface(nullptr),
-	m_swapChain(nullptr)
+	m_swapChain(nullptr),
+	m_renderPass(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -63,6 +64,12 @@ bool vikaApp::create()
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	if (m_renderPass != nullptr)
+	{
+		m_renderPass->destroy();
+		delete m_renderPass;
+		m_renderPass = nullptr;
+	}
 	if (m_swapChain != nullptr)
 	{
 		m_swapChain->destroy();
