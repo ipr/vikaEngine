@@ -15,6 +15,8 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_deviceIndex(0),
 	m_physDevice(nullptr),
 	m_logicalDevice(nullptr),
+	m_commandBuffer(nullptr),
+	m_depthBuffer(nullptr),
 	m_surface(nullptr),
 	m_swapChain(nullptr),
 	m_renderPass(nullptr)
@@ -84,6 +86,19 @@ void vikaApp::destroy()
 		m_surface = nullptr;
 	}
 
+	if (m_depthBuffer != nullptr)
+	{
+		m_depthBuffer->destroy();
+		delete m_depthBuffer;
+		m_depthBuffer = nullptr;
+	}
+	if (m_commandBuffer != nullptr)
+	{
+		m_commandBuffer->destroy();
+		delete m_commandBuffer;
+		m_commandBuffer = nullptr;
+	}
+
 	if (m_logicalDevice != nullptr)
 	{
 		m_logicalDevice->destroy();
@@ -142,11 +157,11 @@ bool vikaApp::createDevice(uint32_t deviceIndex)
 	m_physDevice->getPhysProperties();
 	m_physDevice->getQueueProperties();
 
-	return createLogicalDevice();
+	return createLogicalDevice(1);
 }
 
 // TODO: multi-gpu support?
-bool vikaApp::createLogicalDevice()
+bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 {
 	if (m_physDevice == nullptr)
 	{
@@ -155,7 +170,20 @@ bool vikaApp::createLogicalDevice()
 
 	// after checking properties, create logical device from physical device
 	m_logicalDevice = new vikaDevice(this, m_physDevice);
-	if (m_logicalDevice->create(1) == false)
+	if (m_logicalDevice->create() == false)
+	{
+		return false;
+	}
+
+	// assume one command buffer for now
+	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice, m_physDevice->getQueueIndex());
+	if (m_commandBuffer->create(cmdBufferCount) == false)
+	{
+		return false;
+	}
+
+	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice);
+	if (m_depthBuffer->create() == false)
 	{
 		return false;
 	}

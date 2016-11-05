@@ -11,9 +11,9 @@
 #include <vulkan/vulkan.h>
 
 
-vikaCommandBuffer::vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex) :
+vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, const uint32_t queueIndex) :
 	m_res(VK_SUCCESS),
-	m_parent(parent),
+	m_logDevice(logDevice),
 	m_queueIndex(queueIndex),
 	m_cmdPool(VK_NULL_HANDLE)
 {
@@ -32,7 +32,7 @@ bool vikaCommandBuffer::create(uint32_t bufferCount)
 {
 	m_cmdBuffers.resize(bufferCount);
 
-	m_res = vkCreateCommandPool(m_parent->getDevice(), &m_cmdPoolInfo, NULL, &m_cmdPool);
+	m_res = vkCreateCommandPool(m_logDevice->getDevice(), &m_cmdPoolInfo, NULL, &m_cmdPool);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -44,7 +44,7 @@ bool vikaCommandBuffer::create(uint32_t bufferCount)
 	m_cmdBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	m_cmdBufferInfo.commandBufferCount = bufferCount;
 
-	m_res = vkAllocateCommandBuffers(m_parent->getDevice(), &m_cmdBufferInfo, m_cmdBuffers.data());
+	m_res = vkAllocateCommandBuffers(m_logDevice->getDevice(), &m_cmdBufferInfo, m_cmdBuffers.data());
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -56,12 +56,12 @@ void vikaCommandBuffer::destroy()
 {
 	if (m_cmdBuffers.empty() == false)
 	{
-		vkFreeCommandBuffers(m_parent->getDevice(), m_cmdPool, m_cmdBufferInfo.commandBufferCount, m_cmdBuffers.data());
+		vkFreeCommandBuffers(m_logDevice->getDevice(), m_cmdPool, m_cmdBufferInfo.commandBufferCount, m_cmdBuffers.data());
 		m_cmdBuffers.clear();
 	}
 	if (m_cmdPool != VK_NULL_HANDLE)
 	{
-		vkDestroyCommandPool(m_parent->getDevice(), m_cmdPool, NULL);
+		vkDestroyCommandPool(m_logDevice->getDevice(), m_cmdPool, NULL);
 		m_cmdPool = VK_NULL_HANDLE;
 	}
 }
@@ -69,7 +69,7 @@ void vikaCommandBuffer::destroy()
 bool vikaCommandBuffer::resetPool()
 {
 	//m_res = vkResetCommandPool(device, m_cmdPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
-	m_res = vkResetCommandPool(m_parent->getDevice(), m_cmdPool, 0);
+	m_res = vkResetCommandPool(m_logDevice->getDevice(), m_cmdPool, 0);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;

@@ -14,6 +14,8 @@
 
 #include "vikaPhysDevice.h"
 #include "vikaDevice.h"
+#include "vikaCommandBuffer.h"
+#include "vikaDepthBuffer.h"
 #include "vikaSurface.h"
 #include "vikaSwapChain.h"
 #include "vikaRenderPass.h"
@@ -39,6 +41,9 @@ protected:
 
 	vikaPhysDevice *m_physDevice;
 	vikaDevice *m_logicalDevice;
+
+	vikaCommandBuffer *m_commandBuffer;
+	vikaDepthBuffer *m_depthBuffer;
 	vikaSurface *m_surface;
 	vikaSwapChain *m_swapChain;
 	vikaRenderPass *m_renderPass;
@@ -60,7 +65,7 @@ public:
 
 	// just internal thing for now..
 	bool createDevice(uint32_t deviceIndex = 0);
-	bool createLogicalDevice();
+	bool createLogicalDevice(uint32_t cmdBufferCount = 1);
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
 	// note: physical device needs to be selected before this, do we need logical device too?

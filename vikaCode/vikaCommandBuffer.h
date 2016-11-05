@@ -19,7 +19,7 @@ class vikaCommandBuffer
 {
 protected:
 	VkResult m_res;
-	vikaDevice *m_parent;
+	vikaDevice *m_logDevice;
 
 	uint32_t m_queueIndex;
 	//uint32_t m_bufferCount;
@@ -31,7 +31,7 @@ protected:
 	std::vector<VkCommandBuffer> m_cmdBuffers;
 
 public:
-	vikaCommandBuffer(vikaDevice *parent, const uint32_t queueIndex);
+	vikaCommandBuffer(vikaDevice *logDevice, const uint32_t queueIndex);
 	virtual ~vikaCommandBuffer();
 
 	bool create(uint32_t bufferCount = 1);

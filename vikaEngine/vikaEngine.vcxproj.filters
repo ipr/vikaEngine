@@ -60,6 +60,12 @@
     <ClInclude Include="..\vikaCode\vikaUniformBuffer.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaPipeline.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaDescriptorset.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,6 +99,12 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="..\vikaCode\vikaUniformBuffer.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaPipeline.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaDescriptorset.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>

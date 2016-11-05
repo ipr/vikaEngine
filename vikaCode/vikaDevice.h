@@ -11,9 +11,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include "vikaCommandBuffer.h"
-#include "vikaDepthBuffer.h"
-
 class vikaApp;
 class vikaPhysDevice;
 
@@ -31,14 +28,11 @@ protected:
 
 	std::vector<float> m_queuePriorities;
 
-	vikaCommandBuffer *m_commandBuffer;
-	vikaDepthBuffer *m_depthBuffer;
-
 public:
 	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
 	virtual ~vikaDevice();
 
-	bool create(uint32_t cmdBufferCount = 1);
+	bool create();
 	void destroy();
 
 	vikaApp *getApp() { return m_parent; };
