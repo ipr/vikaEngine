@@ -189,3 +189,10 @@ bool vikaApp::createSwapChain()
 	}
 	return true;
 }
+
+/*
+bool vikaApp::createRenderPass()
+{
+	m_renderPass = new vikaRenderPass(m_logicalDevice);
+}
+*/

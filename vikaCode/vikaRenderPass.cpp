@@ -5,12 +5,15 @@
 #include "stdafx.h"
 #include "vikaRenderPass.h"
 #include "vikaDevice.h"
+#include "vikaDepthBuffer.h"
+
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *parent) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaDepthBuffer *depthBuffer) :
 	m_res(VK_SUCCESS),
-	m_parent(parent),
-	m_renderpass(VK_NULL_HANDLE)
+	m_device(device),
+	m_renderpass(VK_NULL_HANDLE),
+	m_depthBuffer(depthBuffer)
 {
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
@@ -49,7 +52,7 @@ vikaRenderPass::~vikaRenderPass()
 
 bool vikaRenderPass::create()
 {
-    m_res = vkCreateRenderPass(m_parent->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
+    m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -61,7 +64,7 @@ void vikaRenderPass::destroy()
 {
 	if (m_renderpass != VK_NULL_HANDLE)
 	{
-		vkDestroyRenderPass(m_parent->getDevice(), m_renderpass, NULL);
+		vkDestroyRenderPass(m_device->getDevice(), m_renderpass, NULL);
 		m_renderpass = VK_NULL_HANDLE;
 	}
 }

@@ -12,12 +12,14 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaDepthBuffer;
 
 class vikaRenderPass
 {
 protected:
 	VkResult m_res;
-	vikaDevice *m_parent;
+	vikaDevice *m_device;
+	vikaDepthBuffer *m_depthBuffer;
 
 	std::vector<VkAttachmentDescription> m_attachments;
 
@@ -30,7 +32,7 @@ protected:
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *parent);
+	vikaRenderPass(vikaDevice *device, vikaDepthBuffer *depthBuffer);
 	virtual ~vikaRenderPass();
 
 	bool create();

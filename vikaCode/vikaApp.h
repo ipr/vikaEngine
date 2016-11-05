@@ -69,6 +69,8 @@ public:
 	vikaSurface* getSurface() { return m_surface; };
 
 	bool createSwapChain();
+
+	//bool createRenderPass();
 };
 
 #endif // _VIKAAPP_H_
