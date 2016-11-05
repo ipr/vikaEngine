@@ -21,6 +21,10 @@ protected:
 
 	std::vector<VkDescriptorPoolSize> m_poolsize;
     VkDescriptorPoolCreateInfo m_descriptorPool = {};
+	VkDescriptorPool m_pool;
+
+	//VkDescriptorSetLayout m_setLayout;
+	//VkDescriptorSet m_descriptorset;
 
     std::vector<VkDescriptorSetAllocateInfo> m_allocInfo;
     std::vector<VkWriteDescriptorSet> m_writeSet;

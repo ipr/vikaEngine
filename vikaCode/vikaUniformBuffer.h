@@ -19,6 +19,10 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 
+	VkDeviceSize m_bufferSize;
+    VkBufferCreateInfo m_bufferInfo = {};
+	VkBuffer m_buffer;
+
 public:
 	vikaUniformBuffer(vikaDevice *logDevice);
 	virtual ~vikaUniformBuffer();

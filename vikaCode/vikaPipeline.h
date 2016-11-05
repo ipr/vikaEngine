@@ -19,6 +19,9 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 
+    VkDescriptorSetLayoutBinding m_layoutBinding = {};
+    VkDescriptorSetLayoutCreateInfo m_descriptorLayout = {};
+
 public:
 	vikaPipeline(vikaDevice *logDevice);
 	virtual ~vikaPipeline();

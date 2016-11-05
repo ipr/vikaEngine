@@ -18,6 +18,9 @@
 #include "vikaDepthBuffer.h"
 #include "vikaSurface.h"
 #include "vikaSwapChain.h"
+#include "vikaUniformBuffer.h"
+#include "vikaPipeline.h"
+#include "vikaDescriptorset.h"
 #include "vikaRenderPass.h"
 
 class vikaApp
@@ -46,6 +49,9 @@ protected:
 	vikaDepthBuffer *m_depthBuffer;
 	vikaSurface *m_surface;
 	vikaSwapChain *m_swapChain;
+	vikaUniformBuffer *m_uniformBuffer;
+	vikaPipeline *m_pipeline;
+	vikaDescriptorset *m_descriptorSet;
 	vikaRenderPass *m_renderPass;
 
 public:

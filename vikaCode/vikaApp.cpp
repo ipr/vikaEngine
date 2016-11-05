@@ -19,6 +19,9 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_depthBuffer(nullptr),
 	m_surface(nullptr),
 	m_swapChain(nullptr),
+	m_uniformBuffer(nullptr),
+	m_pipeline(nullptr),
+	m_descriptorSet(nullptr),
 	m_renderPass(nullptr)
 {
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -72,6 +75,26 @@ void vikaApp::destroy()
 		delete m_renderPass;
 		m_renderPass = nullptr;
 	}
+
+	if (m_descriptorSet != nullptr)
+	{
+		m_descriptorSet->destroy();
+		delete m_descriptorSet;
+		m_descriptorSet = nullptr;
+	}
+	if (m_pipeline != nullptr)
+	{
+		m_pipeline->destroy();
+		delete m_pipeline;
+		m_pipeline = nullptr;
+	}
+	if (m_uniformBuffer != nullptr)
+	{
+		m_uniformBuffer->destroy();
+		delete m_uniformBuffer;
+		m_uniformBuffer = nullptr;
+	}
+
 	if (m_swapChain != nullptr)
 	{
 		m_swapChain->destroy();
