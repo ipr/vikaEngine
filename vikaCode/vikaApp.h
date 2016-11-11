@@ -85,8 +85,7 @@ public:
 	bool createSurface(HINSTANCE hInstance, HWND hWnd);
 	vikaSurface* getSurface() { return m_surface; };
 
-	bool createSwapChain();
-
+	//bool createSwapChain();
 	//bool createRenderPass();
 };
 

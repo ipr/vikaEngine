@@ -37,13 +37,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		::DestroyWindow(g_hWnd);
 		return app.getResult();
 	}
-	if (app.createDevice() == false)
-	{
-		app.destroy();
-		::DestroyWindow(g_hWnd);
-		return app.getResult();
-	}
-
 	// creating surface is currently crashing, something uninitialized still?
 	// -> need to load appropriate extension
 	if (app.createSurface(g_hInst, g_hWnd) == false)
@@ -76,14 +69,17 @@ bool createWindow(const TCHAR *className, const TCHAR *title)
 	wcex.cbClsExtra     = 0;
 	wcex.cbWndExtra     = 0;
 	wcex.hInstance      = g_hInst;
-	wcex.hIcon          = NULL;
-    wcex.hCursor		= NULL; //LoadCursor(g_hInst, IDC_ARROW);
-	wcex.hbrBackground  = NULL; //(HBRUSH)GetStockObject(BLACK_BRUSH);
+	wcex.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW); //LoadCursor(g_hInst, IDC_ARROW);
+	wcex.hbrBackground  = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wcex.lpszMenuName   = NULL;
 	wcex.lpszClassName  = className;
-	wcex.hIconSm        = NULL;
+	wcex.hIconSm        = LoadIcon(NULL, IDI_WINLOGO);
 
-	RegisterClassExW(&wcex);
+	if (!RegisterClassExW(&wcex))
+	{
+		return false;
+	}
 
 	g_hWnd = CreateWindow(className, title, 
 						WS_OVERLAPPEDWINDOW,

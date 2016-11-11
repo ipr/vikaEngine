@@ -75,6 +75,12 @@ bool vikaApp::create()
 	{
 		return false;
 	}
+
+	// potentially could be left to whoever is calling this
+	if (createDevice() == false)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -213,6 +219,7 @@ bool vikaApp::createDevice(uint32_t deviceIndex)
 	m_physDevice = new vikaPhysDevice(this, physDevice, deviceIndex);
 	m_physDevice->getPhysProperties();
 	m_physDevice->getQueueProperties();
+	m_physDevice->enumerateDeviceExtensions();
 
 	return createLogicalDevice(1);
 }
@@ -264,18 +271,21 @@ bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
 	{
 		return false;
 	}
-	return true;
-}
 
-bool vikaApp::createSwapChain()
-{
 	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface);
 	if (m_swapChain->create() == false)
 	{
 		return false;
 	}
+
 	return true;
 }
+
+/*
+bool vikaApp::createSwapChain()
+{
+}
+*/
 
 /*
 bool vikaApp::createRenderPass()

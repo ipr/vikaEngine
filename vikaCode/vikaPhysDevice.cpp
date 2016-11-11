@@ -70,3 +70,25 @@ bool vikaPhysDevice::getQueueProperties()
 	return true;
 }
 
+bool vikaPhysDevice::enumerateDeviceExtensions()
+{
+	uint32_t extensionCount = 0;
+
+	// no layer name, first call: get count
+	m_res = vkEnumerateDeviceExtensionProperties(m_physDevice, nullptr, &extensionCount, NULL);
+	if (m_res != VK_SUCCESS || extensionCount < 1)
+	{
+		return false;
+	}
+
+	m_extensionProperties.resize(extensionCount);
+
+	m_res = vkEnumerateDeviceExtensionProperties(m_physDevice, nullptr, &extensionCount, m_extensionProperties.data());
+	if (m_res != VK_SUCCESS || extensionCount < 1)
+	{
+		return false;
+	}
+	return true;
+
+
+}

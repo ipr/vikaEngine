@@ -30,12 +30,15 @@ public: // make things simpler..
 	VkPhysicalDeviceMemoryProperties m_memoryProperties = {};
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
+	std::vector<VkExtensionProperties> m_extensionProperties;
+
 public:
 	vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint32_t deviceIndex);
 	~vikaPhysDevice();
 
 	bool getPhysProperties();
 	bool getQueueProperties();
+	bool enumerateDeviceExtensions();
 
 	uint32_t getQueueIndex() const { return m_queueIndex; };
 	VkPhysicalDevice& getPhysDev() { return m_physDevice; }; 
