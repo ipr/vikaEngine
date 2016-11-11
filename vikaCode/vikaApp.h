@@ -38,6 +38,9 @@ protected:
 	// layers known to loader
 	std::vector<VkLayerProperties> m_layers;
 
+	// layers to be loaded with the instance
+	std::vector<const char *> m_layerNames;
+
 	// extensions supported
 	std::vector<VkExtensionProperties> m_instanceExtensions;
 

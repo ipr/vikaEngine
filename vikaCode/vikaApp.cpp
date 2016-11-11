@@ -68,21 +68,23 @@ bool vikaApp::create()
 	// TODO: check that required extensions are supported
 
 	// ok, assume list if fine for now
-    m_instInfo.enabledExtensionCount = m_extensionNames.size();
 	if (m_extensionNames.size() > 0)
 	{
+		m_instInfo.enabledExtensionCount = m_extensionNames.size();
 		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
 	}
 
-	// in case additional layers are needed add to createinfo:
-	//m_instInfo.enabledLayerCount = 0;
-	//m_instInfo.ppEnabledLayerNames = NULL;
-	//
 	// Note! must load list of layers to get win32 surface extension working properly?
 	// driver bug possibly?
 	if (enumerateLayers() == false)
 	{
 		return false;
+	}
+
+	if (m_layerNames.size() > 0)
+	{
+		m_instInfo.enabledLayerCount = m_layerNames.size();
+		m_instInfo.ppEnabledLayerNames = m_layerNames.data();
 	}
 
 	// in case of failure, no runtime installed?
@@ -260,6 +262,7 @@ bool vikaApp::createDevice(uint32_t deviceIndex)
 	m_physDevice->getPhysProperties();
 	m_physDevice->getQueueProperties();
 	m_physDevice->enumerateDeviceExtensions();
+	m_physDevice->enumerateDeviceLayers();
 
 	return createLogicalDevice(1);
 }

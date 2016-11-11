@@ -31,6 +31,7 @@ public: // make things simpler..
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
 	std::vector<VkExtensionProperties> m_extensionProperties;
+	std::vector<VkLayerProperties> m_layerProperties;
 
 public:
 	vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint32_t deviceIndex);
@@ -39,6 +40,7 @@ public:
 	bool getPhysProperties();
 	bool getQueueProperties();
 	bool enumerateDeviceExtensions();
+	bool enumerateDeviceLayers();
 
 	uint32_t getQueueIndex() const { return m_queueIndex; };
 	VkPhysicalDevice& getPhysDev() { return m_physDevice; }; 

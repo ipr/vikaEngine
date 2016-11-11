@@ -49,10 +49,15 @@ bool vikaDevice::create()
 	// TODO: check that required extensions are supported by the physical device before creating logical device
 
 	// ok, assume list if fine for now
-    m_deviceInfo.enabledExtensionCount = m_extensionNames.size();
 	if (m_extensionNames.size() > 0)
 	{
+	    m_deviceInfo.enabledExtensionCount = m_extensionNames.size();
 		m_deviceInfo.ppEnabledExtensionNames = m_extensionNames.data();
+	}
+	if (m_layerNames.size() > 0)
+	{
+		m_deviceInfo.enabledLayerCount = m_layerNames.size();
+		m_deviceInfo.ppEnabledLayerNames = m_layerNames.data();
 	}
 
 	// create logical device from the physical device

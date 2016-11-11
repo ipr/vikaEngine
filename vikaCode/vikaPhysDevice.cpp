@@ -89,6 +89,22 @@ bool vikaPhysDevice::enumerateDeviceExtensions()
 		return false;
 	}
 	return true;
+}
 
+bool vikaPhysDevice::enumerateDeviceLayers()
+{
+	uint32_t propCount = 0;
+	m_res = vkEnumerateDeviceLayerProperties(m_physDevice, &propCount, NULL);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
 
+	m_layerProperties.resize(propCount);
+	m_res = vkEnumerateDeviceLayerProperties(m_physDevice, &propCount, m_layerProperties.data());
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
 }

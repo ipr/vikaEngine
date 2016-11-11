@@ -29,6 +29,7 @@ protected:
 
 	std::vector<float> m_queuePriorities;
 	std::vector<const char *> m_extensionNames;
+	std::vector<const char *> m_layerNames;
 
 public:
 	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
