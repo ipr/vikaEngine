@@ -26,6 +26,11 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 {
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
+#ifdef _WINDOWS
+	// available at instance level, but must be listed after "generic" surface extension? (driver bug?)
+	// other thing: add system env variable VK_LAYER_PATH if this extension is not working (might be another thing)
+	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME); 
+#endif
 
 	m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	m_appInfo.pNext = NULL;
@@ -61,9 +66,8 @@ bool vikaApp::create()
 	}
 
 	// TODO: check that required extensions are supported
-	//auto it = m_instanceExtensions.begin();
 
-	// assuming necessary extensions found
+	// ok, assume list if fine for now
     m_instInfo.enabledExtensionCount = m_extensionNames.size();
 	if (m_extensionNames.size() > 0)
 	{
@@ -73,6 +77,9 @@ bool vikaApp::create()
 	// in case additional layers are needed add to createinfo:
 	//m_instInfo.enabledLayerCount = 0;
 	//m_instInfo.ppEnabledLayerNames = NULL;
+	//
+	// Note! must load list of layers to get win32 surface extension working properly?
+	// driver bug possibly?
 	if (enumerateLayers() == false)
 	{
 		return false;
@@ -305,11 +312,13 @@ bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 		return false;
 	}
 
+	/* not working yet
 	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface);
 	if (m_swapChain->create() == false)
 	{
 		return false;
 	}
+	*/
 
 	return true;
 }

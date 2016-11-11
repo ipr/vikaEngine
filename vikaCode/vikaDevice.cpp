@@ -17,12 +17,10 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_physDevice(physDevice),
 	m_device(VK_NULL_HANDLE)
 {
-	m_queuePriorities = {0.0};
+	// range 0..1, 1 highest?
+	m_queuePriorities = {1.0};
 
 	// stuff you need later: list of extensions to load
-#ifdef _WINDOWS
-	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-#endif
 	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME); // <- available at device level
 
     m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -48,9 +46,9 @@ vikaDevice::~vikaDevice()
 
 bool vikaDevice::create()
 {
-	// check that required extensions are supported by the physical device before creating logical device
-	//auto it = m_physDevice->m_extensionProperties.begin();
+	// TODO: check that required extensions are supported by the physical device before creating logical device
 
+	// ok, assume list if fine for now
     m_deviceInfo.enabledExtensionCount = m_extensionNames.size();
 	if (m_extensionNames.size() > 0)
 	{
