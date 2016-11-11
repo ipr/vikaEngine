@@ -300,8 +300,13 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 	return true;
 }
 
-// note: physical device needs to be selected before this, do we need logical device too?
+// note: physical device needs to be selected before this, 
+// also create logical device from physical device
+// since that will load the necessary extension(s) for us needed in creating surface
+// (otherwise vkCreateWin32SurfaceKHR() won't exist and will crash)
+//
 // for Win32
+#ifdef _WINDOWS
 bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 {
 	if (m_physDevice == nullptr)
@@ -325,6 +330,7 @@ bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 
 	return true;
 }
+#endif
 
 /*
 bool vikaApp::createSwapChain()

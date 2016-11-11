@@ -89,7 +89,9 @@ public:
 
 	// note: physical device needs to be selected before this, do we need logical device too?
 	// for Win32
+#ifdef _WINDOWS
 	bool createSurface(HINSTANCE &hInstance, HWND &hWnd);
+#endif
 	vikaSurface* getSurface() { return m_surface; };
 
 	//bool createSwapChain();
