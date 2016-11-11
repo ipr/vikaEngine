@@ -53,7 +53,10 @@ bool vikaApp::create()
 {
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+#ifdef _WINDOWS
 	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#endif
 
 	// in case of failure, no runtime installed?
     m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
@@ -66,7 +69,10 @@ bool vikaApp::create()
 	{
 		return false;
 	}
-
+	if (enumerateInstanceExtensions() == false)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -162,6 +168,28 @@ bool vikaApp::enumeratePhysicalDevices()
 	// second call: retrieve actual data of all gpu available (handles)
     m_res = vkEnumeratePhysicalDevices(m_instance, &m_devCount, m_devices.data());
 	if (m_res != VK_SUCCESS || m_devCount < 1)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool vikaApp::enumerateInstanceExtensions()
+{
+	uint32_t extensionsCount = 0;
+
+	// no layer name, first call: get count
+	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, NULL);
+	if (m_res != VK_SUCCESS || extensionsCount < 1)
+	{
+		return false;
+	}
+
+	m_instanceExtensions.resize(extensionsCount);
+
+	// no layer name, second call: get data
+	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, m_instanceExtensions.data());
+	if (m_res != VK_SUCCESS || extensionsCount < 1)
 	{
 		return false;
 	}

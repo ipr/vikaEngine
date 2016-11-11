@@ -35,6 +35,9 @@ protected:
 	std::string m_appName;
 	std::string m_engineName;
 
+	// extensions supported
+	std::vector<VkExtensionProperties> m_instanceExtensions;
+
 	// list of various extensions needed
 	std::vector<const char *> m_extensionNames;
 
@@ -64,6 +67,7 @@ public:
 	void destroy();
 
 	bool enumeratePhysicalDevices();
+	bool enumerateInstanceExtensions();
 
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
