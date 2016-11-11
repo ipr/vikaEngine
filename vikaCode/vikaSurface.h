@@ -55,7 +55,7 @@ public:
 	*/
 
 #ifdef _WINDOWS
-	bool createSurface(HINSTANCE hInstance, HWND hWnd);
+	bool createSurface(HINSTANCE &hInstance, HWND &hWnd);
 #endif
 
 	bool createInternals();

@@ -35,6 +35,9 @@ protected:
 	std::string m_appName;
 	std::string m_engineName;
 
+	// layers known to loader
+	std::vector<VkLayerProperties> m_layers;
+
 	// extensions supported
 	std::vector<VkExtensionProperties> m_instanceExtensions;
 
@@ -66,6 +69,7 @@ public:
 	bool create();
 	void destroy();
 
+	bool enumerateLayers();
 	bool enumeratePhysicalDevices();
 	bool enumerateInstanceExtensions();
 
@@ -82,7 +86,7 @@ public:
 
 	// note: physical device needs to be selected before this, do we need logical device too?
 	// for Win32
-	bool createSurface(HINSTANCE hInstance, HWND hWnd);
+	bool createSurface(HINSTANCE &hInstance, HWND &hWnd);
 	vikaSurface* getSurface() { return m_surface; };
 
 	//bool createSwapChain();

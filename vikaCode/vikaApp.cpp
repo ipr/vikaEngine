@@ -27,26 +27,22 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
 
-    m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    m_appInfo.pNext = NULL;
-    m_appInfo.pApplicationName = m_appName.c_str(); // freeform
-    m_appInfo.applicationVersion = appVersion;		// freeform
-    m_appInfo.pEngineName = m_engineName.c_str();		// freeform
-    m_appInfo.engineVersion = engineVersion;			// freeform
-    m_appInfo.apiVersion = VK_API_VERSION_1_0;
+	m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	m_appInfo.pNext = NULL;
+	m_appInfo.pApplicationName = m_appName.c_str(); // freeform
+	m_appInfo.applicationVersion = appVersion;		// freeform
+	m_appInfo.pEngineName = m_engineName.c_str();		// freeform
+	m_appInfo.engineVersion = engineVersion;			// freeform
+	m_appInfo.apiVersion = VK_API_VERSION_1_0;
 
-    m_instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    m_instInfo.pNext = NULL;
-    m_instInfo.flags = 0;
-    m_instInfo.pApplicationInfo = &m_appInfo;
-    m_instInfo.enabledExtensionCount = m_extensionNames.size();
-    m_instInfo.ppEnabledExtensionNames = NULL;
-	if (m_extensionNames.size() > 0)
-	{
-		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
-	}
-    m_instInfo.enabledLayerCount = 0;
-    m_instInfo.ppEnabledLayerNames = NULL;
+	m_instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	m_instInfo.pNext = NULL;
+	m_instInfo.flags = 0;
+	m_instInfo.pApplicationInfo = &m_appInfo;
+	m_instInfo.enabledExtensionCount = 0;
+	m_instInfo.ppEnabledExtensionNames = NULL;
+	m_instInfo.enabledLayerCount = 0;
+	m_instInfo.ppEnabledLayerNames = NULL;
 }
 
 vikaApp::~vikaApp()
@@ -58,6 +54,30 @@ vikaApp::~vikaApp()
 // only variation is parameters you set in constructor..
 bool vikaApp::create()
 {
+	// check supported extensions before trying to create instance
+	if (enumerateInstanceExtensions() == false)
+	{
+		return false;
+	}
+
+	// TODO: check that required extensions are supported
+	//auto it = m_instanceExtensions.begin();
+
+	// assuming necessary extensions found
+    m_instInfo.enabledExtensionCount = m_extensionNames.size();
+	if (m_extensionNames.size() > 0)
+	{
+		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
+	}
+
+	// in case additional layers are needed add to createinfo:
+	//m_instInfo.enabledLayerCount = 0;
+	//m_instInfo.ppEnabledLayerNames = NULL;
+	if (enumerateLayers() == false)
+	{
+		return false;
+	}
+
 	// in case of failure, no runtime installed?
     m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
 	if (m_res != VK_SUCCESS)
@@ -66,12 +86,6 @@ bool vikaApp::create()
 	}
 
 	if (enumeratePhysicalDevices() == false)
-	{
-		return false;
-	}
-
-	// TODO: this should be before vkCreateInstance()?
-	if (enumerateInstanceExtensions() == false)
 	{
 		return false;
 	}
@@ -159,6 +173,25 @@ void vikaApp::destroy()
 	    vkDestroyInstance(m_instance, NULL);
 		m_instance = VK_NULL_HANDLE;
 	}
+}
+
+// enumerate layers known to loader
+bool vikaApp::enumerateLayers()
+{
+	uint32_t layerCount = 0;
+	m_res = vkEnumerateInstanceLayerProperties(&layerCount, NULL);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	m_layers.resize(layerCount);
+	m_res = vkEnumerateInstanceLayerProperties(&layerCount, m_layers.data());
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
 }
 
 // also pretty obvious: after initializing, locate a suitable gpu
@@ -259,7 +292,7 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 
 // note: physical device needs to be selected before this, do we need logical device too?
 // for Win32
-bool vikaApp::createSurface(HINSTANCE hInstance, HWND hWnd)
+bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 {
 	if (m_physDevice == nullptr)
 	{

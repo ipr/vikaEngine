@@ -35,7 +35,7 @@ vikaSurface::~vikaSurface()
 // note: needs extension loaded,
 // VK_KHR_SWAPCHAIN_EXTENSION_NAME
 // VK_KHR_WIN32_SURFACE_EXTENSION_NAME
-bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
+bool vikaSurface::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 {
     m_srfInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
     m_srfInfo.pNext = NULL;
