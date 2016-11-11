@@ -35,8 +35,10 @@ protected:
 	std::string m_appName;
 	std::string m_engineName;
 
-	std::vector<VkPhysicalDevice> m_devices; // actual gpus
+	// list of various extensions needed
+	std::vector<const char *> m_extensionNames;
 
+	std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	uint32_t m_devCount; // aka. gpu count
 
 	// TODO: multi-gpu support?

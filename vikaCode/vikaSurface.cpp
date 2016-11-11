@@ -32,6 +32,9 @@ vikaSurface::~vikaSurface()
 */
 
 #ifdef _WINDOWS
+// note: needs extension loaded,
+// VK_KHR_SWAPCHAIN_EXTENSION_NAME
+// VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
 {
     m_srfInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -40,6 +43,7 @@ bool vikaSurface::createSurface(HINSTANCE hInstance, HWND hWnd)
     m_srfInfo.hinstance = hInstance;
     m_srfInfo.hwnd = hWnd;
 
+	// note: must load appropriate extension to vulkan before this can be used
     m_res = vkCreateWin32SurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{

@@ -34,12 +34,24 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	if (app.create() == false)
 	{
 		app.destroy();
+		::DestroyWindow(g_hWnd);
 		return app.getResult();
 	}
-	app.createLogicalDevice();
+	if (app.createDevice() == false)
+	{
+		app.destroy();
+		::DestroyWindow(g_hWnd);
+		return app.getResult();
+	}
 
 	// creating surface is currently crashing, something uninitialized still?
-	app.createSurface(g_hInst, g_hWnd);
+	// -> need to load appropriate extension
+	if (app.createSurface(g_hInst, g_hWnd) == false)
+	{
+		app.destroy();
+		::DestroyWindow(g_hWnd);
+		return app.getResult();
+	}
 
     // Main message loop:
     MSG msg;

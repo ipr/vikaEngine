@@ -51,6 +51,10 @@ vikaApp::~vikaApp()
 // only variation is parameters you set in constructor..
 bool vikaApp::create()
 {
+	// stuff you need later: list of extensions to load
+	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+
 	// in case of failure, no runtime installed?
     m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
 	if (m_res != VK_SUCCESS)
@@ -192,7 +196,7 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 	}
 
 	// after checking properties, create logical device from physical device
-	m_logicalDevice = new vikaDevice(this, m_physDevice);
+	m_logicalDevice = new vikaDevice(this, m_physDevice, m_extensionNames);
 	if (m_logicalDevice->create() == false)
 	{
 		return false;

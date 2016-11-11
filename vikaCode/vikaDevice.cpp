@@ -11,7 +11,7 @@
 #include <vulkan/vulkan.h>
 
 
-vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
+vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, std::vector<const char *> &extensionNames) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_physDevice(physDevice),
@@ -24,12 +24,19 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
     m_queueInfo.queueCount = m_queuePriorities.size();
     m_queueInfo.pQueuePriorities = m_queuePriorities.data();
 
+	// note: we need to load platform specific extensions here,
+	// for example, Win32 specific surface support
+
     m_deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     m_deviceInfo.pNext = NULL;
     m_deviceInfo.queueCreateInfoCount = 1;
     m_deviceInfo.pQueueCreateInfos = &m_queueInfo;
-    m_deviceInfo.enabledExtensionCount = 0;
+    m_deviceInfo.enabledExtensionCount = extensionNames.size();
     m_deviceInfo.ppEnabledExtensionNames = NULL;
+	if (extensionNames.size() > 0)
+	{
+		m_deviceInfo.ppEnabledExtensionNames = extensionNames.data();
+	}
     m_deviceInfo.enabledLayerCount = 0;
     m_deviceInfo.ppEnabledLayerNames = NULL;
     m_deviceInfo.pEnabledFeatures = NULL;

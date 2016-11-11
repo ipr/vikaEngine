@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include <vulkan/vulkan.h>
@@ -29,7 +30,7 @@ protected:
 	std::vector<float> m_queuePriorities;
 
 public:
-	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
+	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, std::vector<const char *> &extensionNames);
 	virtual ~vikaDevice();
 
 	bool create();
