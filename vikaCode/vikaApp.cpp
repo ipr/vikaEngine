@@ -24,6 +24,13 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_descriptorSet(nullptr),
 	m_renderPass(nullptr)
 {
+	// stuff you need later: list of extensions to load
+	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+#ifdef _WINDOWS
+	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#endif
+
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
     m_appInfo.pApplicationName = m_appName.c_str(); // freeform
@@ -36,8 +43,12 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
     m_instInfo.pNext = NULL;
     m_instInfo.flags = 0;
     m_instInfo.pApplicationInfo = &m_appInfo;
-    m_instInfo.enabledExtensionCount = 0;
+    m_instInfo.enabledExtensionCount = m_extensionNames.size();
     m_instInfo.ppEnabledExtensionNames = NULL;
+	if (m_extensionNames.size() > 0)
+	{
+		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
+	}
     m_instInfo.enabledLayerCount = 0;
     m_instInfo.ppEnabledLayerNames = NULL;
 }
@@ -51,13 +62,6 @@ vikaApp::~vikaApp()
 // only variation is parameters you set in constructor..
 bool vikaApp::create()
 {
-	// stuff you need later: list of extensions to load
-	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
-#ifdef _WINDOWS
-	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-#endif
-
 	// in case of failure, no runtime installed?
     m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
 	if (m_res != VK_SUCCESS)
@@ -69,6 +73,8 @@ bool vikaApp::create()
 	{
 		return false;
 	}
+
+	// TODO: this should be before vkCreateInstance()?
 	if (enumerateInstanceExtensions() == false)
 	{
 		return false;
@@ -224,7 +230,7 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 	}
 
 	// after checking properties, create logical device from physical device
-	m_logicalDevice = new vikaDevice(this, m_physDevice, m_extensionNames);
+	m_logicalDevice = new vikaDevice(this, m_physDevice);
 	if (m_logicalDevice->create() == false)
 	{
 		return false;

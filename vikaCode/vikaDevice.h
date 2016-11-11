@@ -28,9 +28,10 @@ protected:
     VkDevice m_device; // logical handle
 
 	std::vector<float> m_queuePriorities;
+	std::vector<const char *> m_extensionNames;
 
 public:
-	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, std::vector<const char *> &extensionNames);
+	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
 	virtual ~vikaDevice();
 
 	bool create();

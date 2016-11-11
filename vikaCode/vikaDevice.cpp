@@ -11,13 +11,16 @@
 #include <vulkan/vulkan.h>
 
 
-vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, std::vector<const char *> &extensionNames) :
+vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_physDevice(physDevice),
 	m_device(VK_NULL_HANDLE)
 {
 	m_queuePriorities = {0.0};
+#ifdef _WINDOWS
+	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#endif
 
     m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     m_queueInfo.pNext = NULL;
@@ -31,11 +34,11 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice, std::vector<
     m_deviceInfo.pNext = NULL;
     m_deviceInfo.queueCreateInfoCount = 1;
     m_deviceInfo.pQueueCreateInfos = &m_queueInfo;
-    m_deviceInfo.enabledExtensionCount = extensionNames.size();
+    m_deviceInfo.enabledExtensionCount = m_extensionNames.size();
     m_deviceInfo.ppEnabledExtensionNames = NULL;
-	if (extensionNames.size() > 0)
+	if (m_extensionNames.size() > 0)
 	{
-		m_deviceInfo.ppEnabledExtensionNames = extensionNames.data();
+		m_deviceInfo.ppEnabledExtensionNames = m_extensionNames.data();
 	}
     m_deviceInfo.enabledLayerCount = 0;
     m_deviceInfo.ppEnabledLayerNames = NULL;
