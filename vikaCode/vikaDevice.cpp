@@ -18,9 +18,14 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_device(VK_NULL_HANDLE)
 {
 	m_queuePriorities = {0.0};
+
+	// stuff you need later: list of extensions to load
+	/*
 #ifdef _WINDOWS
 	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
 #endif
+*/
+	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME); // <- available at device level
 
     m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     m_queueInfo.pNext = NULL;

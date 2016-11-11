@@ -25,11 +25,7 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_renderPass(nullptr)
 {
 	// stuff you need later: list of extensions to load
-	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
-#ifdef _WINDOWS
-	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-#endif
+	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
 
     m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     m_appInfo.pNext = NULL;
@@ -243,11 +239,13 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 		return false;
 	}
 
+	/* not working yet
 	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice);
 	if (m_depthBuffer->create() == false)
 	{
 		return false;
 	}
+	*/
 
 	return true;
 }
