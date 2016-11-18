@@ -158,13 +158,6 @@ void vikaApp::destroy()
 		m_swapChain = nullptr;
 	}
 
-	if (m_surface != nullptr)
-	{
-		m_surface->destroy();
-		delete m_surface;
-		m_surface = nullptr;
-	}
-
 	if (m_depthBuffer != nullptr)
 	{
 		m_depthBuffer->destroy();
@@ -183,6 +176,13 @@ void vikaApp::destroy()
 		m_logicalDevice->destroy();
 		delete m_logicalDevice;
 		m_logicalDevice = nullptr;
+	}
+
+	if (m_surface != nullptr)
+	{
+		m_surface->destroy();
+		delete m_surface;
+		m_surface = nullptr;
 	}
 
 	if (m_physDevice != nullptr)
