@@ -30,11 +30,12 @@ protected:
 	// TODO: add in derived class
     //VkWin32SurfaceCreateInfoKHR m_createInfo;
 
+public: // make things simpler..
 	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
 	VkSurfaceKHR m_surface;
 
-	uint32_t m_graphicsIndex;
-	uint32_t m_presentIndex;
+	uint32_t m_graphicsQueueIndex;
+	uint32_t m_presentQueueIndex;
 
 	std::vector<VkBool32> m_supports;
 	std::vector<VkSurfaceFormatKHR> m_formats;
@@ -72,7 +73,7 @@ public:
 
 	VkResult getResult() const { return m_res; };
 	VkSurfaceKHR& getSurface() { return m_surface; };
-	VkSurfaceCapabilitiesKHR& getCaps() { return m_caps; };
+	//VkSurfaceCapabilitiesKHR& getCaps() { return m_caps; };
 };
 
 #endif // _VIKASURFACE_H_

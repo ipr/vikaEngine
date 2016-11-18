@@ -24,7 +24,11 @@ protected:
 	uint32_t m_swapchainImageCount;
 
 	VkPresentModeKHR m_swapchainPresentMode;
-	//VkExtent2D m_swapchainExtent = {};
+	VkExtent2D m_swapchainExtent = {};
+
+	VkSurfaceTransformFlagBitsKHR m_preTransform;
+
+	std::vector<uint32_t> m_queueIndices;
 
     VkSwapchainCreateInfoKHR m_swapchainInfo = {};
 	VkSwapchainKHR m_swapchain;
@@ -33,8 +37,10 @@ protected:
 
 
 public:
-	vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface);
+	vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface, VkExtent2D &imageSize);
 	virtual ~vikaSwapChain();
+
+	void makeExtentFromCaps(VkSurfaceCapabilitiesKHR &caps);
 
 	bool create();
 	void destroy();

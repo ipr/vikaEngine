@@ -328,13 +328,11 @@ bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 		return false;
 	}
 
-	/* not working yet
-	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface);
+	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface, m_imageSize);
 	if (m_swapChain->create() == false)
 	{
 		return false;
 	}
-	*/
 
 	return true;
 }

@@ -15,8 +15,8 @@ vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_parent(parent),
 	m_physDevice(physDevice),
 	m_surface(VK_NULL_HANDLE),
-	m_graphicsIndex(UINT32_MAX),
-	m_presentIndex(UINT32_MAX),
+	m_graphicsQueueIndex(UINT32_MAX),
+	m_presentQueueIndex(UINT32_MAX),
 	m_formatCount(0),
 	m_format(VK_FORMAT_UNDEFINED),
 	m_presentModeCount(0)
@@ -98,13 +98,16 @@ bool vikaSurface::enumeratePhysDeviceSupport()
 		{
 			if ((m_physDevice->m_queueProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && m_supports[i] == VK_TRUE)
 			{
-				m_graphicsIndex = i;
-				m_presentIndex = i;
+				m_graphicsQueueIndex = i;
+				m_presentQueueIndex = i;
+				return true;
 			}
 		}
 	}
 
-	if (m_graphicsIndex == UINT32_MAX || m_presentIndex == UINT32_MAX)
+	// TODO: check if additional logic is necessary here..
+
+	if (m_graphicsQueueIndex == UINT32_MAX || m_presentQueueIndex == UINT32_MAX)
 	{
 		return false;
 	}
