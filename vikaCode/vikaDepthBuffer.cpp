@@ -41,6 +41,19 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
 
 	m_viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	m_viewInfo.pNext = NULL;
+    m_viewInfo.image = VK_NULL_HANDLE;
+    //m_viewInfo.format = depth_format; // filled in later
+    m_viewInfo.components.r = VK_COMPONENT_SWIZZLE_R;
+    m_viewInfo.components.g = VK_COMPONENT_SWIZZLE_G;
+    m_viewInfo.components.b = VK_COMPONENT_SWIZZLE_B;
+    m_viewInfo.components.a = VK_COMPONENT_SWIZZLE_A;
+    m_viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+    m_viewInfo.subresourceRange.baseMipLevel = 0;
+    m_viewInfo.subresourceRange.levelCount = 1;
+    m_viewInfo.subresourceRange.baseArrayLayer = 0;
+    m_viewInfo.subresourceRange.layerCount = 1;
+    m_viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    m_viewInfo.flags = 0;
 }
 
 vikaDepthBuffer::~vikaDepthBuffer()
