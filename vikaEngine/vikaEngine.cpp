@@ -130,6 +130,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 		*/
 
+		/*
+	case :
+		{
+			RECT rcWindow;
+			::GetClientRect(m_hWnd, &rcWindow);
+		}
+		break;
+		*/
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
