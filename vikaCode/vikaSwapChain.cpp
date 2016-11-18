@@ -127,15 +127,28 @@ bool vikaSwapChain::create()
 		return false;
 	}
 
+	/*
 	for (uint32_t i = 0; i < m_swapchainImageCount; i++)
 	{
+		VkImageViewCreateInfo ...;
+		vkCreateImageView(..);
 	}
+	*/
 
 	return true;
 }
 
 void vikaSwapChain::destroy()
 {
+	for (uint32_t i = 0; i < m_swapchainViews.size(); i++)
+	{
+		// these are destroyed automatically?
+		//vkDestroyImage(m_logicalDev->getDevice(), m_swapchainImages[i], NULL);
+		vkDestroyImageView(m_logicalDev->getDevice(), m_swapchainViews[i], NULL);
+	}
+	m_swapchainImages.clear();
+	m_swapchainViews.clear();
+
 	if (m_swapchain != VK_NULL_HANDLE)
 	{
 		vkDestroySwapchainKHR(m_logicalDev->getDevice(), m_swapchain, NULL);

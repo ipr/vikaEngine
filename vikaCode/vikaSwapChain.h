@@ -34,6 +34,7 @@ protected:
 	VkSwapchainKHR m_swapchain;
 
 	std::vector<VkImage> m_swapchainImages;
+	std::vector<VkImageView> m_swapchainViews;
 
 
 public:
