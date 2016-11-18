@@ -50,7 +50,7 @@ vikaRenderPass::~vikaRenderPass()
 	destroy();
 }
 
-bool vikaRenderPass::create()
+bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 {
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)

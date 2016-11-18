@@ -63,9 +63,8 @@ void vikaApp::setSize(const uint32_t width, const uint32_t height)
 	m_imageSize.height = height;
 }
 
-// obvious, first method to actually call to initialize:
-// only variation is parameters you set in constructor..
-bool vikaApp::create()
+// TODO: improve device selection method, multi-GPU support?
+bool vikaApp::create(uint32_t deviceIndex)
 {
 	// check supported extensions before trying to create instance
 	if (enumerateInstanceExtensions() == false)
@@ -107,11 +106,19 @@ bool vikaApp::create()
 		return false;
 	}
 
-	// potentially could be left to whoever is calling this
-	if (createDevice() == false)
-	{
-		return false;
-	}
+	// TODO: overwritable device selection method?
+	// -> consider memory, capabilities etc.?
+	// this could select some other device if multiple/necessary..
+	// assume first is fine for now
+	m_deviceIndex = deviceIndex;
+
+	// assume the selected device is fine
+	m_physDevice = new vikaPhysDevice(this, m_devices[m_deviceIndex], deviceIndex);
+	m_physDevice->getPhysProperties();
+	m_physDevice->getQueueProperties();
+	m_physDevice->enumerateDeviceExtensions();
+	m_physDevice->enumerateDeviceLayers();
+
 	return true;
 }
 
@@ -254,35 +261,35 @@ bool vikaApp::enumerateInstanceExtensions()
 	return true;
 }
 
-// just internal thing for now..
-// TODO: multi-gpu support?
-bool vikaApp::createDevice(uint32_t deviceIndex)
+// note: physical device needs to be selected before this, 
+// also create logical device from physical device
+// since that will load the necessary extension(s) for us needed in creating surface
+// (otherwise vkCreateWin32SurfaceKHR() won't exist and will crash)
+//
+// for Win32
+#ifdef _WINDOWS
+bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 {
-	// TODO: overwritable device selection method?
-	// -> consider memory, capabilities etc.?
-	// this could select some other device if multiple/necessary..
-	// assume first is fine for now
-	m_deviceIndex = deviceIndex;
-	// assume the selected device is fine
-	VkPhysicalDevice &physDevice = m_devices[m_deviceIndex];
+	// note: extensions VK_KHR_SURFACE_EXTENSION_NAME and VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+	// must be loaded first on instance-level for surface creation to work here
 
-	m_physDevice = new vikaPhysDevice(this, physDevice, deviceIndex);
-	m_physDevice->getPhysProperties();
-	m_physDevice->getQueueProperties();
-	m_physDevice->enumerateDeviceExtensions();
-	m_physDevice->enumerateDeviceLayers();
-
-	return createLogicalDevice(1);
-}
-
-// TODO: multi-gpu support?
-bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
-{
 	if (m_physDevice == nullptr)
 	{
 		return false;
 	}
 
+	m_surface = new vikaSurface(this, m_physDevice);
+	if (m_surface->createSurface(hInstance, hWnd) == false)
+	{
+		return false;
+	}
+
+	return true;
+}
+#endif
+
+bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
+{
 	// after checking properties, create logical device from physical device
 	m_logicalDevice = new vikaDevice(this, m_physDevice);
 	if (m_logicalDevice->create() == false)
@@ -297,56 +304,41 @@ bool vikaApp::createLogicalDevice(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	/* not working yet
-	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice);
-	if (m_depthBuffer->create() == false)
-	{
-		return false;
-	}
-	*/
-
-	return true;
-}
-
-// note: physical device needs to be selected before this, 
-// also create logical device from physical device
-// since that will load the necessary extension(s) for us needed in creating surface
-// (otherwise vkCreateWin32SurfaceKHR() won't exist and will crash)
-//
-// for Win32
-#ifdef _WINDOWS
-bool vikaApp::createSurface(HINSTANCE &hInstance, HWND &hWnd)
-{
-	if (m_physDevice == nullptr)
-	{
-		return false;
-	}
-
-	m_surface = new vikaSurface(this, m_physDevice);
-	if (m_surface->createSurface(hInstance, hWnd) == false)
-	{
-		return false;
-	}
-
 	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface, m_imageSize);
 	if (m_swapChain->create() == false)
 	{
 		return false;
 	}
 
+	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice, m_imageSize);
+	if (m_depthBuffer->create(VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_D16_UNORM) == false)
+	{
+		return false;
+	}
+
+	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice);
+	if (m_uniformBuffer->create() == false)
+	{
+		return false;
+	}
+
+	m_pipeline = new vikaPipeline(m_logicalDevice);
+	if (m_pipeline->create() == false)
+	{
+		return false;
+	}
+	
+	m_descriptorSet = new vikaDescriptorset(m_logicalDevice);
+	if (m_descriptorSet->create() == false)
+	{
+		return false;
+	}
+
+	m_renderPass = new vikaRenderPass(m_logicalDevice, m_depthBuffer);
+	if (m_renderPass->create() == false)
+	{
+		return false;
+	}
 	return true;
 }
-#endif
 
-/*
-bool vikaApp::createSwapChain()
-{
-}
-*/
-
-/*
-bool vikaApp::createRenderPass()
-{
-	m_renderPass = new vikaRenderPass(m_logicalDevice);
-}
-*/

@@ -85,7 +85,7 @@ public:
 	// screen/image size
 	void setSize(const uint32_t width, const uint32_t height);
 
-	bool create();
+	bool create(uint32_t deviceIndex = 0);
 	void destroy();
 
 	bool enumerateLayers();
@@ -97,10 +97,6 @@ public:
 
 	VkResult getResult() const { return m_res; };
 	VkInstance& getInstance() { return m_instance; };
-
-	// just internal thing for now..
-	bool createDevice(uint32_t deviceIndex = 0);
-	bool createLogicalDevice(uint32_t cmdBufferCount = 1);
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
 	// note: physical device needs to be selected before this, do we need logical device too?
@@ -110,8 +106,7 @@ public:
 #endif
 	vikaSurface* getSurface() { return m_surface; };
 
-	//bool createSwapChain();
-	//bool createRenderPass();
+	bool createRenderPass(uint32_t cmdBufferCount = 1);
 
 	// TODO: on window size change
 	//bool onWindowSize() { return false; };

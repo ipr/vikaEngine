@@ -52,6 +52,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		return app.getResult();
 	}
 
+	if (app.createRenderPass() == false)
+	{
+		app.destroy();
+		::DestroyWindow(g_hWnd);
+		return app.getResult();
+	}
+
     // Main message loop:
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0))
