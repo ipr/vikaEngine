@@ -127,14 +127,33 @@ bool vikaSwapChain::create()
 		return false;
 	}
 
-	/*
+	m_swapchainCreateViews.resize(m_swapchainImageCount);
+	m_swapchainViews.resize(m_swapchainImageCount);
 	for (uint32_t i = 0; i < m_swapchainImageCount; i++)
 	{
-		VkImageViewCreateInfo ...;
-		vkCreateImageView(..);
-	}
-	*/
+		VkImageViewCreateInfo &imageView = m_swapchainCreateViews[i];
+		imageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		imageView.pNext = NULL;
+		imageView.flags = 0;
+		imageView.image = m_swapchainImages[i];
+		imageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		imageView.format = m_surface->m_format;
+		imageView.components.r = VK_COMPONENT_SWIZZLE_R;
+		imageView.components.g = VK_COMPONENT_SWIZZLE_G;
+		imageView.components.b = VK_COMPONENT_SWIZZLE_B;
+		imageView.components.a = VK_COMPONENT_SWIZZLE_A;
+		imageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		imageView.subresourceRange.baseMipLevel = 0;
+		imageView.subresourceRange.levelCount = 1;
+		imageView.subresourceRange.baseArrayLayer = 0;
+		imageView.subresourceRange.layerCount = 1;
 
+		m_res = vkCreateImageView(m_logicalDev->getDevice(), &m_swapchainCreateViews[i], NULL, &m_swapchainViews[i]);
+		if (m_res != VK_SUCCESS)
+		{
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -148,6 +167,7 @@ void vikaSwapChain::destroy()
 	}
 	m_swapchainImages.clear();
 	m_swapchainViews.clear();
+	m_swapchainCreateViews.clear();
 
 	if (m_swapchain != VK_NULL_HANDLE)
 	{
