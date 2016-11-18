@@ -69,6 +69,16 @@ public:
 	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
 	virtual ~vikaApp();
 
+	// add needed things before calling create() (which will load them)
+	void addLayer(const char *layer)
+	{
+		m_layerNames.push_back(layer);
+	}
+	void addExtension(const char *extension)
+	{
+		m_extensionNames.push_back(extension);
+	}
+
 	bool create();
 	void destroy();
 
@@ -96,6 +106,9 @@ public:
 
 	//bool createSwapChain();
 	//bool createRenderPass();
+
+	// TODO: on window size change
+	//bool onWindowSize() { return false; };
 };
 
 #endif // _VIKAAPP_H_

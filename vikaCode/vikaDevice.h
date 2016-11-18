@@ -35,6 +35,16 @@ public:
 	vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice);
 	virtual ~vikaDevice();
 
+	// add needed things before calling create() (which will load them)
+	void addLayer(const char *layer)
+	{
+		m_layerNames.push_back(layer);
+	}
+	void addExtension(const char *extension)
+	{
+		m_extensionNames.push_back(extension);
+	}
+
 	bool create();
 	void destroy();
 
