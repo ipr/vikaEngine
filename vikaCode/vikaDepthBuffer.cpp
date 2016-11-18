@@ -112,7 +112,8 @@ bool vikaDepthBuffer::create(VkSampleCountFlagBits sampleCount, VkFormat depthFo
 		return false;
 	}
 
-	// not completed yet..
+	// after binding
+	m_viewInfo.image = m_image;
 	m_res = vkCreateImageView(m_logDevice->getDevice(), &m_viewInfo, NULL, &m_view);
 	if (m_res != VK_SUCCESS)
 	{
