@@ -55,6 +55,14 @@ vikaApp::~vikaApp()
 	destroy();
 }
 
+// screen/image size,
+// used in multiple places
+void vikaApp::setSize(const uint32_t width, const uint32_t height)
+{
+	m_imageSize.width = width;
+	m_imageSize.height = height;
+}
+
 // obvious, first method to actually call to initialize:
 // only variation is parameters you set in constructor..
 bool vikaApp::create()

@@ -35,6 +35,9 @@ protected:
 	std::string m_appName;
 	std::string m_engineName;
 
+	// size/resolution used in multiple cases
+	VkExtent2D m_imageSize = {};
+
 	// layers known to loader
 	std::vector<VkLayerProperties> m_layers;
 
@@ -78,6 +81,9 @@ public:
 	{
 		m_extensionNames.push_back(extension);
 	}
+
+	// screen/image size
+	void setSize(const uint32_t width, const uint32_t height);
 
 	bool create();
 	void destroy();

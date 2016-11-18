@@ -26,17 +26,23 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		return 0;
 	}
 
+	RECT rcWindow;
+	::GetClientRect(g_hWnd, &rcWindow);
+
 	LARGE_INTEGER liStartClock, liPerfFreq;
 	::QueryPerformanceCounter(&liStartClock);
 	::QueryPerformanceFrequency(&liPerfFreq);
 
 	vikaApp app(pShortName, pEngineName);
+	app.setSize(rcWindow.right, rcWindow.bottom);
+
 	if (app.create() == false)
 	{
 		app.destroy();
 		::DestroyWindow(g_hWnd);
 		return app.getResult();
 	}
+
 	// creating surface is currently crashing, something uninitialized still?
 	// -> need to load appropriate extension
 	if (app.createSurface(g_hInst, g_hWnd) == false)
@@ -134,7 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case :
 		{
 			RECT rcWindow;
-			::GetClientRect(m_hWnd, &rcWindow);
+			::GetClientRect(g_hWnd, &rcWindow);
 		}
 		break;
 		*/

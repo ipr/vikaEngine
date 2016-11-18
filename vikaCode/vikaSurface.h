@@ -33,6 +33,9 @@ protected:
 	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
 	VkSurfaceKHR m_surface;
 
+	uint32_t m_graphicsIndex;
+	uint32_t m_presentIndex;
+
 	std::vector<VkBool32> m_supports;
 	std::vector<VkSurfaceFormatKHR> m_formats;
 
