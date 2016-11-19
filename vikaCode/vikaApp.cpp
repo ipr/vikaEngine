@@ -11,7 +11,6 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_res(VK_SUCCESS),
 	m_appName(appName),
 	m_engineName(engineName),
-	m_devCount(0),
 	m_deviceIndex(0),
 	m_physDevice(nullptr),
 	m_logicalDevice(nullptr),
@@ -221,18 +220,20 @@ bool vikaApp::enumerateLayers()
 // also pretty obvious: after initializing, locate a suitable gpu
 bool vikaApp::enumeratePhysicalDevices()
 {
+	uint32_t devCount = 0;
+
 	// first call: retrieve amount of gpu available
-    m_res = vkEnumeratePhysicalDevices(m_instance, &m_devCount, NULL);
-	if (m_res != VK_SUCCESS || m_devCount < 1)
+    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, NULL);
+	if (m_res != VK_SUCCESS || devCount < 1)
 	{
 		return false;
 	}
 
-	m_devices.resize(m_devCount);
+	m_devices.resize(devCount);
 
 	// second call: retrieve actual data of all gpu available (handles)
-    m_res = vkEnumeratePhysicalDevices(m_instance, &m_devCount, m_devices.data());
-	if (m_res != VK_SUCCESS || m_devCount < 1)
+    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, m_devices.data());
+	if (m_res != VK_SUCCESS || devCount < 1)
 	{
 		return false;
 	}
@@ -242,8 +243,6 @@ bool vikaApp::enumeratePhysicalDevices()
 bool vikaApp::enumerateInstanceExtensions()
 {
 	uint32_t extensionsCount = 0;
-
-	// no layer name, first call: get count
 	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, NULL);
 	if (m_res != VK_SUCCESS || extensionsCount < 1)
 	{
@@ -251,8 +250,6 @@ bool vikaApp::enumerateInstanceExtensions()
 	}
 
 	m_instanceExtensions.resize(extensionsCount);
-
-	// no layer name, second call: get data
 	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, m_instanceExtensions.data());
 	if (m_res != VK_SUCCESS || extensionsCount < 1)
 	{

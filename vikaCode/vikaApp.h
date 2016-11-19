@@ -51,7 +51,7 @@ protected:
 	std::vector<const char *> m_extensionNames;
 
 	std::vector<VkPhysicalDevice> m_devices; // actual gpus
-	uint32_t m_devCount; // aka. gpu count
+	//uint32_t m_devCount; // aka. gpu count
 
 	// TODO: multi-gpu support?
 	uint32_t m_deviceIndex;
