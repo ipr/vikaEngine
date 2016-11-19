@@ -23,6 +23,10 @@ protected:
     VkBufferCreateInfo m_bufferInfo = {};
 	VkBuffer m_buffer;
 
+	VkDeviceMemory m_devMemory;
+	VkMemoryRequirements m_memReqs = {};
+	VkMemoryAllocateInfo m_memInfo = {};
+
 public:
 	vikaUniformBuffer(vikaDevice *logDevice);
 	virtual ~vikaUniformBuffer();
