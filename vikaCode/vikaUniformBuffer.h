@@ -11,6 +11,17 @@
 
 #include <vulkan/vulkan.h>
 
+// no need to include whole glmath lib just for this..
+// just 4x4 matrix of floats
+struct mat4
+{
+	float x[4];
+	float y[4];
+	float z[4];
+	float w[4];
+};
+
+
 class vikaDevice;
 class vikaPhysDevice;
 
@@ -36,7 +47,7 @@ public:
 	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaUniformBuffer();
 
-	bool create(const uint32_t bufferSize);
+	bool create(mat4 &MVP);
 	void destroy();
 };
 
