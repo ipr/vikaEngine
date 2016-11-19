@@ -9,11 +9,11 @@
 
 #include <vulkan/vulkan.h>
 
-vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
+vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkDeviceSize bufferSize) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
-	m_bufferSize(sizeof(mat4)),
+	m_bufferSize(bufferSize),
 	m_buffer(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
 {
@@ -36,8 +36,8 @@ vikaUniformBuffer::~vikaUniformBuffer()
 	destroy();
 }
 
-// parameter is matrix for view-projection transformation
-bool vikaUniformBuffer::create(mat4 &MVP)
+	// parameter expected: mat4 with view-projection matrix
+bool vikaUniformBuffer::create(uint32_t sizeMVP, void *dataMVP)
 {
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
 	if (m_res != VK_SUCCESS)
@@ -63,15 +63,15 @@ bool vikaUniformBuffer::create(mat4 &MVP)
 
 	// following step is used to copy current projection-view matrix into allocated buffer
 
-	uint8_t *pData = nullptr; // pointer to mapping in user space (actually in device memory)
-	m_res = vkMapMemory(m_logDevice->getDevice(), m_devMemory, 0, m_memReqs.size, 0, (void**)&pData);
+	uint8_t *pMapping = nullptr; // pointer to mapping in user space (actually in device memory)
+	m_res = vkMapMemory(m_logDevice->getDevice(), m_devMemory, 0, m_memReqs.size, 0, (void**)&pMapping);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
 
 	// copy to device via our mapping
-	memcpy(pData, &MVP, sizeof(mat4));
+	memcpy(pMapping, dataMVP, sizeMVP);
 	vkUnmapMemory(m_logDevice->getDevice(), m_devMemory);
 
 	m_res = vkBindBufferMemory(m_logDevice->getDevice(), m_buffer, m_devMemory, 0);

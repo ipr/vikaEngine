@@ -318,8 +318,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 
 	// TODO: fill in view-projection matrix
 	mat4 MVP;
-	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice);
-	if (m_uniformBuffer->create(MVP) == false)
+	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice, sizeof(mat4));
+	if (m_uniformBuffer->create(sizeof(mat4), &MVP) == false)
 	{
 		return false;
 	}

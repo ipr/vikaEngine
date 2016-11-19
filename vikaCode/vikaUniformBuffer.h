@@ -44,10 +44,11 @@ public: // simplify things..
 	VkDescriptorBufferInfo m_descInfo = {};
 
 public:
-	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
+	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkDeviceSize bufferSize);
 	virtual ~vikaUniformBuffer();
 
-	bool create(mat4 &MVP);
+	// parameter expected: mat4 with view-projection matrix
+	bool create(uint32_t sizeMVP, void *dataMVP);
 	void destroy();
 };
 
