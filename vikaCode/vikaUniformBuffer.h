@@ -12,12 +12,14 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaPhysDevice;
 
 class vikaUniformBuffer
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaPhysDevice *m_physDevice;
 
 public: // simplify things..
 	VkDeviceSize m_bufferSize;
@@ -29,7 +31,7 @@ public: // simplify things..
 	VkMemoryAllocateInfo m_memInfo = {};
 
 public:
-	vikaUniformBuffer(vikaDevice *logDevice);
+	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaUniformBuffer();
 
 	bool create();

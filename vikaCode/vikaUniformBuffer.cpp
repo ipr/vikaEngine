@@ -5,12 +5,14 @@
 #include "stdafx.h"
 #include "vikaUniformBuffer.h"
 #include "vikaDevice.h"
+#include "vikaPhysDevice.h"
 
 #include <vulkan/vulkan.h>
 
-vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice) :
+vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
+	m_physDevice(physDevice),
 	m_bufferSize(0), // TODO: size needed
 	m_buffer(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
@@ -44,9 +46,14 @@ bool vikaUniformBuffer::create()
 	}
 
 	vkGetBufferMemoryRequirements(m_logDevice->getDevice(), m_buffer, &m_memReqs);
-    m_memInfo.allocationSize = m_memReqs.size;
 
-	// TODO: memory type stuff to m_memInfo
+	// use m_memReqs.memoryTypeBits to get m_memInfo.memoryTypeIndex
+	m_memInfo.allocationSize = m_memReqs.size;
+	if (m_physDevice->memtypeBitsToIndex(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+										m_memReqs.memoryTypeBits, m_memInfo.memoryTypeIndex) == false)
+	{
+		return false;
+	}
 
 	m_res = vkAllocateMemory(m_logDevice->getDevice(), &m_memInfo, NULL, &m_devMemory);
 	if (m_res != VK_SUCCESS)
