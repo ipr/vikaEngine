@@ -22,11 +22,16 @@ protected:
     VkDescriptorSetLayoutBinding m_layoutBinding = {};
     VkDescriptorSetLayoutCreateInfo m_descriptorLayout = {};
 
+	std::vector<VkDescriptorSetLayout> m_layouts;
+
+    VkPipelineLayoutCreateInfo m_pipelineInfo = {};
+	VkPipelineLayout m_pipelineLayout;
+
 public:
 	vikaPipeline(vikaDevice *logDevice);
 	virtual ~vikaPipeline();
 
-	bool create();
+	bool create(uint32_t descriptorSetCount = 1);
 	void destroy();
 };
 
