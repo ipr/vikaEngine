@@ -15,7 +15,6 @@ vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *phys
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
-	//m_queueIndex(queueIndex),
 	m_cmdPool(VK_NULL_HANDLE)
 {
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -32,7 +31,6 @@ vikaCommandBuffer::~vikaCommandBuffer()
 bool vikaCommandBuffer::create(uint32_t bufferCount)
 {
 	m_cmdBuffers.resize(bufferCount);
-
 	m_res = vkCreateCommandPool(m_logDevice->getDevice(), &m_cmdPoolInfo, NULL, &m_cmdPool);
 	if (m_res != VK_SUCCESS)
 	{
@@ -55,7 +53,7 @@ bool vikaCommandBuffer::create(uint32_t bufferCount)
 
 void vikaCommandBuffer::destroy()
 {
-	if (m_cmdBuffers.empty() == false)
+	if (m_cmdBuffers.size() > 0)
 	{
 		vkFreeCommandBuffers(m_logDevice->getDevice(), m_cmdPool, m_cmdBufferInfo.commandBufferCount, m_cmdBuffers.data());
 		m_cmdBuffers.clear();

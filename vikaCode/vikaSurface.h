@@ -15,7 +15,6 @@
 
 #include <vulkan/vulkan.h>
 
-
 class vikaApp;
 class vikaPhysDevice;
 

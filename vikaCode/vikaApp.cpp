@@ -336,8 +336,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_renderPass = new vikaRenderPass(m_logicalDevice, m_depthBuffer);
-	if (m_renderPass->create() == false)
+	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_depthBuffer);
+	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
 	{
 		return false;
 	}

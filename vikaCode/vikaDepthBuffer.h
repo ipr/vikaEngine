@@ -21,7 +21,9 @@ protected:
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
 
+public: // simplify things..
 	VkFormatProperties m_formatProp = {};
+	VkFormat m_depthFormat;
 
 	VkImage m_image;
     VkImageCreateInfo m_imageInfo = {};

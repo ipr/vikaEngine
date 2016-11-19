@@ -5,18 +5,39 @@
 #include "stdafx.h"
 #include "vikaRenderPass.h"
 #include "vikaDevice.h"
+#include "vikaSurface.h"
 #include "vikaDepthBuffer.h"
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaDepthBuffer *depthBuffer) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaDepthBuffer *depthBuffer) :
 	m_res(VK_SUCCESS),
 	m_device(device),
-	m_renderpass(VK_NULL_HANDLE),
-	m_depthBuffer(depthBuffer)
+	m_surface(surface),
+	m_depthBuffer(depthBuffer),
+	m_renderpass(VK_NULL_HANDLE)
 {
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
+	m_attachments[0].format = m_surface->m_format;
+	//m_attachments[0].samples = sampleCount; // filled in later
+	m_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	m_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	m_attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	m_attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	m_attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	m_attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	m_attachments[0].flags = 0;
+
+	m_attachments[1].format = m_depthBuffer->m_depthFormat;
+	//m_attachments[1].samples = sampleCount; // filled in later
+	m_attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	m_attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	m_attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	m_attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	m_attachments[1].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	m_attachments[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	m_attachments[1].flags = 0;
 
     m_colorReference.attachment = 0;
 	m_colorReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -52,6 +73,9 @@ vikaRenderPass::~vikaRenderPass()
 
 bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 {
+	m_attachments[0].samples = sampleCount;
+	m_attachments[1].samples = sampleCount;
+
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)
 	{

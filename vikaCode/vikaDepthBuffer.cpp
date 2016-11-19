@@ -13,6 +13,7 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
+	m_depthFormat(VK_FORMAT_D16_UNORM),
 	m_image(VK_NULL_HANDLE),
 	m_view(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
@@ -81,6 +82,7 @@ bool vikaDepthBuffer::create(VkSampleCountFlagBits sampleCount, VkFormat depthFo
 		// or try other formats..
 		return false;
 	}
+	m_depthFormat = depthFormat;
 	m_imageInfo.format = depthFormat;
 	m_viewInfo.format = depthFormat;
     m_imageInfo.samples = sampleCount;

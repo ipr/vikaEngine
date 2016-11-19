@@ -13,12 +13,14 @@
 
 class vikaDevice;
 class vikaDepthBuffer;
+class vikaSurface;
 
 class vikaRenderPass
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_device;
+	vikaSurface *m_surface;
 	vikaDepthBuffer *m_depthBuffer;
 
 	std::vector<VkAttachmentDescription> m_attachments;
@@ -32,7 +34,7 @@ protected:
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *device, vikaDepthBuffer *depthBuffer);
+	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaDepthBuffer *depthBuffer);
 	virtual ~vikaRenderPass();
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
