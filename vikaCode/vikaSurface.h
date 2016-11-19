@@ -42,13 +42,11 @@ public: // make things simpler..
 	std::vector<VkBool32> m_supports;
 	std::vector<VkSurfaceFormatKHR> m_formats;
 
-	uint32_t m_formatCount;
 	VkFormat m_format; // format selected
 
 	VkSurfaceCapabilitiesKHR m_caps = {};
 
-	uint32_t m_presentModeCount;
-	std::vector<VkPresentModeKHR> m_presents;
+	std::vector<VkPresentModeKHR> m_presentModes;
 
 public:
 	vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice);

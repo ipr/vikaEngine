@@ -17,9 +17,7 @@ vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_surface(VK_NULL_HANDLE),
 	m_graphicsQueueIndex(UINT32_MAX),
 	m_presentQueueIndex(UINT32_MAX),
-	m_formatCount(0),
-	m_format(VK_FORMAT_UNDEFINED),
-	m_presentModeCount(0)
+	m_format(VK_FORMAT_UNDEFINED)
 {
 }
 
@@ -116,23 +114,21 @@ bool vikaSurface::enumeratePhysDeviceSupport()
 
 bool vikaSurface::enumerateFormats()
 {
-	// first call: get count
-	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &m_formatCount, NULL);
-	if (m_res != VK_SUCCESS || m_formatCount < 1)
+	uint32_t formatCount = 0;
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &formatCount, NULL);
+	if (m_res != VK_SUCCESS || formatCount < 1)
 	{
 		return false;
 	}
 
-	m_formats.resize(m_formatCount);
-
-	// second call: get data
-	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &m_formatCount, m_formats.data());
-	if (m_res != VK_SUCCESS || m_formatCount < 1)
+	m_formats.resize(formatCount);
+	m_res = vkGetPhysicalDeviceSurfaceFormatsKHR(m_physDevice->getPhysDev(), m_surface, &formatCount, m_formats.data());
+	if (m_res != VK_SUCCESS || formatCount < 1)
 	{
 		return false;
 	}
 
-	if (m_formatCount == 1 && m_formats[0].format == VK_FORMAT_UNDEFINED)
+	if (formatCount == 1 && m_formats[0].format == VK_FORMAT_UNDEFINED)
 	{
 		// no preferred format defined -> select something
 		m_format = VK_FORMAT_B8G8R8A8_UNORM;
@@ -142,7 +138,6 @@ bool vikaSurface::enumerateFormats()
 		// just select first one
 		m_format = m_formats[0].format;
 	}
-
 	return true;
 }
 
@@ -165,18 +160,16 @@ bool vikaSurface::enumerateCapabilities()
 
 bool vikaSurface::enumeratePresentModes()
 {
-	// first call: get count
-	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &m_presentModeCount, NULL);
-	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
+	uint32_t presentModeCount = 0;
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &presentModeCount, NULL);
+	if (m_res != VK_SUCCESS || presentModeCount < 1)
 	{
 		return false;
 	}
 
-	m_presents.resize(m_presentModeCount);
-	
-	// second call: get data
-	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &m_presentModeCount, m_presents.data());
-	if (m_res != VK_SUCCESS || m_presentModeCount < 1)
+	m_presentModes.resize(presentModeCount);
+	m_res = vkGetPhysicalDeviceSurfacePresentModesKHR(m_physDevice->getPhysDev(), m_surface, &presentModeCount, m_presentModes.data());
+	if (m_res != VK_SUCCESS || presentModeCount < 1)
 	{
 		return false;
 	}
