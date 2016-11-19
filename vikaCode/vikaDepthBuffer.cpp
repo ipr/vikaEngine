@@ -95,7 +95,8 @@ bool vikaDepthBuffer::create(VkSampleCountFlagBits sampleCount, VkFormat depthFo
 
 	// no flags..
 	// use m_memReqs.memoryTypeBits to get m_memInfo.memoryTypeIndex
-	if (memtypeBitsToIndex() == false)
+	m_memInfo.allocationSize = m_memReqs.size;
+	if (m_physDevice->memtypeBitsToIndex(0, m_memReqs.memoryTypeBits, m_memInfo.memoryTypeIndex) == false)
 	{
 		return false;
 	}
@@ -144,24 +145,3 @@ void vikaDepthBuffer::destroy()
 	}
 }
 
-// this method is pretty directly from the API-sample under Apache license
-bool vikaDepthBuffer::memtypeBitsToIndex(VkFlags reqMask)
-{
-	// handle this one here too
-	m_memInfo.allocationSize = m_memReqs.size;
-
-	uint32_t memoryTypeBits = m_memReqs.memoryTypeBits;
-	for (uint32_t i = 0; i < m_physDevice->m_memoryProperties.memoryTypeCount; i++)
-	{
-		if ((memoryTypeBits & 1) == 1)
-		{
-			if ((m_physDevice->m_memoryProperties.memoryTypes[i].propertyFlags & reqMask) == reqMask)
-			{
-				m_memInfo.memoryTypeIndex = i;
-				return true;
-			}
-		}
-		memoryTypeBits >>= 1;
-	}
-	return false;
-}

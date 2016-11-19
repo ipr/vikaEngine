@@ -298,7 +298,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	// assume one command buffer for now
-	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice, m_physDevice->getQueueIndex());
+	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice, m_physDevice);
 	if (m_commandBuffer->create(cmdBufferCount) == false)
 	{
 		return false;
@@ -322,13 +322,13 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_pipeline = new vikaPipeline(m_logicalDevice);
+	m_pipeline = new vikaPipeline(m_logicalDevice, m_uniformBuffer);
 	if (m_pipeline->create() == false)
 	{
 		return false;
 	}
 	
-	m_descriptorSet = new vikaDescriptorset(m_logicalDevice);
+	m_descriptorSet = new vikaDescriptorset(m_logicalDevice, m_pipeline, m_uniformBuffer);
 	if (m_descriptorSet->create() == false)
 	{
 		return false;

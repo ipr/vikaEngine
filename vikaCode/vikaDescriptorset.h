@@ -12,28 +12,30 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaPipeline;
+class vikaUniformBuffer;
 
 class vikaDescriptorset
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaPipeline *m_pipeline;
+	vikaUniformBuffer *m_uniBuffer;
 
 	std::vector<VkDescriptorPoolSize> m_poolsize;
     VkDescriptorPoolCreateInfo m_descriptorPool = {};
 	VkDescriptorPool m_pool;
 
-	//VkDescriptorSetLayout m_setLayout;
-	//VkDescriptorSet m_descriptorset;
-
     std::vector<VkDescriptorSetAllocateInfo> m_allocInfo;
+	std::vector<VkDescriptorSet> m_descriptorset;
     std::vector<VkWriteDescriptorSet> m_writeSet;
 
 public:
-	vikaDescriptorset(vikaDevice *logDevice);
+	vikaDescriptorset(vikaDevice *logDevice, vikaPipeline *pipeline, vikaUniformBuffer *uniBuffer);
 	virtual ~vikaDescriptorset();
 
-	bool create();
+	bool create(uint32_t descriptorSetCount = 1);
 	void destroy();
 };
 

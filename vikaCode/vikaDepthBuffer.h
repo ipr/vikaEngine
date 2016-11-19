@@ -39,8 +39,6 @@ public:
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT, VkFormat depthFormat = VK_FORMAT_D16_UNORM);
 	void destroy();
-
-	bool memtypeBitsToIndex(VkFlags reqMask = 0);
 };
 
 #endif

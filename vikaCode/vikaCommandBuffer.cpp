@@ -7,19 +7,20 @@
 #include "stdafx.h"
 #include "vikaCommandBuffer.h"
 #include "vikaDevice.h"
+#include "vikaPhysDevice.h"
 
 #include <vulkan/vulkan.h>
 
-
-vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, const uint32_t queueIndex) :
+vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
-	m_queueIndex(queueIndex),
+	m_physDevice(physDevice),
+	//m_queueIndex(queueIndex),
 	m_cmdPool(VK_NULL_HANDLE)
 {
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	m_cmdPoolInfo.pNext = NULL;
-	m_cmdPoolInfo.queueFamilyIndex = m_queueIndex;
+	m_cmdPoolInfo.queueFamilyIndex = m_physDevice->getQueueIndex();
 	m_cmdPoolInfo.flags = 0;
 }
 

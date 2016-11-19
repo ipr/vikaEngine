@@ -42,6 +42,8 @@ public:
 	bool enumerateDeviceExtensions();
 	bool enumerateDeviceLayers();
 
+	bool memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const;
+
 	uint32_t getQueueIndex() const { return m_queueIndex; };
 	VkPhysicalDevice& getPhysDev() { return m_physDevice; }; 
 };

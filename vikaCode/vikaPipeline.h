@@ -12,13 +12,16 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaUniformBuffer;
 
 class vikaPipeline
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaUniformBuffer *m_uniBuffer;
 
+public: // simplify things..
     VkDescriptorSetLayoutBinding m_layoutBinding = {};
     VkDescriptorSetLayoutCreateInfo m_descriptorLayout = {};
 
@@ -27,8 +30,10 @@ protected:
     VkPipelineLayoutCreateInfo m_pipelineInfo = {};
 	VkPipelineLayout m_pipelineLayout;
 
+	//VkPipelineCache ..
+
 public:
-	vikaPipeline(vikaDevice *logDevice);
+	vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer);
 	virtual ~vikaPipeline();
 
 	bool create(uint32_t descriptorSetCount = 1);

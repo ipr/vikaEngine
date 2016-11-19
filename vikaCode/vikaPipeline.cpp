@@ -5,12 +5,14 @@
 #include "stdafx.h"
 #include "vikaPipeline.h"
 #include "vikaDevice.h"
+#include "vikaUniformBuffer.h"
 
 #include <vulkan/vulkan.h>
 
-vikaPipeline::vikaPipeline(vikaDevice *logDevice) :
+vikaPipeline::vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
+	m_uniBuffer(uniBuffer),
 	m_pipelineLayout(VK_NULL_HANDLE)
 {
 	// TODO: when using textures, define sampler here

@@ -108,3 +108,23 @@ bool vikaPhysDevice::enumerateDeviceLayers()
 	}
 	return true;
 }
+
+// this method is pretty directly from the API-sample under Apache license
+// note: set reqmask to zero if not needed
+bool vikaPhysDevice::memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const
+{
+	uint32_t memoryTypeBits = memReqsTypeBits;
+	for (uint32_t i = 0; i < m_memoryProperties.memoryTypeCount; i++)
+	{
+		if ((memoryTypeBits & 1) == 1)
+		{
+			if ((m_memoryProperties.memoryTypes[i].propertyFlags & reqMask) == reqMask)
+			{
+				typeIndex = i;
+				return true;
+			}
+		}
+		memoryTypeBits >>= 1;
+	}
+	return false;
+}
