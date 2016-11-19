@@ -30,11 +30,13 @@ public: // simplify things..
 	VkMemoryRequirements m_memReqs = {};
 	VkMemoryAllocateInfo m_memInfo = {};
 
+	VkDescriptorBufferInfo m_descInfo = {};
+
 public:
 	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaUniformBuffer();
 
-	bool create();
+	bool create(const uint32_t bufferSize);
 	void destroy();
 };
 

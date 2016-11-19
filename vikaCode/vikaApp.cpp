@@ -316,8 +316,9 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
+	// TODO: size of buffer
 	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice);
-	if (m_uniformBuffer->create() == false)
+	if (m_uniformBuffer->create(0) == false)
 	{
 		return false;
 	}

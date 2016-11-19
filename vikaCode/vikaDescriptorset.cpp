@@ -65,7 +65,7 @@ bool vikaDescriptorset::create(uint32_t descriptorSetCount)
     m_writeSet[0].dstSet = m_descriptorset[0]; // just first (of n?)
     m_writeSet[0].descriptorCount = 1;
     m_writeSet[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    m_writeSet[0].pBufferInfo = &info.uniform_data.buffer_info;
+    m_writeSet[0].pBufferInfo = &m_uniBuffer->m_descInfo;
     m_writeSet[0].dstArrayElement = 0;
     m_writeSet[0].dstBinding = 0;
 
