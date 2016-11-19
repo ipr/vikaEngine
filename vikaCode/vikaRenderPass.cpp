@@ -6,14 +6,16 @@
 #include "vikaRenderPass.h"
 #include "vikaDevice.h"
 #include "vikaSurface.h"
+#include "vikaCommandBuffer.h"
 #include "vikaDepthBuffer.h"
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaDepthBuffer *depthBuffer) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer) :
 	m_res(VK_SUCCESS),
 	m_device(device),
 	m_surface(surface),
+	m_commandBuffer(commandBuffer),
 	m_depthBuffer(depthBuffer),
 	m_renderpass(VK_NULL_HANDLE)
 {
@@ -91,4 +93,15 @@ void vikaRenderPass::destroy()
 		vkDestroyRenderPass(m_device->getDevice(), m_renderpass, NULL);
 		m_renderpass = VK_NULL_HANDLE;
 	}
+}
+
+bool vikaRenderPass::begin()
+{
+	//vkCmdBeginRenderPass();
+	return false;
+}
+
+void vikaRenderPass::end()
+{
+	//vkCmdEndRenderPass();
 }

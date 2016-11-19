@@ -12,8 +12,9 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
-class vikaDepthBuffer;
 class vikaSurface;
+class vikaCommandBuffer;
+class vikaDepthBuffer;
 
 class vikaRenderPass
 {
@@ -21,6 +22,7 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_device;
 	vikaSurface *m_surface;
+	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
 
 	std::vector<VkAttachmentDescription> m_attachments;
@@ -34,11 +36,14 @@ protected:
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaDepthBuffer *depthBuffer);
+	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer);
 	virtual ~vikaRenderPass();
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
+
+	bool begin();
+	void end();
 };
 
 #endif 
