@@ -19,16 +19,6 @@ vikaDescriptorset::vikaDescriptorset(vikaDevice *logDevice, vikaPipeline *pipeli
 	//m_setLayout(VK_NULL_HANDLE),
 	//m_descriptorset(VK_NULL_HANDLE)
 {
-}
-
-vikaDescriptorset::~vikaDescriptorset()
-{
-	destroy();
-}
-
-// count of descriptorsets needs to be same in multiple places
-bool vikaDescriptorset::create(uint32_t descriptorSetCount)
-{
 	m_poolsize.resize(1);
 	m_poolsize[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	m_poolsize[0].descriptorCount = 1;
@@ -39,15 +29,38 @@ bool vikaDescriptorset::create(uint32_t descriptorSetCount)
     m_descriptorPool.poolSizeCount = m_poolsize.size();
     m_descriptorPool.pPoolSizes = m_poolsize.data();
 
+	m_allocInfo.resize(1);
+    m_allocInfo[0].sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    m_allocInfo[0].pNext = NULL;
+    //m_allocInfo[0].descriptorPool = m_pool; // fill in later
+    //m_allocInfo[0].descriptorSetCount = descriptorSetCount;
+    //m_allocInfo[0].pSetLayouts = m_pipeline->m_layouts.data();
+
+	m_writeSet.resize(1);
+    m_writeSet[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    m_writeSet[0].pNext = NULL;
+    //m_writeSet[0].dstSet = m_descriptorset[0]; // just first (of n?)
+    m_writeSet[0].descriptorCount = 1;
+    m_writeSet[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    //m_writeSet[0].pBufferInfo = &m_uniBuffer->m_descInfo; // fill in later
+    m_writeSet[0].dstArrayElement = 0;
+    m_writeSet[0].dstBinding = 0;
+}
+
+vikaDescriptorset::~vikaDescriptorset()
+{
+	destroy();
+}
+
+// count of descriptorsets needs to be same in multiple places
+bool vikaDescriptorset::create(uint32_t descriptorSetCount)
+{
     m_res = vkCreateDescriptorPool(m_logDevice->getDevice(), &m_descriptorPool, NULL, &m_pool);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
 
-	m_allocInfo.resize(1);
-    m_allocInfo[0].sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    m_allocInfo[0].pNext = NULL;
     m_allocInfo[0].descriptorPool = m_pool;
     m_allocInfo[0].descriptorSetCount = descriptorSetCount;
     m_allocInfo[0].pSetLayouts = m_pipeline->m_layouts.data();
@@ -59,15 +72,10 @@ bool vikaDescriptorset::create(uint32_t descriptorSetCount)
 		return false;
 	}
 
-	m_writeSet.resize(1);
-    m_writeSet[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    m_writeSet[0].pNext = NULL;
     m_writeSet[0].dstSet = m_descriptorset[0]; // just first (of n?)
     m_writeSet[0].descriptorCount = 1;
     m_writeSet[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     m_writeSet[0].pBufferInfo = &m_uniBuffer->m_descInfo;
-    m_writeSet[0].dstArrayElement = 0;
-    m_writeSet[0].dstBinding = 0;
 
     vkUpdateDescriptorSets(m_logDevice->getDevice(), 1, m_writeSet.data(), 0, NULL);
 

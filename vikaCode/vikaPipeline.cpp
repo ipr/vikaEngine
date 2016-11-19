@@ -26,6 +26,13 @@ vikaPipeline::vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer) 
 	m_descriptorLayout.pNext = NULL;
 	m_descriptorLayout.bindingCount = 1;
 	m_descriptorLayout.pBindings = &m_layoutBinding;
+
+    m_pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    m_pipelineInfo.pNext = NULL;
+    m_pipelineInfo.pushConstantRangeCount = 0;
+    m_pipelineInfo.pPushConstantRanges = NULL;
+    //m_pipelineInfo.setLayoutCount = descriptorSetCount; // fill in later
+    //m_pipelineInfo.pSetLayouts = m_layouts.data();
 }
 
 vikaPipeline::~vikaPipeline()
@@ -43,10 +50,6 @@ bool vikaPipeline::create(uint32_t descriptorSetCount)
 		return false;
 	}
 
-    m_pipelineInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    m_pipelineInfo.pNext = NULL;
-    m_pipelineInfo.pushConstantRangeCount = 0;
-    m_pipelineInfo.pPushConstantRanges = NULL;
     m_pipelineInfo.setLayoutCount = descriptorSetCount;
     m_pipelineInfo.pSetLayouts = m_layouts.data();
 

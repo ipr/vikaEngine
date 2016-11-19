@@ -73,8 +73,6 @@ bool vikaPhysDevice::getQueueProperties()
 bool vikaPhysDevice::enumerateDeviceExtensions()
 {
 	uint32_t extensionCount = 0;
-
-	// no layer name, first call: get count
 	m_res = vkEnumerateDeviceExtensionProperties(m_physDevice, nullptr, &extensionCount, NULL);
 	if (m_res != VK_SUCCESS || extensionCount < 1)
 	{
@@ -82,7 +80,6 @@ bool vikaPhysDevice::enumerateDeviceExtensions()
 	}
 
 	m_extensionProperties.resize(extensionCount);
-
 	m_res = vkEnumerateDeviceExtensionProperties(m_physDevice, nullptr, &extensionCount, m_extensionProperties.data());
 	if (m_res != VK_SUCCESS || extensionCount < 1)
 	{
@@ -128,3 +125,4 @@ bool vikaPhysDevice::memtypeBitsToIndex(const VkFlags reqMask, const uint32_t me
 	}
 	return false;
 }
+

@@ -30,7 +30,10 @@ protected:
     //VkWin32SurfaceCreateInfoKHR m_createInfo;
 
 public: // make things simpler..
+
+#ifdef _WINDOWS
 	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
+#endif
 	VkSurfaceKHR m_surface;
 
 	uint32_t m_graphicsQueueIndex;
