@@ -39,7 +39,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
-	m_attachments[0].format = m_surface->m_format;
+	//m_attachments[0].format = m_surface->m_format;
 	//m_attachments[0].samples = sampleCount; // filled in later
 	m_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	m_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -49,7 +49,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 	m_attachments[0].flags = 0;
 
-	m_attachments[1].format = m_depthBuffer->m_depthFormat;
+	//m_attachments[1].format = m_depthBuffer->m_depthFormat;
 	//m_attachments[1].samples = sampleCount; // filled in later
 	m_attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	m_attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -93,7 +93,9 @@ vikaRenderPass::~vikaRenderPass()
 
 bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 {
+	m_attachments[0].format = m_surface->m_format;
 	m_attachments[0].samples = sampleCount;
+	m_attachments[1].format = m_depthBuffer->m_depthFormat;
 	m_attachments[1].samples = sampleCount;
 
 	// expecting that depth buffer has been set before this..

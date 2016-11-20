@@ -21,7 +21,8 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_uniformBuffer(nullptr),
 	m_pipeline(nullptr),
 	m_descriptorSet(nullptr),
-	m_renderPass(nullptr)
+	m_renderPass(nullptr),
+	m_framebuffer(nullptr)
 {
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
@@ -126,13 +127,18 @@ bool vikaApp::create(uint32_t deviceIndex)
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	if (m_framebuffer != nullptr)
+	{
+		m_framebuffer->destroy();
+		delete m_framebuffer;
+		m_framebuffer = nullptr;
+	}
 	if (m_renderPass != nullptr)
 	{
 		m_renderPass->destroy();
 		delete m_renderPass;
 		m_renderPass = nullptr;
 	}
-
 	if (m_descriptorSet != nullptr)
 	{
 		m_descriptorSet->destroy();
@@ -337,6 +343,12 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 
 	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer);
 	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
+	{
+		return false;
+	}
+
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_renderPass, m_depthBuffer, m_imageSize);
+	if (m_framebuffer->create() == false)
 	{
 		return false;
 	}
