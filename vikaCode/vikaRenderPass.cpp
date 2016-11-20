@@ -19,8 +19,24 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_swapchain(swapchain),
 	m_commandBuffer(commandBuffer),
 	m_depthBuffer(depthBuffer),
+	m_imageSemaphore(VK_NULL_HANDLE),
 	m_renderpass(VK_NULL_HANDLE)
 {
+    m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    m_imageMemoryBarrier.pNext = NULL;
+    m_imageMemoryBarrier.srcAccessMask = 0;
+    m_imageMemoryBarrier.dstAccessMask = 0;
+    //m_imageMemoryBarrier.oldLayout = oldLayout;
+    //m_imageMemoryBarrier.newLayout = newLayout;
+    m_imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    m_imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    //m_imageMemoryBarrier.image = image;
+    //m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
+    m_imageMemoryBarrier.subresourceRange.baseMipLevel = 0;
+    m_imageMemoryBarrier.subresourceRange.levelCount = 1;
+    m_imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+    m_imageMemoryBarrier.subresourceRange.layerCount = 1;
+
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
 	m_attachments[0].format = m_surface->m_format;
@@ -81,10 +97,23 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	m_attachments[1].samples = sampleCount;
 
 	// expecting that depth buffer has been set before this..
-	//createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, 
+	if (createSemaphore() == false)
+	{
+		return false;
+	}
 
-	// TODO:
-	// should execute "end" before this?
+    // Acquire the swapchain image index in order to set its layout
+	uint32_t imageIndex = 0;
+    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_imageSemaphore, VK_NULL_HANDLE,
+                                &imageIndex);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
+
+	// should execute "end" here
+	m_commandBuffer->executeEnd();
 
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)
@@ -101,37 +130,41 @@ void vikaRenderPass::destroy()
 		vkDestroyRenderPass(m_device->getDevice(), m_renderpass, NULL);
 		m_renderpass = VK_NULL_HANDLE;
 	}
+
+	if (m_imageSemaphore != VK_NULL_HANDLE)
+	{
+		vkDestroySemaphore(m_device->getDevice(), m_imageSemaphore, NULL);
+		m_imageSemaphore = VK_NULL_HANDLE;
+	}
 }
 
-bool vikaRenderPass::begin()
+void vikaRenderPass::beginPass()
 {
-	//vkCmdBeginRenderPass();
-	return false;
+	/*
+	VkSubpassContents subpass = ;
+	VkRenderPassBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	beginInfo.pNext = NULL;
+	beginInfo.
+
+	vkCmdBeginRenderPass(m_commandBuffer->getCmd(0), &beginInfo, subpass);
+	*/
 }
 
-void vikaRenderPass::end()
+void vikaRenderPass::endPass()
 {
-	//vkCmdEndRenderPass();
+	/*
+	vkCmdEndRenderPass(m_commandBuffer->getCmd(0));
+	*/
 }
 
 bool vikaRenderPass::createSemaphore()
 {
-	VkSemaphore imageSemaphore(VK_NULL_HANDLE);
-	VkSemaphoreCreateInfo semaphoreInfo = {};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.pNext = NULL;
-    semaphoreInfo.flags = 0;
+    m_semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    m_semaphoreInfo.pNext = NULL;
+    m_semaphoreInfo.flags = 0;
 
-    m_res = vkCreateSemaphore(m_device->getDevice(), &semaphoreInfo, NULL, &imageSemaphore);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-    // Acquire the swapchain image in order to set its layout
-	uint32_t *pImageIndex = nullptr;
-    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, imageSemaphore, VK_NULL_HANDLE,
-                                pImageIndex);
+    m_res = vkCreateSemaphore(m_device->getDevice(), &m_semaphoreInfo, NULL, &m_imageSemaphore);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -141,60 +174,51 @@ bool vikaRenderPass::createSemaphore()
 
 void vikaRenderPass::createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
 {
-    VkImageMemoryBarrier imageMemoryBarrier = {};
-    imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    imageMemoryBarrier.pNext = NULL;
-    imageMemoryBarrier.srcAccessMask = 0;
-    imageMemoryBarrier.dstAccessMask = 0;
-    imageMemoryBarrier.oldLayout = oldLayout;
-    imageMemoryBarrier.newLayout = newLayout;
-    imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    imageMemoryBarrier.image = image;
-    imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
-    imageMemoryBarrier.subresourceRange.baseMipLevel = 0;
-    imageMemoryBarrier.subresourceRange.levelCount = 1;
-    imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
-    imageMemoryBarrier.subresourceRange.layerCount = 1;
+    m_imageMemoryBarrier.oldLayout = oldLayout;
+    m_imageMemoryBarrier.newLayout = newLayout;
+    m_imageMemoryBarrier.image = image;
+    m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
 
 	switch (oldLayout)
 	{
 	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-        imageMemoryBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        imageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
 		break;
 	default:
+		m_imageMemoryBarrier.srcAccessMask = 0;
 		break;
 	}
 
 	switch (newLayout)
 	{
 	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-        imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-        imageMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 		break;
 	case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-        imageMemoryBarrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 		break;
 	default:
+		m_imageMemoryBarrier.dstAccessMask = 0;
 		break;
 	}
 
     VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
     VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 
-    vkCmdPipelineBarrier(m_commandBuffer->getCmd(0), srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &imageMemoryBarrier);
+    vkCmdPipelineBarrier(m_commandBuffer->getCmd(0), srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
 }

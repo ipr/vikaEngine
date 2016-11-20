@@ -27,6 +27,11 @@ protected:
 	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
 
+	VkSemaphoreCreateInfo m_semaphoreInfo = {};
+	VkSemaphore m_imageSemaphore;
+
+    VkImageMemoryBarrier m_imageMemoryBarrier = {};
+
 	std::vector<VkAttachmentDescription> m_attachments;
 
     VkAttachmentReference m_colorReference = {};
@@ -44,8 +49,8 @@ public:
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
 
-	bool begin();
-	void end();
+	void beginPass();
+	void endPass();
 
 	bool createSemaphore();
 	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
