@@ -40,6 +40,7 @@ public:
 	bool resetPool();
 	bool resetBuffer(uint32_t bufferIndex = 0);
 
+	bool executeBegin(uint32_t bufferIndex = 0);
 	bool executeEnd(uint32_t bufferIndex = 0);
 
 	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };

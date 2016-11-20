@@ -93,6 +93,22 @@ bool vikaCommandBuffer::resetBuffer(uint32_t bufferIndex)
 	return true;
 }
 
+bool vikaCommandBuffer::executeBegin(uint32_t bufferIndex)
+{
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.pNext = NULL;
+	beginInfo.flags = 0;
+	beginInfo.pInheritanceInfo = NULL;
+
+	m_res = vkBeginCommandBuffer(m_cmdBuffers[bufferIndex], &beginInfo);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 {
 	m_res = vkEndCommandBuffer(m_cmdBuffers[bufferIndex]);
