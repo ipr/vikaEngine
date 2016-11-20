@@ -119,12 +119,28 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 
 bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
 {
-	VkCommandBuffer &cmdBuf = m_cmdBuffers[bufferIndex];
-
-	VkFenceCreateInfo fenceInfo = {};
 	VkFence drawFence(VK_NULL_HANDLE);
+	VkFenceCreateInfo fenceInfo = {};
+	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	fenceInfo.pNext = NULL;
+	fenceInfo.flags = 0;
+    m_res = vkCreateFence(m_logDevice->getDevice(), &fenceInfo, NULL, &drawFence);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
 
+	VkPipelineStageFlags pipeFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	VkSubmitInfo submitInfo = {};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.pNext = NULL;
+    submitInfo.waitSemaphoreCount = 0;
+    submitInfo.pWaitSemaphores = NULL;
+    submitInfo.pWaitDstStageMask = &pipeFlags;
+    submitInfo.commandBufferCount = m_cmdBuffers.size(); // TODO: does this work if count > 1 ?
+    submitInfo.pCommandBuffers = m_cmdBuffers.data();
+    submitInfo.signalSemaphoreCount = 0;
+    submitInfo.pSignalSemaphores = NULL;
 
 	VkQueue &gfxQueue = m_logDevice->getGraphicsQueue();
 	m_res = vkQueueSubmit(gfxQueue, 1, &submitInfo, drawFence);
@@ -132,5 +148,14 @@ bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
 	{
 		return false;
 	}
+
+	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
+	uint64_t fenceTimeout = 100000000;
+	do 
+	{
+		m_res = vkWaitForFences(m_logDevice->getDevice(), 1, &drawFence, VK_TRUE, fenceTimeout);
+	} while (m_res == VK_TIMEOUT);
+
+    vkDestroyFence(m_logDevice->getDevice(), drawFence, NULL);
 	return true;
 }
