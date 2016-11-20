@@ -13,6 +13,7 @@
 
 class vikaDevice;
 class vikaSurface;
+class vikaSwapChain;
 class vikaCommandBuffer;
 class vikaDepthBuffer;
 
@@ -22,6 +23,7 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_device;
 	vikaSurface *m_surface;
+	vikaSwapChain *m_swapchain;
 	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
 
@@ -36,7 +38,7 @@ protected:
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer);
+	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer);
 	virtual ~vikaRenderPass();
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
@@ -44,6 +46,9 @@ public:
 
 	bool begin();
 	void end();
+
+	bool createSemaphore();
+	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
 };
 
 #endif 

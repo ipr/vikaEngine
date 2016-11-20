@@ -23,9 +23,7 @@ protected:
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
 
-	//uint32_t m_queueIndex;
-	//uint32_t m_bufferCount;
-
+public: // simplify things..
     VkCommandPoolCreateInfo m_cmdPoolInfo = {};
 	VkCommandPool m_cmdPool;
 
@@ -41,6 +39,10 @@ public:
 
 	bool resetPool();
 	bool resetBuffer(uint32_t bufferIndex = 0);
+
+	bool executeEnd(uint32_t bufferIndex = 0);
+
+	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };
 };
 
 #endif

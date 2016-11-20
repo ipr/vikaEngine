@@ -93,3 +93,13 @@ bool vikaCommandBuffer::resetBuffer(uint32_t bufferIndex)
 	return true;
 }
 
+bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
+{
+	m_res = vkEndCommandBuffer(m_cmdBuffers[bufferIndex]);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+

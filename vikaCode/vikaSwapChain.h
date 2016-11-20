@@ -21,6 +21,7 @@ protected:
 	vikaDevice *m_logicalDev;
 	vikaSurface *m_surface;
 
+public: // simplify things..
 	uint32_t m_swapchainImageCount;
 
 	VkPresentModeKHR m_swapchainPresentMode;
