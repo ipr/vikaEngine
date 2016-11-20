@@ -71,7 +71,13 @@ bool vikaDevice::create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex)
 
 	// depends on swapchain extension
 	vkGetDeviceQueue(m_device, graphicsQueueIndex, 0, &m_graphicsQueue);
-
+	vkGetDeviceQueue(m_device, presentQueueIndex, 0, &m_presentQueue);
+	/*
+	if (graphicsQueueIndex == presentQueueIndex)
+	{
+		m_presentQueue = m_graphicsQueue;
+	}
+	*/
 	return true;
 }
 
