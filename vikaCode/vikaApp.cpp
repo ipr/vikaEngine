@@ -113,11 +113,13 @@ bool vikaApp::create(uint32_t deviceIndex)
 
 	// assume the selected device is fine
 	m_physDevice = new vikaPhysDevice(this, m_devices[m_deviceIndex], deviceIndex);
-	m_physDevice->getPhysProperties();
-	m_physDevice->getQueueProperties();
+	if (m_physDevice->getQueueProperties() == false)
+	{
+		// not suitable for graphics?
+		return false;
+	}
 	m_physDevice->enumerateDeviceExtensions();
 	m_physDevice->enumerateDeviceLayers();
-
 	return true;
 }
 
@@ -289,7 +291,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 {
 	// after checking properties, create logical device from physical device
 	m_logicalDevice = new vikaDevice(this, m_physDevice);
-	if (m_logicalDevice->create() == false)
+	if (m_logicalDevice->create(m_physDevice->m_graphicsQueueIndex, m_physDevice->m_presentQueueIndex) == false)
 	{
 		return false;
 	}

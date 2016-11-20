@@ -27,6 +27,9 @@ protected:
 
     VkDevice m_device; // logical handle
 
+	VkQueue m_graphicsQueue;
+	VkQueue m_presentQueue;
+
 	std::vector<float> m_queuePriorities;
 	std::vector<const char *> m_extensionNames;
 	std::vector<const char *> m_layerNames;
@@ -45,7 +48,7 @@ public:
 		m_extensionNames.push_back(extension);
 	}
 
-	bool create();
+	bool create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex);
 	void destroy();
 
 	vikaApp *getApp() { return m_parent; };

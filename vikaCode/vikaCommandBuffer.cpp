@@ -19,7 +19,7 @@ vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *phys
 {
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	m_cmdPoolInfo.pNext = NULL;
-	//m_cmdPoolInfo.queueFamilyIndex = m_physDevice->getQueueIndex();
+	//m_cmdPoolInfo.queueFamilyIndex = m_physDevice->m_graphicsQueueIndex;
 	m_cmdPoolInfo.flags = 0;
 
 	m_cmdBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -41,7 +41,7 @@ vikaCommandBuffer::~vikaCommandBuffer()
 
 bool vikaCommandBuffer::create(uint32_t bufferCount)
 {
-	m_cmdPoolInfo.queueFamilyIndex = m_physDevice->getQueueIndex();
+	m_cmdPoolInfo.queueFamilyIndex = m_physDevice->m_graphicsQueueIndex;
 
 	m_cmdBuffers.resize(bufferCount);
 	m_res = vkCreateCommandPool(m_logDevice->getDevice(), &m_cmdPoolInfo, NULL, &m_cmdPool);

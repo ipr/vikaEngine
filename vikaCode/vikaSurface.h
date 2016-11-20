@@ -36,6 +36,7 @@ public: // make things simpler..
 #endif
 	VkSurfaceKHR m_surface;
 
+	// TODO: should be members of physical device?
 	uint32_t m_graphicsQueueIndex;
 	uint32_t m_presentQueueIndex;
 

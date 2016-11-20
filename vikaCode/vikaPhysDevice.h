@@ -22,7 +22,8 @@ protected:
 public: // make things simpler..
 	uint32_t m_deviceIndex;
 	uint32_t m_queuePropCount;
-	uint32_t m_queueIndex;
+	uint32_t m_graphicsQueueIndex;
+	uint32_t m_presentQueueIndex;
 
 	VkPhysicalDevice m_physDevice;
 
@@ -37,14 +38,13 @@ public:
 	vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint32_t deviceIndex);
 	~vikaPhysDevice();
 
-	bool getPhysProperties();
 	bool getQueueProperties();
 	bool enumerateDeviceExtensions();
 	bool enumerateDeviceLayers();
 
 	bool memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const;
 
-	uint32_t getQueueIndex() const { return m_queueIndex; };
+	//uint32_t getQueueIndex() const { return m_graphicsQueueIndex; };
 	VkPhysicalDevice& getPhysDev() { return m_physDevice; }; 
 };
 

@@ -12,7 +12,8 @@ vikaPhysDevice::vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint3
 	m_parent(parent),
 	m_deviceIndex(deviceIndex),
 	m_queuePropCount(0),
-	m_queueIndex(0),
+	m_graphicsQueueIndex(0),
+	m_presentQueueIndex(0),
 	m_physDevice(physDev)
 {
 }
@@ -21,16 +22,11 @@ vikaPhysDevice::~vikaPhysDevice()
 {
 }
 
-bool vikaPhysDevice::getPhysProperties()
+bool vikaPhysDevice::getQueueProperties()
 {
 	vkGetPhysicalDeviceMemoryProperties(m_physDevice, &m_memoryProperties);
 	vkGetPhysicalDeviceProperties(m_physDevice, &m_deviceProperties);
 
-	return true;
-}
-
-bool vikaPhysDevice::getQueueProperties()
-{
 	// first call: retrieve count
     vkGetPhysicalDeviceQueueFamilyProperties(m_physDevice, &m_queuePropCount, NULL);
 	if (m_queuePropCount < 1)
@@ -58,7 +54,8 @@ bool vikaPhysDevice::getQueueProperties()
 		VkQueueFamilyProperties &prop = m_queueProperties[i];
 		if (prop.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
-			m_queueIndex = i;
+			m_graphicsQueueIndex = i;
+			m_presentQueueIndex = i;
 			found = true;
 			break;
 		}

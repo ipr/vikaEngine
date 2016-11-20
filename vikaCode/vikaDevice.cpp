@@ -15,7 +15,9 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_parent(parent),
 	m_physDevice(physDevice),
-	m_device(VK_NULL_HANDLE)
+	m_device(VK_NULL_HANDLE),
+	m_graphicsQueue(VK_NULL_HANDLE),
+	m_presentQueue(VK_NULL_HANDLE)
 {
 	// range 0..1, 1 highest?
 	m_queuePriorities = {1.0};
@@ -44,7 +46,7 @@ vikaDevice::~vikaDevice()
 	destroy();
 }
 
-bool vikaDevice::create()
+bool vikaDevice::create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex)
 {
 	// TODO: check that required extensions are supported by the physical device before creating logical device
 
@@ -66,6 +68,10 @@ bool vikaDevice::create()
 	{
 		return false;
 	}
+
+	// depends on swapchain extension
+	vkGetDeviceQueue(m_device, graphicsQueueIndex, 0, &m_graphicsQueue);
+
 	return true;
 }
 
