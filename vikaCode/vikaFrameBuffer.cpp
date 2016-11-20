@@ -46,6 +46,7 @@ bool vikaFrameBuffer::create()
 	m_frameBuffers.resize(m_swapchain->m_swapchainImageCount);
 	for (uint32_t i = 0; i < m_swapchain->m_swapchainImageCount; i++)
 	{
+		m_attachments[0] = m_swapchain->m_swapchainViews[i];
 		m_res = vkCreateFramebuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_frameBuffers[i]);
 		if (m_res != VK_SUCCESS)
 		{
