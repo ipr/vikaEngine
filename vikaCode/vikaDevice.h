@@ -54,6 +54,9 @@ public:
 	vikaApp *getApp() { return m_parent; };
 	VkResult getResult() const { return m_res; };
 	VkDevice& getDevice() { return m_device; };
+
+	VkQueue& getGraphicsQueue() { return m_graphicsQueue; };
+	VkQueue& getPresentQueue() { return m_presentQueue; };
 };
 
 #endif // _VIKADEVICE_H_

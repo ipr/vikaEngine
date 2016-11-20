@@ -45,7 +45,7 @@ public:
 	bool executeBegin(uint32_t bufferIndex = 0);
 	bool executeEnd(uint32_t bufferIndex = 0);
 
-	//bool executeBuffer(uint32_t bufferIndex = 0);
+	bool executeQueue(uint32_t bufferIndex = 0);
 
 	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };
 };

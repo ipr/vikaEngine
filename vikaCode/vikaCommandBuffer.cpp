@@ -117,9 +117,20 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 	return true;
 }
 
-/*
-bool vikaCommandBuffer::executeBuffer(uint32_t bufferIndex)
+bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
 {
-	//vkQueueSubmit() ...
+	VkCommandBuffer &cmdBuf = m_cmdBuffers[bufferIndex];
+
+	VkFenceCreateInfo fenceInfo = {};
+	VkFence drawFence(VK_NULL_HANDLE);
+
+	VkSubmitInfo submitInfo = {};
+
+	VkQueue &gfxQueue = m_logDevice->getGraphicsQueue();
+	m_res = vkQueueSubmit(gfxQueue, 1, &submitInfo, drawFence);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
 }
-*/
