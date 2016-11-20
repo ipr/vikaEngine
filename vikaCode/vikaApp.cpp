@@ -298,7 +298,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 
 	// assume one command buffer for now
 	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice, m_physDevice);
-	if (m_commandBuffer->create(cmdBufferCount) == false)
+	if (m_commandBuffer->create(m_physDevice->m_graphicsQueueIndex, cmdBufferCount) == false)
 	{
 		return false;
 	}

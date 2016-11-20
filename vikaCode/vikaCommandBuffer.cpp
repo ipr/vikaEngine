@@ -39,9 +39,9 @@ vikaCommandBuffer::~vikaCommandBuffer()
 	destroy();
 }
 
-bool vikaCommandBuffer::create(uint32_t bufferCount)
+bool vikaCommandBuffer::create(uint32_t graphicsQueueIndex, uint32_t bufferCount)
 {
-	m_cmdPoolInfo.queueFamilyIndex = m_physDevice->m_graphicsQueueIndex;
+	m_cmdPoolInfo.queueFamilyIndex = graphicsQueueIndex;
 
 	m_cmdBuffers.resize(bufferCount);
 	m_res = vkCreateCommandPool(m_logDevice->getDevice(), &m_cmdPoolInfo, NULL, &m_cmdPool);

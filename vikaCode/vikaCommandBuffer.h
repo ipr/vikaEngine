@@ -36,7 +36,7 @@ public:
 	vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaCommandBuffer();
 
-	bool create(uint32_t bufferCount = 1);
+	bool create(uint32_t graphicsQueueIndex, uint32_t bufferCount = 1);
 	void destroy();
 
 	bool resetPool();
