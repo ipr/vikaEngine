@@ -10,6 +10,7 @@
 #include "vikaCommandBuffer.h"
 #include "vikaDepthBuffer.h"
 #include "vikaFrameBuffer.h"
+#include "vikaSemaphore.h"
 
 #include <vulkan/vulkan.h>
 
@@ -20,7 +21,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_swapchain(swapchain),
 	m_commandBuffer(commandBuffer),
 	m_depthBuffer(depthBuffer),
-	m_imageSemaphore(VK_NULL_HANDLE),
+	m_semaphore(nullptr),
 	m_renderpass(VK_NULL_HANDLE)
 {
     m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -100,14 +101,15 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	m_attachments[1].samples = sampleCount;
 
 	// expecting that depth buffer has been set before this..
-	if (createSemaphore() == false)
+	m_semaphore = new vikaSemaphore(m_device->getDevice());
+	if (m_semaphore->create() == false)
 	{
 		return false;
 	}
 
     // Acquire the swapchain image index in order to set its layout
 	uint32_t imageIndex = 0;
-    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_imageSemaphore, VK_NULL_HANDLE,
+    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
                                 &imageIndex);
 	if (m_res != VK_SUCCESS)
 	{
@@ -134,10 +136,11 @@ void vikaRenderPass::destroy()
 		m_renderpass = VK_NULL_HANDLE;
 	}
 
-	if (m_imageSemaphore != VK_NULL_HANDLE)
+	if (m_semaphore != nullptr)
 	{
-		vkDestroySemaphore(m_device->getDevice(), m_imageSemaphore, NULL);
-		m_imageSemaphore = VK_NULL_HANDLE;
+		m_semaphore->destroy();
+		delete m_semaphore;
+		m_semaphore = nullptr;
 	}
 }
 
@@ -163,20 +166,6 @@ void vikaRenderPass::endPass()
 	/*
 	vkCmdEndRenderPass(m_commandBuffer->getCmd(0));
 	*/
-}
-
-bool vikaRenderPass::createSemaphore()
-{
-    m_semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    m_semaphoreInfo.pNext = NULL;
-    m_semaphoreInfo.flags = 0;
-
-    m_res = vkCreateSemaphore(m_device->getDevice(), &m_semaphoreInfo, NULL, &m_imageSemaphore);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-	return true;
 }
 
 void vikaRenderPass::createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)

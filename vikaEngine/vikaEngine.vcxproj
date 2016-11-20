@@ -157,8 +157,10 @@
     <ClInclude Include="..\vikaCode\vikaFrameBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaPipeline.h" />
     <ClInclude Include="..\vikaCode\vikaRenderPass.h" />
+    <ClInclude Include="..\vikaCode\vikaSemaphore.h" />
     <ClInclude Include="..\vikaCode\vikaShaderModule.h" />
     <ClInclude Include="..\vikaCode\vikaUniformBuffer.h" />
+    <ClInclude Include="..\vikaCode\vikaVertexBuffer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -176,8 +178,10 @@
     <ClCompile Include="..\vikaCode\vikaFrameBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaPipeline.cpp" />
     <ClCompile Include="..\vikaCode\vikaRenderPass.cpp" />
+    <ClCompile Include="..\vikaCode\vikaSemaphore.cpp" />
     <ClCompile Include="..\vikaCode\vikaShaderModule.cpp" />
     <ClCompile Include="..\vikaCode\vikaUniformBuffer.cpp" />
+    <ClCompile Include="..\vikaCode\vikaVertexBuffer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

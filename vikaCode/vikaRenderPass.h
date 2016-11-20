@@ -17,6 +17,7 @@ class vikaSwapChain;
 class vikaCommandBuffer;
 class vikaDepthBuffer;
 class vikaFrameBuffer;
+class vikaSemaphore;
 
 class vikaRenderPass
 {
@@ -27,11 +28,9 @@ protected:
 	vikaSwapChain *m_swapchain;
 	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
+	vikaSemaphore *m_semaphore;
 
 public: // simplify..
-	VkSemaphoreCreateInfo m_semaphoreInfo = {};
-	VkSemaphore m_imageSemaphore;
-
     VkImageMemoryBarrier m_imageMemoryBarrier = {};
 
 	std::vector<VkAttachmentDescription> m_attachments;
@@ -54,7 +53,6 @@ public:
 	void beginPass(vikaFrameBuffer *framebuffer);
 	void endPass();
 
-	bool createSemaphore();
 	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
 };
 
