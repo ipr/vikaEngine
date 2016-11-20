@@ -14,6 +14,7 @@
 class vikaDevice;
 class vikaRenderPass;
 class vikaDepthBuffer;
+class vikaSwapChain;
 
 class vikaFrameBuffer
 {
@@ -22,15 +23,16 @@ protected:
 	vikaDevice *m_logDevice;
 	vikaRenderPass *m_renderPass;
 	vikaDepthBuffer *m_depthBuffer;
+	vikaSwapChain *m_swapchain;
 
 public: // simplify..
 	std::vector<VkImageView> m_attachments;
 
 	VkFramebufferCreateInfo m_bufferInfo = {};
-	VkFramebuffer m_frameBuffer;
+	std::vector<VkFramebuffer> m_frameBuffers;
 
 public:
-	vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, VkExtent2D &imageSize);
+	vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize);
 	virtual ~vikaFrameBuffer();
 
 	bool create();

@@ -7,15 +7,16 @@
 #include "vikaDevice.h"
 #include "vikaRenderPass.h"
 #include "vikaDepthBuffer.h"
+#include "vikaSwapChain.h"
 
 #include <vulkan/vulkan.h>
 
-vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, VkExtent2D &imageSize) :
+vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_renderPass(renderPass),
 	m_depthBuffer(depthBuffer),
-	m_frameBuffer(VK_NULL_HANDLE)
+	m_swapchain(swapchain)
 {
 	m_attachments.resize(2);
 
@@ -42,20 +43,24 @@ bool vikaFrameBuffer::create()
 	m_bufferInfo.attachmentCount = m_attachments.size();
 	m_bufferInfo.pAttachments = m_attachments.data();
 
-	m_res = vkCreateFramebuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_frameBuffer);
-	if (m_res != VK_SUCCESS)
+	m_frameBuffers.resize(m_swapchain->m_swapchainImageCount);
+	for (uint32_t i = 0; i < m_swapchain->m_swapchainImageCount; i++)
 	{
-		return false;
+		m_res = vkCreateFramebuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_frameBuffers[i]);
+		if (m_res != VK_SUCCESS)
+		{
+			return false;
+		}
 	}
 	return true;
 }
 
 void vikaFrameBuffer::destroy()
 {
-	if (m_frameBuffer != VK_NULL_HANDLE)
+	for (size_t i = 0; i < m_frameBuffers.size(); i++)
 	{
-		vkDestroyFramebuffer(m_logDevice->getDevice(), m_frameBuffer, NULL);
-		m_frameBuffer = VK_NULL_HANDLE;
+		vkDestroyFramebuffer(m_logDevice->getDevice(), m_frameBuffers[i], NULL);
 	}
+	m_frameBuffers.clear();
 }
 

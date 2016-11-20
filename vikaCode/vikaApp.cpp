@@ -353,7 +353,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_renderPass, m_depthBuffer, m_imageSize);
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_renderPass, m_depthBuffer, m_swapChain, m_imageSize);
 	if (m_framebuffer->create() == false)
 	{
 		return false;
