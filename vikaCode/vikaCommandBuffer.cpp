@@ -8,6 +8,7 @@
 #include "vikaCommandBuffer.h"
 #include "vikaDevice.h"
 #include "vikaPhysDevice.h"
+#include "vikaFence.h"
 
 #include <vulkan/vulkan.h>
 
@@ -119,13 +120,9 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 
 bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
 {
-	VkFence drawFence(VK_NULL_HANDLE);
-	VkFenceCreateInfo fenceInfo = {};
-	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-	fenceInfo.pNext = NULL;
-	fenceInfo.flags = 0;
-    m_res = vkCreateFence(m_logDevice->getDevice(), &fenceInfo, NULL, &drawFence);
-	if (m_res != VK_SUCCESS)
+	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
+	vikaFence fence(m_logDevice->getDevice(), 100000000);
+	if (fence.create() == false)
 	{
 		return false;
 	}
@@ -143,19 +140,15 @@ bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
     submitInfo.pSignalSemaphores = NULL;
 
 	VkQueue &gfxQueue = m_logDevice->getGraphicsQueue();
-	m_res = vkQueueSubmit(gfxQueue, 1, &submitInfo, drawFence);
+	m_res = vkQueueSubmit(gfxQueue, 1, &submitInfo, fence.getFence());
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
 
-	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
-	uint64_t fenceTimeout = 100000000;
-	do 
+	if (fence.doWait() == false)
 	{
-		m_res = vkWaitForFences(m_logDevice->getDevice(), 1, &drawFence, VK_TRUE, fenceTimeout);
-	} while (m_res == VK_TIMEOUT);
-
-    vkDestroyFence(m_logDevice->getDevice(), drawFence, NULL);
+		return false;
+	}
 	return true;
 }

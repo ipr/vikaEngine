@@ -72,6 +72,9 @@
     <ClInclude Include="..\vikaCode\vikaFrameBuffer.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaFence.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -117,6 +120,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="..\vikaCode\vikaFrameBuffer.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaFence.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
