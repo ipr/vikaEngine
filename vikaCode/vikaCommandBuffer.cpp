@@ -28,6 +28,10 @@ vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *phys
 	m_cmdBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	//m_cmdBufferInfo.commandBufferCount = bufferCount; // fill in later
 
+	m_beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	m_beginInfo.pNext = NULL;
+	m_beginInfo.flags = 0;
+	m_beginInfo.pInheritanceInfo = NULL;
 }
 
 vikaCommandBuffer::~vikaCommandBuffer()
@@ -95,13 +99,7 @@ bool vikaCommandBuffer::resetBuffer(uint32_t bufferIndex)
 
 bool vikaCommandBuffer::executeBegin(uint32_t bufferIndex)
 {
-	VkCommandBufferBeginInfo beginInfo = {};
-	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	beginInfo.pNext = NULL;
-	beginInfo.flags = 0;
-	beginInfo.pInheritanceInfo = NULL;
-
-	m_res = vkBeginCommandBuffer(m_cmdBuffers[bufferIndex], &beginInfo);
+	m_res = vkBeginCommandBuffer(m_cmdBuffers[bufferIndex], &m_beginInfo);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;

@@ -30,6 +30,8 @@ public: // simplify things..
     VkCommandBufferAllocateInfo m_cmdBufferInfo = {};
 	std::vector<VkCommandBuffer> m_cmdBuffers;
 
+	VkCommandBufferBeginInfo m_beginInfo = {};
+
 public:
 	vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaCommandBuffer();
