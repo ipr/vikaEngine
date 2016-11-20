@@ -28,7 +28,7 @@ vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPa
 	//m_bufferInfo.pAttachments = m_attachments.data();
 	m_bufferInfo.height = imageSize.height;
 	m_bufferInfo.width = imageSize.width;
-	m_bufferInfo.layers = 0;
+	m_bufferInfo.layers = 1;
 }
 
 vikaFrameBuffer::~vikaFrameBuffer()

@@ -310,7 +310,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	// TODO: execute here?
-	//m_commandBuffer->executeBegin()
+	m_commandBuffer->executeBegin();
 
 	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface, m_imageSize);
 	if (m_swapChain->create() == false)
@@ -326,6 +326,10 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 
 	// TODO: fill in view-projection matrix
 	mat4 MVP;
+	memset(&MVP.x, 0, sizeof(MVP.x));
+	memset(&MVP.y, 0, sizeof(MVP.y));
+	memset(&MVP.z, 0, sizeof(MVP.z));
+	memset(&MVP.w, 0, sizeof(MVP.w));
 	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice, sizeof(mat4));
 	if (m_uniformBuffer->create(sizeof(mat4), &MVP) == false)
 	{
@@ -357,8 +361,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	// TODO: execute "end" here?
-	//m_commandBuffer->executeEnd();
-	//m_commandBuffer->executeQueue();
+	m_commandBuffer->executeEnd();
+	m_commandBuffer->executeQueue();
 	return true;
 }
 

@@ -116,7 +116,7 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
 
 	// should execute "end" here?
-	m_commandBuffer->executeEnd();
+	//m_commandBuffer->executeEnd();
 
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)

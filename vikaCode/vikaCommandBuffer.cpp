@@ -118,7 +118,7 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 	return true;
 }
 
-bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
+bool vikaCommandBuffer::executeQueue()
 {
 	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
 	vikaFence fence(m_logDevice->getDevice(), 100000000);
