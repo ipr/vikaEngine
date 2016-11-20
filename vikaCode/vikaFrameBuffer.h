@@ -23,6 +23,7 @@ protected:
 	vikaRenderPass *m_renderPass;
 	vikaDepthBuffer *m_depthBuffer;
 
+public: // simplify..
 	std::vector<VkImageView> m_attachments;
 
 	VkFramebufferCreateInfo m_bufferInfo = {};

@@ -16,6 +16,7 @@ class vikaSurface;
 class vikaSwapChain;
 class vikaCommandBuffer;
 class vikaDepthBuffer;
+class vikaFrameBuffer;
 
 class vikaRenderPass
 {
@@ -50,7 +51,7 @@ public:
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
 
-	void beginPass();
+	void beginPass(vikaFrameBuffer *framebuffer);
 	void endPass();
 
 	bool createSemaphore();

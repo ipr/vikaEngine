@@ -9,6 +9,7 @@
 #include "vikaSwapChain.h"
 #include "vikaCommandBuffer.h"
 #include "vikaDepthBuffer.h"
+#include "vikaFrameBuffer.h"
 
 #include <vulkan/vulkan.h>
 
@@ -140,14 +141,18 @@ void vikaRenderPass::destroy()
 	}
 }
 
-void vikaRenderPass::beginPass()
+void vikaRenderPass::beginPass(vikaFrameBuffer *framebuffer)
 {
 	/*
-	VkSubpassContents subpass = ;
+	//VkSubpassContents subpass = ;
 	VkRenderPassBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	beginInfo.pNext = NULL;
-	beginInfo.
+	beginInfo.renderPass = m_renderpass;
+	beginInfo.framebuffer = framebuffer->m_frameBuffer;
+	beginInfo.renderArea = ;
+	beginInfo.clearValueCount = ;
+	beginInfo.pClearValues = NULL;
 
 	vkCmdBeginRenderPass(m_commandBuffer->getCmd(0), &beginInfo, subpass);
 	*/
