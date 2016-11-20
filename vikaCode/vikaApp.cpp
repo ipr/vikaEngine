@@ -309,6 +309,9 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
+	// TODO: execute here?
+	//m_commandBuffer->executeBegin()
+
 	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface, m_imageSize);
 	if (m_swapChain->create() == false)
 	{
@@ -340,6 +343,9 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	{
 		return false;
 	}
+
+	// TODO: execute "end" here?
+	//m_commandBuffer->executeEnd();
 
 	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer);
 	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
