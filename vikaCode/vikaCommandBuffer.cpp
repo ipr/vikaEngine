@@ -117,3 +117,9 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 	return true;
 }
 
+/*
+bool vikaCommandBuffer::executeBuffer(uint32_t bufferIndex)
+{
+	//vkQueueSubmit() ...
+}
+*/
