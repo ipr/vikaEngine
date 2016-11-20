@@ -27,6 +27,7 @@ protected:
 	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
 
+public: // simplify..
 	VkSemaphoreCreateInfo m_semaphoreInfo = {};
 	VkSemaphore m_imageSemaphore;
 
