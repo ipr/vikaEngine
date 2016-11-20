@@ -139,8 +139,7 @@ bool vikaCommandBuffer::executeQueue(uint32_t bufferIndex)
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores = NULL;
 
-	VkQueue &gfxQueue = m_logDevice->getGraphicsQueue();
-	m_res = vkQueueSubmit(gfxQueue, 1, &submitInfo, fence.getFence());
+	m_res = vkQueueSubmit(m_logDevice->getGraphicsQueue(), 1, &submitInfo, fence.getFence());
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
