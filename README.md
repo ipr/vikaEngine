@@ -11,7 +11,8 @@ It is also speech-form for "last/final".
 Also, it sounds funny.
 
 ## Dependencies:
-Vulkan SDK
+
+Just Vulkan SDK.
 
 Vulkan SDK is distributed at:
     https://vulkan.lunarg.com
@@ -21,5 +22,5 @@ Vulkan SDK is licensed under the Apache License, Version 2.0:
 
 ## Suggested third-party stuff
 
-GLM OpenGL Math - https://github.com/g-truc/glm
-DirectXMath - https://github.com/Microsoft/DirectXMath
+* GLM OpenGL Math - https://github.com/g-truc/glm
+* DirectXMath - https://github.com/Microsoft/DirectXMath
