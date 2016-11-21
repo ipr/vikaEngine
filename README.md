@@ -12,7 +12,9 @@ Also, it sounds funny.
 
 ## Dependencies:
 
-Just Vulkan SDK.
+Just Vulkan SDK:
+- vulkan.h header file
+- vulkan-1 loader library (linker stub .lib and runtime .dll)
 
 Vulkan SDK is distributed at:
     https://vulkan.lunarg.com
