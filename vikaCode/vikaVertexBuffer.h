@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaCommandBuffer;
 class vikaRenderPass;
 class vikaSemaphore;
 
@@ -20,11 +21,12 @@ class vikaVertexBuffer
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaCommandBuffer *m_commandBuffer;
 	vikaRenderPass *m_renderPass;
 	vikaSemaphore *m_semaphore;
 
 public:
-	vikaVertexBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass);
+	vikaVertexBuffer(vikaDevice *logDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass);
 	virtual ~vikaVertexBuffer();
 
 	bool create();

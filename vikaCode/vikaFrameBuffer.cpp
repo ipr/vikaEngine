@@ -11,10 +11,9 @@
 
 #include <vulkan/vulkan.h>
 
-vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize) :
+vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
-	m_renderPass(renderPass),
 	m_depthBuffer(depthBuffer),
 	m_swapchain(swapchain)
 {
@@ -36,10 +35,10 @@ vikaFrameBuffer::~vikaFrameBuffer()
 	destroy();
 }
 
-bool vikaFrameBuffer::create()
+bool vikaFrameBuffer::create(vikaRenderPass *renderPass)
 {
     m_attachments[1] = m_depthBuffer->m_view;
-	m_bufferInfo.renderPass = m_renderPass->m_renderpass;
+	m_bufferInfo.renderPass = renderPass->m_renderpass;
 	m_bufferInfo.attachmentCount = m_attachments.size();
 	m_bufferInfo.pAttachments = m_attachments.data();
 

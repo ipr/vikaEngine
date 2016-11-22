@@ -361,13 +361,13 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_renderPass, m_depthBuffer, m_swapChain, m_imageSize);
-	if (m_framebuffer->create() == false)
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain, m_imageSize);
+	if (m_framebuffer->create(m_renderPass) == false)
 	{
 		return false;
 	}
 
-	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_renderPass);
+	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_commandBuffer, m_renderPass);
 	if (m_vertexBuffer->create() == false)
 	{
 		return false;

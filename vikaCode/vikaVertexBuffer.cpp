@@ -5,14 +5,16 @@
 #include "stdafx.h"
 #include "vikaVertexBuffer.h"
 #include "vikaDevice.h"
+#include "vikaCommandBuffer.h"
 #include "vikaRenderPass.h"
 #include "vikaSemaphore.h"
 
 #include <vulkan/vulkan.h>
 
-vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass) :
+vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
+	m_commandBuffer(commandBuffer),
 	m_renderPass(renderPass),
 	m_semaphore(nullptr)
 {
@@ -33,6 +35,17 @@ bool vikaVertexBuffer::create()
 
 	//VkClearValue..
 
+	// TODO:
+	//m_renderPass->beginPass(VK_SUBPASS_CONTENTS_INLINE);
+
+	/*
+    vkCmdBindVertexBuffers(info.cmd, 0,             // Start Binding 
+                           1,                       // Binding Count 
+                           &info.vertex_buffer.buf, // pBuffers 
+                           offsets);                // pOffsets 
+						   */
+
+	//m_renderPass->endPass();
 	return true;
 }
 

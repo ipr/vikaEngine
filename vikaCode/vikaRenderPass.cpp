@@ -144,10 +144,10 @@ void vikaRenderPass::destroy()
 	}
 }
 
-void vikaRenderPass::beginPass(vikaFrameBuffer *framebuffer)
+void vikaRenderPass::beginPass(vikaFrameBuffer *framebuffer, VkSubpassContents subpass)
 {
 	/*
-	//VkSubpassContents subpass = ;
+	//VkSubpassContents subpass = VK_SUBPASS_CONTENTS_INLINE;
 	VkRenderPassBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	beginInfo.pNext = NULL;

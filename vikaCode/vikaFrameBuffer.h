@@ -21,7 +21,6 @@ class vikaFrameBuffer
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
-	vikaRenderPass *m_renderPass;
 	vikaDepthBuffer *m_depthBuffer;
 	vikaSwapChain *m_swapchain;
 
@@ -32,10 +31,10 @@ public: // simplify..
 	std::vector<VkFramebuffer> m_frameBuffers;
 
 public:
-	vikaFrameBuffer(vikaDevice *logDevice, vikaRenderPass *renderPass, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize);
+	vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize);
 	virtual ~vikaFrameBuffer();
 
-	bool create();
+	bool create(vikaRenderPass *renderPass);
 	void destroy();
 };
 

@@ -50,7 +50,7 @@ public:
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
 
-	void beginPass(vikaFrameBuffer *framebuffer);
+	void beginPass(vikaFrameBuffer *framebuffer, VkSubpassContents subpass);
 	void endPass();
 
 	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
