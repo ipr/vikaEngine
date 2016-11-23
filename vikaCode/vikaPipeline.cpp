@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "vikaPipeline.h"
 #include "vikaDevice.h"
+#include "vikaDescriptorset.h"
 #include "vikaUniformBuffer.h"
 
 #include <vulkan/vulkan.h>
@@ -43,6 +44,7 @@ vikaPipeline::~vikaPipeline()
 // count of descriptorsets needs to be same in multiple places
 bool vikaPipeline::create(uint32_t descriptorSetCount)
 {
+	// TODO: move
 	m_layouts.resize(descriptorSetCount);
 	m_res = vkCreateDescriptorSetLayout(m_logDevice->getDevice(), &m_descriptorLayout, NULL, m_layouts.data());
 	if (m_res != VK_SUCCESS)

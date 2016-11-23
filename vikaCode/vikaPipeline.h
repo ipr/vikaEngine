@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaDescriptorset;
 class vikaUniformBuffer;
 
 class vikaPipeline
@@ -19,12 +20,14 @@ class vikaPipeline
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	//vikaDescriptorset *m_descSet;
 	vikaUniformBuffer *m_uniBuffer;
 
 public: // simplify things..
+
+	// TODO: move
     VkDescriptorSetLayoutBinding m_layoutBinding = {};
     VkDescriptorSetLayoutCreateInfo m_descriptorLayout = {};
-
 	std::vector<VkDescriptorSetLayout> m_layouts;
 
     VkPipelineLayoutCreateInfo m_pipelineInfo = {};
