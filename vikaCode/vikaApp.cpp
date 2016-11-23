@@ -27,10 +27,22 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 {
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
-#ifdef _WINDOWS
+#ifdef VK_USE_PLATFORM_WIN32_KHR
 	// available at instance level, but must be listed after "generic" surface extension? (driver bug?)
 	// other thing: add system env variable VK_LAYER_PATH if this extension is not working (might be another thing)
 	m_extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME); 
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+	m_extensionNames.push_back(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_MIR_KHR
+	m_extensionNames.push_back(VK_KHR_MIR_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+	m_extensionNames.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+	m_extensionNames.push_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
 #endif
 
 	m_appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;

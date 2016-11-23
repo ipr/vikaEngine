@@ -19,6 +19,8 @@ vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_presentQueueIndex(UINT32_MAX),
 	m_format(VK_FORMAT_UNDEFINED)
 {
+	/*
+	// TODO: remove or make another way to use these when loading extensions?
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 	m_requiredExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
 #endif
@@ -34,6 +36,7 @@ vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 	m_requiredExtensions.push_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
 #endif
+	*/
 }
 
 vikaSurface::~vikaSurface()

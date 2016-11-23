@@ -26,7 +26,7 @@ protected:
     //VkWin32SurfaceCreateInfoKHR m_createInfo;
 
 public: // make things simpler..
-	std::vector<const char *> m_requiredExtensions;
+	//std::vector<const char *> m_requiredExtensions;
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 	VkWin32SurfaceCreateInfoKHR m_win32Info = {};
