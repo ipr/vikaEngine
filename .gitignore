@@ -5,3 +5,7 @@ vikaEngine/vikaEngine.VC.db
 *.ipch
 vikaEngine/Debug/
 vikaEngine/x64/
+vikaTestApp/Debug/
+vikaTestApp/x64/
+*.suo
+vikaTestApp/vikaEngine.VC.db
