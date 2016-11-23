@@ -52,14 +52,14 @@ vikaSurface::~vikaSurface()
 // VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 bool vikaSurface::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 {
-    m_srfInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-    m_srfInfo.pNext = NULL;
-	m_srfInfo.flags = 0;
-    m_srfInfo.hinstance = hInstance;
-    m_srfInfo.hwnd = hWnd;
+    m_win32Info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    m_win32Info.pNext = NULL;
+	m_win32Info.flags = 0;
+    m_win32Info.hinstance = hInstance;
+    m_win32Info.hwnd = hWnd;
 
 	// note: must load appropriate extension to vulkan before this can be used
-    m_res = vkCreateWin32SurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+    m_res = vkCreateWin32SurfaceKHR(m_parent->getInstance(), &m_win32Info, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -74,13 +74,13 @@ bool vikaSurface::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 bool vikaSurface::createSurface(struct wl_display *display, struct wl_surface *surface)
 {
-	m_srfInfo.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
-	m_srfInfo.pNext = NULL;
-	m_srfInfo.flags = 0;
-	m_srfInfo.display = display;
-	m_srfInfo.surface = surface;
+	m_waylInfo.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
+	m_waylInfo.pNext = NULL;
+	m_waylInfo.flags = 0;
+	m_waylInfo.display = display;
+	m_waylInfo.surface = surface;
 
-	m_res = vkCreateWaylandSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	m_res = vkCreateWaylandSurfaceKHR(m_parent->getInstance(), &m_waylInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -94,13 +94,13 @@ bool vikaSurface::createSurface(struct wl_display *display, struct wl_surface *s
 #ifdef VK_USE_PLATFORM_MIR_KHR
 bool vikaSurface::createSurface(MirConnection *connection, MirSurface *mirSurface)
 {
-	m_srfInfo.sType = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR;
-	m_srfInfo.pNext = NULL;
-	m_srfInfo.flags = 0;
-	m_srfInfo.connection = connection;
-	m_srfInfo.mirSurface = mirSurface;
+	m_mirInfo.sType = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR;
+	m_mirInfo.pNext = NULL;
+	m_mirInfo.flags = 0;
+	m_mirInfo.connection = connection;
+	m_mirInfo.mirSurface = mirSurface;
 
-	m_res = vkCreateMirSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	m_res = vkCreateMirSurfaceKHR(m_parent->getInstance(), &m_mirInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -114,13 +114,13 @@ bool vikaSurface::createSurface(MirConnection *connection, MirSurface *mirSurfac
 #ifdef VK_USE_PLATFORM_XCB_KHR
 bool vikaSurface::createSurface(xcb_connection_t *connection, xcb_window_t window)
 {
-	m_srfInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-	m_srfInfo.pNext = NULL;
-	m_srfInfo.flags = 0;
-	m_srfInfo.connection = connection;
-	m_srfInfo.window = window;
+	m_xcbInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+	m_xcbInfo.pNext = NULL;
+	m_xcbInfo.flags = 0;
+	m_xcbInfo.connection = connection;
+	m_xcbInfo.window = window;
 
-	m_res = vkCreateXcbSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	m_res = vkCreateXcbSurfaceKHR(m_parent->getInstance(), &m_xcbInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -134,13 +134,13 @@ bool vikaSurface::createSurface(xcb_connection_t *connection, xcb_window_t windo
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 bool vikaSurface::createSurface(Display *dpy, Window window)
 {
-	m_srfInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
-	m_srfInfo.pNext = NULL;
-	m_srfInfo.flags = 0;
-	m_srfInfo.dpy = dpy;
-	m_srfInfo.window = window;
+	m_xlibInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+	m_xlibInfo.pNext = NULL;
+	m_xlibInfo.flags = 0;
+	m_xlibInfo.dpy = dpy;
+	m_xlibInfo.window = window;
 
-	m_res = vkCreateXlibSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	m_res = vkCreateXlibSurfaceKHR(m_parent->getInstance(), &m_xlibInfo, NULL, &m_surface);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;

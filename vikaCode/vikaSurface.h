@@ -29,19 +29,19 @@ public: // make things simpler..
 	std::vector<const char *> m_requiredExtensions;
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
+	VkWin32SurfaceCreateInfoKHR m_win32Info = {};
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-	VkWaylandSurfaceCreateInfoKHR m_srfInfo = {};
+	VkWaylandSurfaceCreateInfoKHR m_waylInfo = {};
 #endif
 #ifdef VK_USE_PLATFORM_MIR_KHR
-	VkMirSurfaceCreateInfoKHR m_srfInfo = {};
+	VkMirSurfaceCreateInfoKHR m_mirInfo = {};
 #endif
 #ifdef VK_USE_PLATFORM_XCB_KHR
-	VkXcbSurfaceCreateInfoKHR m_srfInfo = {};
+	VkXcbSurfaceCreateInfoKHR m_xcbInfo = {};
 #endif
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-	VkXlibSurfaceCreateInfoKHR m_srfInfo = {};
+	VkXlibSurfaceCreateInfoKHR m_xlibInfo = {};
 #endif
 
 	VkSurfaceKHR m_surface;
