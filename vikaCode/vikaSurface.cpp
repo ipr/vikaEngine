@@ -19,6 +19,21 @@ vikaSurface::vikaSurface(vikaApp *parent, vikaPhysDevice *physDevice) :
 	m_presentQueueIndex(UINT32_MAX),
 	m_format(VK_FORMAT_UNDEFINED)
 {
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+	m_requiredExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+	m_requiredExtensions.push_back(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_MIR_KHR
+	m_requiredExtensions.push_back(VK_KHR_MIR_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+	m_requiredExtensions.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+#endif
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+	m_requiredExtensions.push_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
+#endif
 }
 
 vikaSurface::~vikaSurface()
@@ -31,7 +46,7 @@ vikaSurface::~vikaSurface()
 // could make this pure virtual in future
 */
 
-#ifdef _WINDOWS
+#ifdef VK_USE_PLATFORM_WIN32_KHR
 // note: needs extension loaded,
 // VK_KHR_SWAPCHAIN_EXTENSION_NAME
 // VK_KHR_WIN32_SURFACE_EXTENSION_NAME
@@ -49,6 +64,89 @@ bool vikaSurface::createSurface(HINSTANCE &hInstance, HWND &hWnd)
 	{
 		return false;
 	}
+
+	//m_physDevPresentSupport = vkGetPhysicalDeviceWin32PresentationSupportKHR(m_physDevice->getPhysDev(), queue)
+
+	return createInternals();
+}
+#endif
+
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+bool vikaSurface::createSurface(struct wl_display *display, struct wl_surface *surface)
+{
+	m_srfInfo.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR;
+	m_srfInfo.pNext = NULL;
+	m_srfInfo.flags = 0;
+	m_srfInfo.display = display;
+	m_srfInfo.surface = surface;
+
+	m_res = vkCreateWaylandSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	//m_physDevPresentSupport = vkGetPhysicalDeviceWaylandPresentationSupportKHR(m_physDevice->getPhysDev(), queue, display)
+
+	return createInternals();
+}
+#endif
+#ifdef VK_USE_PLATFORM_MIR_KHR
+bool vikaSurface::createSurface(MirConnection *connection, MirSurface *mirSurface)
+{
+	m_srfInfo.sType = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR;
+	m_srfInfo.pNext = NULL;
+	m_srfInfo.flags = 0;
+	m_srfInfo.connection = connection;
+	m_srfInfo.mirSurface = mirSurface;
+
+	m_res = vkCreateMirSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	//m_physDevPresentSupport = vkGetPhysicalDeviceMirPresentationSupportKHR(m_physDevice->getPhysDev(), queue, connection)
+
+	return createInternals();
+}
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+bool vikaSurface::createSurface(xcb_connection_t *connection, xcb_window_t window)
+{
+	m_srfInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+	m_srfInfo.pNext = NULL;
+	m_srfInfo.flags = 0;
+	m_srfInfo.connection = connection;
+	m_srfInfo.window = window;
+
+	m_res = vkCreateXcbSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	//m_physDevPresentSupport = vkGetPhysicalDeviceXcbPresentationSupportKHR(m_physDevice->getPhysDev(), queue, connection)
+
+	return createInternals();
+}
+#endif
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+bool vikaSurface::createSurface(Display *dpy, Window window)
+{
+	m_srfInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+	m_srfInfo.pNext = NULL;
+	m_srfInfo.flags = 0;
+	m_srfInfo.dpy = dpy;
+	m_srfInfo.window = window;
+
+	m_res = vkCreateXlibSurfaceKHR(m_parent->getInstance(), &m_srfInfo, NULL, &m_surface);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	//m_physDevPresentSupport = vkGetPhysicalDeviceXlibPresentationSupportKHR(m_physDevice->getPhysDev(), queue, dpy)
 
 	return createInternals();
 }

@@ -7,10 +7,6 @@
 
 #pragma once
 
-#ifdef _WINDOWS
-#include <Windows.h>
-#endif
-
 #include <vector>
 
 #include <vulkan/vulkan.h>
@@ -30,11 +26,26 @@ protected:
     //VkWin32SurfaceCreateInfoKHR m_createInfo;
 
 public: // make things simpler..
+	std::vector<const char *> m_requiredExtensions;
 
-#ifdef _WINDOWS
+#ifdef VK_USE_PLATFORM_WIN32_KHR
 	VkWin32SurfaceCreateInfoKHR m_srfInfo = {};
 #endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+	VkWaylandSurfaceCreateInfoKHR m_srfInfo = {};
+#endif
+#ifdef VK_USE_PLATFORM_MIR_KHR
+	VkMirSurfaceCreateInfoKHR m_srfInfo = {};
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+	VkXcbSurfaceCreateInfoKHR m_srfInfo = {};
+#endif
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+	VkXlibSurfaceCreateInfoKHR m_srfInfo = {};
+#endif
+
 	VkSurfaceKHR m_surface;
+	//VkBool32 m_physDevPresentSupport;
 
 	// TODO: should be members of physical device?
 	uint32_t m_graphicsQueueIndex;
@@ -59,8 +70,20 @@ public:
 	void destroySurface(VkDevice &device);
 	*/
 
-#ifdef _WINDOWS
+#ifdef VK_USE_PLATFORM_WIN32_KHR
 	bool createSurface(HINSTANCE &hInstance, HWND &hWnd);
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+	bool createSurface(struct wl_display *display, struct wl_surface *surface);
+#endif
+#ifdef VK_USE_PLATFORM_MIR_KHR
+	bool createSurface(MirConnection *connection, MirSurface *mirSurface);
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+	bool createSurface(xcb_connection_t *connection, xcb_window_t window);
+#endif
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+	bool createSurface(Display *dpy, Window window);
 #endif
 
 	bool createInternals();
