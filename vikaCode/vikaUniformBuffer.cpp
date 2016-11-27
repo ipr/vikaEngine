@@ -36,7 +36,6 @@ vikaUniformBuffer::~vikaUniformBuffer()
 	destroy();
 }
 
-// parameter expected: mat4 with view-projection matrix
 bool vikaUniformBuffer::create()
 {
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);

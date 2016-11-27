@@ -360,7 +360,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	m_pipeline = new vikaPipeline(m_logicalDevice, m_uniformBuffer);
-	if (m_pipeline->create() == false)
+	if (m_pipeline->createLayout() == false)
 	{
 		return false;
 	}
@@ -383,8 +383,14 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_commandBuffer, m_renderPass);
+	uint64_t vertexDataSize = 0;
+	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer, m_renderPass, vertexDataSize);
 	if (m_vertexBuffer->create() == false)
+	{
+		return false;
+	}
+
+	if (m_pipeline->createInputAssembly(m_vertexBuffer, m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
 	{
 		return false;
 	}
