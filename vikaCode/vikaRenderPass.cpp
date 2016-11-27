@@ -80,8 +80,8 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 
     m_renderpassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     m_renderpassInfo.pNext = NULL;
-    m_renderpassInfo.attachmentCount = m_attachments.size();
-    m_renderpassInfo.pAttachments = m_attachments.data();
+    //m_renderpassInfo.attachmentCount = m_attachments.size();
+    //m_renderpassInfo.pAttachments = m_attachments.data();
     m_renderpassInfo.subpassCount = 1;
     m_renderpassInfo.pSubpasses = &m_subpassDesc;
     m_renderpassInfo.dependencyCount = 0;
@@ -99,6 +99,9 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	m_attachments[0].samples = sampleCount;
 	m_attachments[1].format = m_depthBuffer->m_depthFormat;
 	m_attachments[1].samples = sampleCount;
+
+    m_renderpassInfo.attachmentCount = m_attachments.size();
+    m_renderpassInfo.pAttachments = m_attachments.data();
 
 	// expecting that depth buffer has been set before this..
 	m_semaphore = new vikaSemaphore(m_device->getDevice());

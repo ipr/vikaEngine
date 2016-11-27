@@ -27,8 +27,8 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 
     m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     m_queueInfo.pNext = NULL;
-    m_queueInfo.queueCount = m_queuePriorities.size();
-    m_queueInfo.pQueuePriorities = m_queuePriorities.data();
+    //m_queueInfo.queueCount = m_queuePriorities.size();
+    //m_queueInfo.pQueuePriorities = m_queuePriorities.data();
 
     m_deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     m_deviceInfo.pNext = NULL;
@@ -48,6 +48,9 @@ vikaDevice::~vikaDevice()
 
 bool vikaDevice::create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex)
 {
+    m_queueInfo.queueCount = m_queuePriorities.size();
+    m_queueInfo.pQueuePriorities = m_queuePriorities.data();
+
 	// TODO: check that required extensions are supported by the physical device before creating logical device
 
 	// ok, assume list if fine for now
