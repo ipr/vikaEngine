@@ -47,9 +47,11 @@ public:
 	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkDeviceSize bufferSize);
 	virtual ~vikaUniformBuffer();
 
-	// parameter expected: mat4 with view-projection matrix
-	bool create(uint32_t sizeMVP, void *dataMVP);
+	bool create();
 	void destroy();
+
+	// parameter expected: mat4 with view-projection matrix
+	bool copyToMemory(uint32_t sizeMVP, void *dataMVP);
 };
 
 #endif

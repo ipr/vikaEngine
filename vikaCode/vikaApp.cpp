@@ -350,7 +350,11 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	memset(&MVP.z, 0, sizeof(MVP.z));
 	memset(&MVP.w, 0, sizeof(MVP.w));
 	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice, sizeof(mat4));
-	if (m_uniformBuffer->create(sizeof(mat4), &MVP) == false)
+	if (m_uniformBuffer->create() == false)
+	{
+		return false;
+	}
+	if (m_uniformBuffer->copyToMemory(sizeof(mat4), &MVP) == false)
 	{
 		return false;
 	}
