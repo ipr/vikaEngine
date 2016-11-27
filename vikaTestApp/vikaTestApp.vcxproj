@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F8A18DE-DB2D-4756-A668-6FD649581720}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>vikaEngine</RootNamespace>
+    <RootNamespace>vikaTestApp</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -198,11 +198,11 @@
     <ClCompile Include="vikaEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="vikaEngine.rc" />
+    <ResourceCompile Include="vikaTestApp.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico" />
-    <Image Include="vikaEngine.ico" />
+    <Image Include="vikaTestApp.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
