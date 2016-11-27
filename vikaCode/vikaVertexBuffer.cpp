@@ -138,3 +138,28 @@ bool vikaVertexBuffer::copyToMemory(uint32_t sizeVertices, void *dataVertices)
 	}
 	return true;
 }
+
+bool vikaVertexBuffer::beginRender()
+{
+	m_clearValues.resize(2);
+    m_clearValues[0].color.float32[0] = 0.2f;
+    m_clearValues[0].color.float32[1] = 0.2f;
+    m_clearValues[0].color.float32[2] = 0.2f;
+    m_clearValues[0].color.float32[3] = 0.2f;
+    m_clearValues[1].depthStencil.depth = 1.0f;
+    m_clearValues[1].depthStencil.stencil = 0;
+
+	if (m_renderPass->acquireImage() == false)
+	{
+		return false;
+	}
+	/*
+	if (m_renderPass->beginPass() == false)
+	{
+		return false;
+	}
+	*/
+	//m_renderPass->createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
+	//m_renderPass->beginPass();
+	return true;
+}

@@ -371,13 +371,12 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer);
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain);
+	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer, m_framebuffer);
 	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
 	{
 		return false;
 	}
-
-	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain);
 	if (m_framebuffer->create(m_renderPass, m_imageSize) == false)
 	{
 		return false;
@@ -389,6 +388,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	{
 		return false;
 	}
+	//if (m_vertexBuffer->copyToMemory() == false)
+	//if (m_vertexBuffer->beginRender() == false)
 
 	if (m_pipeline->createInputAssembly(m_vertexBuffer, m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
 	{

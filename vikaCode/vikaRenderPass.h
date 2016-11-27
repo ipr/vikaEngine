@@ -28,6 +28,7 @@ protected:
 	vikaSwapChain *m_swapchain;
 	vikaCommandBuffer *m_commandBuffer;
 	vikaDepthBuffer *m_depthBuffer;
+	vikaFrameBuffer *m_framebuffer;
 	vikaSemaphore *m_semaphore;
 
 public: // simplify..
@@ -44,13 +45,15 @@ public: // simplify..
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer);
+	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer);
 	virtual ~vikaRenderPass();
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
 
-	void beginPass(vikaFrameBuffer *framebuffer, VkSubpassContents subpass);
+	bool acquireImage();
+
+	void beginPass(VkSubpassContents subpass);
 	void endPass();
 
 	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);

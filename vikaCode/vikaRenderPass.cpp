@@ -14,13 +14,14 @@
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer) :
 	m_res(VK_SUCCESS),
 	m_device(device),
 	m_surface(surface),
 	m_swapchain(swapchain),
 	m_commandBuffer(commandBuffer),
 	m_depthBuffer(depthBuffer),
+	m_framebuffer(framebuffer),
 	m_semaphore(nullptr),
 	m_renderpass(VK_NULL_HANDLE)
 {
@@ -147,7 +148,21 @@ void vikaRenderPass::destroy()
 	}
 }
 
-void vikaRenderPass::beginPass(vikaFrameBuffer *framebuffer, VkSubpassContents subpass)
+bool vikaRenderPass::acquireImage()
+{
+    // Acquire the swapchain image index in order to set its layout
+	uint32_t imageIndex = 0;
+    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
+                                &imageIndex);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
+	return true;
+}
+
+void vikaRenderPass::beginPass(VkSubpassContents subpass)
 {
 	/*
 	//VkSubpassContents subpass = VK_SUBPASS_CONTENTS_INLINE;
@@ -155,10 +170,14 @@ void vikaRenderPass::beginPass(vikaFrameBuffer *framebuffer, VkSubpassContents s
 	beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	beginInfo.pNext = NULL;
 	beginInfo.renderPass = m_renderpass;
-	beginInfo.framebuffer = framebuffer->m_frameBuffer;
-	beginInfo.renderArea = ;
-	beginInfo.clearValueCount = ;
-	beginInfo.pClearValues = NULL;
+	beginInfo.framebuffer = m_framebuffer->getCurrentFB();
+	beginInfo.renderArea.offset.x = 0;
+	beginInfo.renderArea.offset.y = 0;
+	beginInfo.renderArea.extent.height = m_framebuffer->m_bufferInfo.height;
+	beginInfo.renderArea.extent.width = m_framebuffer->m_bufferInfo.width;
+
+	//beginInfo.clearValueCount = 2;
+	//beginInfo.pClearValues = NULL;
 
 	vkCmdBeginRenderPass(m_commandBuffer->getCmd(0), &beginInfo, subpass);
 	*/

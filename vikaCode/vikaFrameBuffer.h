@@ -36,6 +36,8 @@ public:
 
 	bool create(vikaRenderPass *renderPass, VkExtent2D &imageSize);
 	void destroy();
+
+	VkFramebuffer& getCurrentFB() { return m_frameBuffers[0]; };
 };
 
 #endif

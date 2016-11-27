@@ -37,6 +37,8 @@ public: // simplify things..
 
 	VkDescriptorBufferInfo m_descInfo = {};
 
+	std::vector<VkClearValue> m_clearValues;
+
 	VkVertexInputBindingDescription m_viBinding = {};
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
 
@@ -49,6 +51,8 @@ public:
 
 	// parameter expected: vertex data and size of it
 	bool copyToMemory(uint32_t sizeVertices, void *dataVertices);
+
+	bool beginRender();
 
 	// TODO: rest of stuff
 	//bool vertexBinding();
