@@ -372,7 +372,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain);
-	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer, m_framebuffer);
+	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer);
+	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer, m_framebuffer, m_vertexBuffer);
 	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
 	{
 		return false;
@@ -383,18 +384,26 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	uint64_t vertexDataSize = 0;
-	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer, m_renderPass);
 	if (m_vertexBuffer->create(vertexDataSize) == false)
 	{
 		return false;
 	}
 	//if (m_vertexBuffer->copyToMemory() == false)
-	//if (m_vertexBuffer->beginRender() == false)
 
 	if (m_pipeline->createInputAssembly(m_vertexBuffer, m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
 	{
 		return false;
 	}
+
+	/*
+	if (m_renderPass->beginPass(VK_SUBPASS_CONTENTS_INLINE) == false)
+	{
+	}
+
+	// must be within render pass to bind vertex buffer?
+
+	m_renderPass->endPass();
+	*/
 
 	// TODO: execute "end" here?
 	m_commandBuffer->executeEnd();

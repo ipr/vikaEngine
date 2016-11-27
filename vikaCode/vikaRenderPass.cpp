@@ -10,11 +10,12 @@
 #include "vikaCommandBuffer.h"
 #include "vikaDepthBuffer.h"
 #include "vikaFrameBuffer.h"
+#include "vikaVertexBuffer.h"
 #include "vikaSemaphore.h"
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer) :
 	m_res(VK_SUCCESS),
 	m_device(device),
 	m_surface(surface),
@@ -22,6 +23,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_commandBuffer(commandBuffer),
 	m_depthBuffer(depthBuffer),
 	m_framebuffer(framebuffer),
+	m_vertexBuffer(vertexBuffer),
 	m_semaphore(nullptr),
 	m_renderpass(VK_NULL_HANDLE)
 {
@@ -162,8 +164,9 @@ bool vikaRenderPass::acquireImage()
 	return true;
 }
 
-void vikaRenderPass::beginPass(VkSubpassContents subpass)
+bool vikaRenderPass::beginPass(VkSubpassContents subpass)
 {
+	//m_vertexBuffer
 	/*
 	//VkSubpassContents subpass = VK_SUBPASS_CONTENTS_INLINE;
 	VkRenderPassBeginInfo beginInfo = {};
@@ -181,6 +184,8 @@ void vikaRenderPass::beginPass(VkSubpassContents subpass)
 
 	vkCmdBeginRenderPass(m_commandBuffer->getCmd(0), &beginInfo, subpass);
 	*/
+
+	return true;
 }
 
 void vikaRenderPass::endPass()

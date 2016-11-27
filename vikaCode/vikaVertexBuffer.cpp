@@ -7,18 +7,16 @@
 #include "vikaDevice.h"
 #include "vikaPhysDevice.h"
 #include "vikaCommandBuffer.h"
-#include "vikaRenderPass.h"
-#include "vikaSemaphore.h"
+//#include "vikaSemaphore.h"
 
 #include <vulkan/vulkan.h>
 
-vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass) :
+vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
 	m_commandBuffer(commandBuffer),
-	m_renderPass(renderPass),
-	m_semaphore(nullptr),
+	//m_semaphore(nullptr),
 	m_buffer(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
 {
@@ -45,11 +43,21 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize)
 {
 	m_bufferInfo.size = bufferSize; 
 
+	m_clearValues.resize(2);
+    m_clearValues[0].color.float32[0] = 0.2f;
+    m_clearValues[0].color.float32[1] = 0.2f;
+    m_clearValues[0].color.float32[2] = 0.2f;
+    m_clearValues[0].color.float32[3] = 0.2f;
+    m_clearValues[1].depthStencil.depth = 1.0f;
+    m_clearValues[1].depthStencil.stencil = 0;
+
+	/*
 	m_semaphore = new vikaSemaphore(m_logDevice->getDevice());
 	if (m_semaphore->create() == false)
 	{
 		return false;
 	}
+	*/
 
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
 	if (m_res != VK_SUCCESS)
@@ -109,12 +117,14 @@ void vikaVertexBuffer::destroy()
 		m_buffer = VK_NULL_HANDLE;
 	}
 
+	/*
 	if (m_semaphore != nullptr)
 	{
 		m_semaphore->destroy();
 		delete m_semaphore;
 		m_semaphore = nullptr;
 	}
+	*/
 }
 
 // parameter expected: vertex data and size of it
@@ -139,27 +149,3 @@ bool vikaVertexBuffer::copyToMemory(uint32_t sizeVertices, void *dataVertices)
 	return true;
 }
 
-bool vikaVertexBuffer::beginRender()
-{
-	m_clearValues.resize(2);
-    m_clearValues[0].color.float32[0] = 0.2f;
-    m_clearValues[0].color.float32[1] = 0.2f;
-    m_clearValues[0].color.float32[2] = 0.2f;
-    m_clearValues[0].color.float32[3] = 0.2f;
-    m_clearValues[1].depthStencil.depth = 1.0f;
-    m_clearValues[1].depthStencil.stencil = 0;
-
-	if (m_renderPass->acquireImage() == false)
-	{
-		return false;
-	}
-	/*
-	if (m_renderPass->beginPass() == false)
-	{
-		return false;
-	}
-	*/
-	//m_renderPass->createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
-	//m_renderPass->beginPass();
-	return true;
-}

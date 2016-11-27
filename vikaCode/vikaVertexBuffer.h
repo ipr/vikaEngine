@@ -14,8 +14,7 @@
 class vikaDevice;
 class vikaPhysDevice;
 class vikaCommandBuffer;
-class vikaRenderPass;
-class vikaSemaphore;
+//class vikaSemaphore;
 
 class vikaVertexBuffer
 {
@@ -24,8 +23,7 @@ protected:
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
 	vikaCommandBuffer *m_commandBuffer;
-	vikaRenderPass *m_renderPass;
-	vikaSemaphore *m_semaphore;
+	//vikaSemaphore *m_semaphore;
 
 public: // simplify things..
     VkBufferCreateInfo m_bufferInfo = {};
@@ -43,7 +41,7 @@ public: // simplify things..
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
 
 public:
-	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass);
+	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);
 	virtual ~vikaVertexBuffer();
 
 	bool create(VkDeviceSize bufferSize);
@@ -51,11 +49,6 @@ public:
 
 	// parameter expected: vertex data and size of it
 	bool copyToMemory(uint32_t sizeVertices, void *dataVertices);
-
-	bool beginRender();
-
-	// TODO: rest of stuff
-	//bool vertexBinding();
 };
 
 #endif
