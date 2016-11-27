@@ -9,7 +9,7 @@
 
 #include <vulkan/vulkan.h>
 
-vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkExtent2D &imageSize) :
+vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
@@ -27,8 +27,8 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
     m_imageInfo.pNext = NULL;
 	m_imageInfo.imageType = VK_IMAGE_TYPE_2D;
     //m_imageInfo.format = depth_format; // filled in later
-    m_imageInfo.extent.width = imageSize.width;
-    m_imageInfo.extent.height = imageSize.height;
+    //m_imageInfo.extent.width = imageSize.width;
+    //m_imageInfo.extent.height = imageSize.height;
     m_imageInfo.extent.depth = 1;
     m_imageInfo.mipLevels = 1;
     m_imageInfo.arrayLayers = 1;
@@ -65,8 +65,11 @@ vikaDepthBuffer::~vikaDepthBuffer()
 // Number of samples needs to be the same at image creation,
 // renderpass creation and pipeline creation.
 //
-bool vikaDepthBuffer::create(VkSampleCountFlagBits sampleCount, VkFormat depthFormat)
+bool vikaDepthBuffer::create(VkExtent2D &imageSize, VkSampleCountFlagBits sampleCount, VkFormat depthFormat)
 {
+    m_imageInfo.extent.width = imageSize.width;
+    m_imageInfo.extent.height = imageSize.height;
+
 	//VkFormat depthFormat = VK_FORMAT_D16_UNORM;
 	vkGetPhysicalDeviceFormatProperties(m_physDevice->getPhysDev(), depthFormat, &m_formatProp);
 	if (m_formatProp.linearTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)

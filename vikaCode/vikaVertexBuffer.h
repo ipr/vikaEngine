@@ -28,7 +28,6 @@ protected:
 	vikaSemaphore *m_semaphore;
 
 public: // simplify things..
-	VkDeviceSize m_bufferSize;
     VkBufferCreateInfo m_bufferInfo = {};
 	VkBuffer m_buffer;
 
@@ -42,10 +41,10 @@ public: // simplify things..
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
 
 public:
-	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass, VkDeviceSize bufferSize);
+	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass);
 	virtual ~vikaVertexBuffer();
 
-	bool create();
+	bool create(VkDeviceSize bufferSize);
 	void destroy();
 
 	// parameter expected: vertex data and size of it

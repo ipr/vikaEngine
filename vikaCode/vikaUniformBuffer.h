@@ -33,7 +33,6 @@ protected:
 	vikaPhysDevice *m_physDevice;
 
 public: // simplify things..
-	VkDeviceSize m_bufferSize;
     VkBufferCreateInfo m_bufferInfo = {};
 	VkBuffer m_buffer;
 
@@ -44,10 +43,10 @@ public: // simplify things..
 	VkDescriptorBufferInfo m_descInfo = {};
 
 public:
-	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkDeviceSize bufferSize);
+	vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaUniformBuffer();
 
-	bool create();
+	bool create(VkDeviceSize bufferSize);
 	void destroy();
 
 	// parameter expected: mat4 with view-projection matrix

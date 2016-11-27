@@ -11,7 +11,7 @@
 
 #include <vulkan/vulkan.h>
 
-vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize) :
+vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_depthBuffer(depthBuffer),
@@ -22,11 +22,11 @@ vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBu
 	m_bufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 	m_bufferInfo.pNext = NULL;
 	m_bufferInfo.flags = 0;
-	//m_bufferInfo.renderPass = m_renderPass->m_renderpass;
+	//m_bufferInfo.renderPass = m_renderPass->m_renderpass; // filled in later
 	//m_bufferInfo.attachmentCount = m_attachments.size();
 	//m_bufferInfo.pAttachments = m_attachments.data();
-	m_bufferInfo.height = imageSize.height;
-	m_bufferInfo.width = imageSize.width;
+	//m_bufferInfo.height = imageSize.height;
+	//m_bufferInfo.width = imageSize.width;
 	m_bufferInfo.layers = 1;
 }
 
@@ -35,9 +35,11 @@ vikaFrameBuffer::~vikaFrameBuffer()
 	destroy();
 }
 
-bool vikaFrameBuffer::create(vikaRenderPass *renderPass)
+bool vikaFrameBuffer::create(vikaRenderPass *renderPass, VkExtent2D &imageSize)
 {
     m_attachments[1] = m_depthBuffer->m_view;
+	m_bufferInfo.height = imageSize.height;
+	m_bufferInfo.width = imageSize.width;
 	m_bufferInfo.renderPass = renderPass->m_renderpass;
 	m_bufferInfo.attachmentCount = m_attachments.size();
 	m_bufferInfo.pAttachments = m_attachments.data();

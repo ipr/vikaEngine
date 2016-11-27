@@ -337,8 +337,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice, m_imageSize);
-	if (m_depthBuffer->create(VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_D16_UNORM) == false)
+	m_depthBuffer = new vikaDepthBuffer(m_logicalDevice, m_physDevice);
+	if (m_depthBuffer->create(m_imageSize, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_D16_UNORM) == false)
 	{
 		return false;
 	}
@@ -349,8 +349,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	memset(&MVP.y, 0, sizeof(MVP.y));
 	memset(&MVP.z, 0, sizeof(MVP.z));
 	memset(&MVP.w, 0, sizeof(MVP.w));
-	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice, sizeof(mat4));
-	if (m_uniformBuffer->create() == false)
+	m_uniformBuffer = new vikaUniformBuffer(m_logicalDevice, m_physDevice);
+	if (m_uniformBuffer->create(sizeof(mat4)) == false)
 	{
 		return false;
 	}
@@ -377,15 +377,15 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain, m_imageSize);
-	if (m_framebuffer->create(m_renderPass) == false)
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain);
+	if (m_framebuffer->create(m_renderPass, m_imageSize) == false)
 	{
 		return false;
 	}
 
 	uint64_t vertexDataSize = 0;
-	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer, m_renderPass, vertexDataSize);
-	if (m_vertexBuffer->create() == false)
+	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer, m_renderPass);
+	if (m_vertexBuffer->create(vertexDataSize) == false)
 	{
 		return false;
 	}

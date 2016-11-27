@@ -31,10 +31,10 @@ public: // simplify..
 	std::vector<VkFramebuffer> m_frameBuffers;
 
 public:
-	vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, VkExtent2D &imageSize);
+	vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain);
 	virtual ~vikaFrameBuffer();
 
-	bool create(vikaRenderPass *renderPass);
+	bool create(vikaRenderPass *renderPass, VkExtent2D &imageSize);
 	void destroy();
 };
 

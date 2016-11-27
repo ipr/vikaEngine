@@ -12,13 +12,12 @@
 
 #include <vulkan/vulkan.h>
 
-vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass, VkDeviceSize bufferSize) :
+vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer, vikaRenderPass *renderPass) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
 	m_commandBuffer(commandBuffer),
 	m_renderPass(renderPass),
-	m_bufferSize(bufferSize),
 	m_semaphore(nullptr),
 	m_buffer(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
@@ -26,7 +25,7 @@ vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDe
 	m_bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	m_bufferInfo.pNext = NULL;
 	m_bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-	m_bufferInfo.size = m_bufferSize; 
+	m_bufferInfo.size = 0; 
 	m_bufferInfo.queueFamilyIndexCount = 0;
 	m_bufferInfo.pQueueFamilyIndices = NULL;
 	m_bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -42,8 +41,10 @@ vikaVertexBuffer::~vikaVertexBuffer()
 	destroy();
 }
 
-bool vikaVertexBuffer::create()
+bool vikaVertexBuffer::create(VkDeviceSize bufferSize)
 {
+	m_bufferInfo.size = bufferSize; 
+
 	m_semaphore = new vikaSemaphore(m_logDevice->getDevice());
 	if (m_semaphore->create() == false)
 	{
@@ -58,7 +59,7 @@ bool vikaVertexBuffer::create()
 
 	m_descInfo.buffer = m_buffer;
 	m_descInfo.offset = 0;
-	m_descInfo.range = m_bufferSize;
+	m_descInfo.range = m_bufferInfo.size;
 
 	vkGetBufferMemoryRequirements(m_logDevice->getDevice(), m_buffer, &m_memReqs);
 

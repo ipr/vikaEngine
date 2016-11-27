@@ -9,18 +9,17 @@
 
 #include <vulkan/vulkan.h>
 
-vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkDeviceSize bufferSize) :
+vikaUniformBuffer::vikaUniformBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
-	m_bufferSize(bufferSize),
 	m_buffer(VK_NULL_HANDLE),
 	m_devMemory(VK_NULL_HANDLE)
 {
 	m_bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	m_bufferInfo.pNext = NULL;
 	m_bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-	m_bufferInfo.size = m_bufferSize; 
+	m_bufferInfo.size = 0; 
 	m_bufferInfo.queueFamilyIndexCount = 0;
 	m_bufferInfo.pQueueFamilyIndices = NULL;
 	m_bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -36,8 +35,10 @@ vikaUniformBuffer::~vikaUniformBuffer()
 	destroy();
 }
 
-bool vikaUniformBuffer::create()
+bool vikaUniformBuffer::create(VkDeviceSize bufferSize)
 {
+	m_bufferInfo.size = bufferSize; 
+
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
 	if (m_res != VK_SUCCESS)
 	{
@@ -46,7 +47,7 @@ bool vikaUniformBuffer::create()
 
 	m_descInfo.buffer = m_buffer;
 	m_descInfo.offset = 0;
-	m_descInfo.range = m_bufferSize;
+	m_descInfo.range = m_bufferInfo.size;
 
 	vkGetBufferMemoryRequirements(m_logDevice->getDevice(), m_buffer, &m_memReqs);
 
