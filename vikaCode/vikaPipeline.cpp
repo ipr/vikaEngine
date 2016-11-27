@@ -12,10 +12,9 @@
 
 #include <vulkan/vulkan.h>
 
-vikaPipeline::vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer) :
+vikaPipeline::vikaPipeline(vikaDevice *logDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
-	m_uniBuffer(uniBuffer),
 	m_pipelineLayout(VK_NULL_HANDLE),
 	m_pipeline(VK_NULL_HANDLE)
 {

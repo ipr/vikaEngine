@@ -359,7 +359,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_pipeline = new vikaPipeline(m_logicalDevice, m_uniformBuffer);
+	m_pipeline = new vikaPipeline(m_logicalDevice);
 	if (m_pipeline->createLayout() == false)
 	{
 		return false;

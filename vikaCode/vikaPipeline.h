@@ -23,7 +23,7 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 	//vikaDescriptorset *m_descSet;
-	vikaUniformBuffer *m_uniBuffer;
+	//vikaUniformBuffer *m_uniBuffer;
 	//vikaVertexBuffer *m_vertexBuffer;
 
 public: // simplify things..
@@ -35,6 +35,9 @@ public: // simplify things..
 
     VkPipelineLayoutCreateInfo m_pipelineInfo = {};
 	VkPipelineLayout m_pipelineLayout;
+
+    VkDynamicState m_dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];
+    VkPipelineDynamicStateCreateInfo m_dynamicState = {};
 
 	VkPipelineVertexInputStateCreateInfo m_vertexInput = {};
 	VkPipelineInputAssemblyStateCreateInfo m_pipelineInput = {};
@@ -57,7 +60,7 @@ public: // simplify things..
 	VkPipeline m_pipeline;
 
 public:
-	vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer);
+	vikaPipeline(vikaDevice *logDevice);
 	virtual ~vikaPipeline();
 
 	void destroy();
