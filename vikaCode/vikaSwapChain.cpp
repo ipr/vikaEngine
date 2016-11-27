@@ -9,37 +9,23 @@
 
 #include <vulkan/vulkan.h>
 
-vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface, VkExtent2D &imageSize) :
+vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface) :
 	m_res(VK_SUCCESS),
 	m_logicalDev(logicalDev),
 	m_surface(surface),
 	m_swapchainImageCount(0),
-	m_swapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR), // The FIFO present mode is guaranteed by the spec to be supported
-	m_swapchainExtent(imageSize), // just init
-	m_preTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
 	m_swapchain(VK_NULL_HANDLE)
 {
-	if (surface->m_caps.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
-	{
-		m_preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-	}
-	else
-	{
-		m_preTransform = surface->m_caps.currentTransform;
-	}
-
-	makeExtentFromCaps(surface->m_caps);
-
     m_swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     m_swapchainInfo.pNext = NULL;
-	m_swapchainInfo.surface = m_surface->getSurface();
-    m_swapchainInfo.minImageCount = m_surface->m_caps.minImageCount;
-    m_swapchainInfo.imageFormat = m_surface->m_format;
-	m_swapchainInfo.imageExtent = m_swapchainExtent;
-    m_swapchainInfo.preTransform = m_preTransform;
+	//m_swapchainInfo.surface = m_surface->getSurface(); // filled in later
+    //m_swapchainInfo.minImageCount = m_surface->m_caps.minImageCount;
+    //m_swapchainInfo.imageFormat = m_surface->m_format;
+	//m_swapchainInfo.imageExtent = imageSize; // just init, changed later
+    m_swapchainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR; // just init
     m_swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     m_swapchainInfo.imageArrayLayers = 1;
-    m_swapchainInfo.presentMode = m_swapchainPresentMode;
+    m_swapchainInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR; // The FIFO present mode is guaranteed by the spec to be supported
     m_swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
     m_swapchainInfo.clipped = true;
     m_swapchainInfo.imageColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
@@ -47,6 +33,67 @@ vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface, VkExt
     m_swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     m_swapchainInfo.queueFamilyIndexCount = 0;
     m_swapchainInfo.pQueueFamilyIndices = NULL;
+}
+
+vikaSwapChain::~vikaSwapChain()
+{
+	destroy();
+}
+
+void vikaSwapChain::makeExtentFromCaps(const VkSurfaceCapabilitiesKHR &caps, VkExtent2D &extent) const
+{
+    // width and height are either both 0xFFFFFFFF, or both not 0xFFFFFFFF.
+    if (caps.currentExtent.width != 0xFFFFFFFF && caps.currentExtent.height != 0xFFFFFFFF) 
+	{
+        // If the surface size is defined, the swap chain size must match
+        extent = caps.currentExtent;
+		return;
+	}
+
+    // If the surface size is undefined, the size is set to
+    // the size of the images requested.
+
+	// already initialized in construction..
+	// note: compare to min and max limits
+	if (extent.width < caps.minImageExtent.width) 
+	{
+		extent.width = caps.minImageExtent.width;
+	} 
+	else if (extent.width > caps.maxImageExtent.width) 
+	{
+		extent.width = caps.maxImageExtent.width;
+	}
+
+	if (extent.height < caps.minImageExtent.height) 
+	{
+		extent.height = caps.minImageExtent.height;
+	} 
+	else if (extent.height > caps.maxImageExtent.height) 
+	{
+		extent.height = caps.maxImageExtent.height;
+	}
+}
+
+bool vikaSwapChain::create(VkExtent2D &imageSize)
+{
+	// number of presentable images at a time: checking this ensures that can be acquired
+	//uint32_t reqImageCount = m_surface->getCaps().minImageCount;
+
+	m_swapchainInfo.surface = m_surface->getSurface();
+    m_swapchainInfo.minImageCount = m_surface->m_caps.minImageCount;
+    m_swapchainInfo.imageFormat = m_surface->m_format;
+
+	m_swapchainInfo.imageExtent = imageSize; // just init, changed later
+	makeExtentFromCaps(m_surface->m_caps, m_swapchainInfo.imageExtent);
+
+	if (m_surface->m_caps.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
+	{
+		m_swapchainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+	}
+	else
+	{
+		m_swapchainInfo.preTransform = m_surface->m_caps.currentTransform;
+	}
 
 	if (m_surface->m_graphicsQueueIndex != m_surface->m_presentQueueIndex)
 	{
@@ -61,51 +108,6 @@ vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface, VkExt
         m_swapchainInfo.queueFamilyIndexCount = m_queueIndices.size();
         m_swapchainInfo.pQueueFamilyIndices = m_queueIndices.data();
 	}
-}
-
-vikaSwapChain::~vikaSwapChain()
-{
-	destroy();
-}
-
-void vikaSwapChain::makeExtentFromCaps(VkSurfaceCapabilitiesKHR &caps)
-{
-    // width and height are either both 0xFFFFFFFF, or both not 0xFFFFFFFF.
-    if (caps.currentExtent.width != 0xFFFFFFFF && caps.currentExtent.height != 0xFFFFFFFF) 
-	{
-        // If the surface size is defined, the swap chain size must match
-        m_swapchainExtent = caps.currentExtent;
-		return;
-	}
-
-    // If the surface size is undefined, the size is set to
-    // the size of the images requested.
-
-	// already initialized in construction..
-	// note: compare to min and max limits
-	if (m_swapchainExtent.width < caps.minImageExtent.width) 
-	{
-		m_swapchainExtent.width = caps.minImageExtent.width;
-	} 
-	else if (m_swapchainExtent.width > caps.maxImageExtent.width) 
-	{
-		m_swapchainExtent.width = caps.maxImageExtent.width;
-	}
-
-	if (m_swapchainExtent.height < caps.minImageExtent.height) 
-	{
-		m_swapchainExtent.height = caps.minImageExtent.height;
-	} 
-	else if (m_swapchainExtent.height > caps.maxImageExtent.height) 
-	{
-		m_swapchainExtent.height = caps.maxImageExtent.height;
-	}
-}
-
-bool vikaSwapChain::create()
-{
-	// number of presentable images at a time: checking this ensures that can be acquired
-	//uint32_t reqImageCount = m_surface->getCaps().minImageCount;
 
 	m_res = vkCreateSwapchainKHR(m_logicalDev->getDevice(), &m_swapchainInfo, NULL, &m_swapchain);
 	if (m_res != VK_SUCCESS)
@@ -129,7 +131,7 @@ bool vikaSwapChain::create()
 
 	m_swapchainCreateViews.resize(m_swapchainImageCount);
 	m_swapchainViews.resize(m_swapchainImageCount);
-	for (uint32_t i = 0; i < m_swapchainImageCount; i++)
+	for (uint32_t i = 0; i < m_swapchainCreateViews.size(); i++)
 	{
 		VkImageViewCreateInfo &imageView = m_swapchainCreateViews[i];
 		imageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;

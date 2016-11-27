@@ -7,15 +7,13 @@
 #include "stdafx.h"
 #include "vikaCommandBuffer.h"
 #include "vikaDevice.h"
-#include "vikaPhysDevice.h"
 #include "vikaFence.h"
 
 #include <vulkan/vulkan.h>
 
-vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
+vikaCommandBuffer::vikaCommandBuffer(vikaDevice *logDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
-	m_physDevice(physDevice),
 	m_cmdPool(VK_NULL_HANDLE)
 {
 	m_cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;

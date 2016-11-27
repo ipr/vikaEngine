@@ -37,6 +37,45 @@ vikaPipeline::vikaPipeline(vikaDevice *logDevice, vikaUniformBuffer *uniBuffer) 
     m_pipelineInfo.pPushConstantRanges = NULL;
     //m_pipelineInfo.setLayoutCount = descriptorSetCount; // fill in later
     //m_pipelineInfo.pSetLayouts = m_layouts.data();
+
+    m_pipelineRaster.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    m_pipelineRaster.pNext = NULL;
+    m_pipelineRaster.flags = 0;
+    m_pipelineRaster.polygonMode = VK_POLYGON_MODE_FILL;
+    m_pipelineRaster.cullMode = VK_CULL_MODE_BACK_BIT;
+    m_pipelineRaster.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    m_pipelineRaster.depthClampEnable = VK_TRUE;
+    m_pipelineRaster.rasterizerDiscardEnable = VK_FALSE;
+    m_pipelineRaster.depthBiasEnable = VK_FALSE;
+    m_pipelineRaster.depthBiasConstantFactor = 0;
+    m_pipelineRaster.depthBiasClamp = 0;
+    m_pipelineRaster.depthBiasSlopeFactor = 0;
+    m_pipelineRaster.lineWidth = 1.0f;
+
+    m_pipelineInput.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    m_pipelineInput.pNext = NULL;
+    m_pipelineInput.flags = 0;
+    m_pipelineInput.primitiveRestartEnable = VK_FALSE;
+    m_pipelineInput.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+    m_depthstencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    m_depthstencil.pNext = NULL;
+    m_depthstencil.flags = 0;
+    m_depthstencil.depthTestEnable = VK_TRUE;
+    m_depthstencil.depthWriteEnable = VK_TRUE;
+    m_depthstencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    m_depthstencil.depthBoundsTestEnable = VK_FALSE;
+    m_depthstencil.minDepthBounds = 0;
+    m_depthstencil.maxDepthBounds = 0;
+    m_depthstencil.stencilTestEnable = VK_FALSE;
+    m_depthstencil.back.failOp = VK_STENCIL_OP_KEEP;
+    m_depthstencil.back.passOp = VK_STENCIL_OP_KEEP;
+    m_depthstencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
+    m_depthstencil.back.compareMask = 0;
+    m_depthstencil.back.reference = 0;
+    m_depthstencil.back.depthFailOp = VK_STENCIL_OP_KEEP;
+    m_depthstencil.back.writeMask = 0;
+    m_depthstencil.front = m_depthstencil.back;
 }
 
 vikaPipeline::~vikaPipeline()
@@ -99,28 +138,6 @@ bool vikaPipeline::createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRende
     m_vertexInput.vertexAttributeDescriptionCount = vertexBuffer->m_viAttribs.size();
     m_vertexInput.pVertexAttributeDescriptions = vertexBuffer->m_viAttribs.data();
 
-    //VkPipelineInputAssemblyStateCreateInfo ia;
-    m_pipelineInput.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    m_pipelineInput.pNext = NULL;
-    m_pipelineInput.flags = 0;
-    m_pipelineInput.primitiveRestartEnable = VK_FALSE;
-    m_pipelineInput.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-
-    //VkPipelineRasterizationStateCreateInfo rs;
-    m_pipelineRaster.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    m_pipelineRaster.pNext = NULL;
-    m_pipelineRaster.flags = 0;
-    m_pipelineRaster.polygonMode = VK_POLYGON_MODE_FILL;
-    m_pipelineRaster.cullMode = VK_CULL_MODE_BACK_BIT;
-    m_pipelineRaster.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-    m_pipelineRaster.depthClampEnable = VK_TRUE;
-    m_pipelineRaster.rasterizerDiscardEnable = VK_FALSE;
-    m_pipelineRaster.depthBiasEnable = VK_FALSE;
-    m_pipelineRaster.depthBiasConstantFactor = 0;
-    m_pipelineRaster.depthBiasClamp = 0;
-    m_pipelineRaster.depthBiasSlopeFactor = 0;
-    m_pipelineRaster.lineWidth = 1.0f;
-
     //VkPipelineColorBlendAttachmentState att_state[1];
 	m_blendAttachments.resize(1);
     m_blendAttachments[0].colorWriteMask = 0xf;
@@ -156,26 +173,6 @@ bool vikaPipeline::createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRende
     m_viewport.pScissors = NULL;
     m_viewport.pViewports = NULL;
 
-    //VkPipelineDepthStencilStateCreateInfo ds;
-    m_depthstencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-    m_depthstencil.pNext = NULL;
-    m_depthstencil.flags = 0;
-    m_depthstencil.depthTestEnable = VK_TRUE;
-    m_depthstencil.depthWriteEnable = VK_TRUE;
-    m_depthstencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
-    m_depthstencil.depthBoundsTestEnable = VK_FALSE;
-    m_depthstencil.minDepthBounds = 0;
-    m_depthstencil.maxDepthBounds = 0;
-    m_depthstencil.stencilTestEnable = VK_FALSE;
-    m_depthstencil.back.failOp = VK_STENCIL_OP_KEEP;
-    m_depthstencil.back.passOp = VK_STENCIL_OP_KEEP;
-    m_depthstencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
-    m_depthstencil.back.compareMask = 0;
-    m_depthstencil.back.reference = 0;
-    m_depthstencil.back.depthFailOp = VK_STENCIL_OP_KEEP;
-    m_depthstencil.back.writeMask = 0;
-    m_depthstencil.front = m_depthstencil.back;
-
     //VkPipelineMultisampleStateCreateInfo ms;
     m_multisample.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     m_multisample.pNext = NULL;
@@ -208,11 +205,13 @@ bool vikaPipeline::createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRende
     m_graphicsPipelineInfo.renderPass = renderpass->m_renderpass;
     m_graphicsPipelineInfo.subpass = 0;
 
+	/* init not finished yet
     m_res = vkCreateGraphicsPipelines(m_logDevice->getDevice(), VK_NULL_HANDLE, 1, &m_graphicsPipelineInfo, NULL, &m_pipeline);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
+	*/
 	return true;
 }
 

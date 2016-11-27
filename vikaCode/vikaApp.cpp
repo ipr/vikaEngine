@@ -322,7 +322,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	// assume one command buffer for now
-	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice, m_physDevice);
+	m_commandBuffer = new vikaCommandBuffer(m_logicalDevice);
 	if (m_commandBuffer->create(m_physDevice->m_graphicsQueueIndex, cmdBufferCount) == false)
 	{
 		return false;
@@ -331,8 +331,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	// TODO: execute here?
 	m_commandBuffer->executeBegin();
 
-	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface, m_imageSize);
-	if (m_swapChain->create() == false)
+	m_swapChain = new vikaSwapChain(m_logicalDevice, m_surface);
+	if (m_swapChain->create(m_imageSize) == false)
 	{
 		return false;
 	}

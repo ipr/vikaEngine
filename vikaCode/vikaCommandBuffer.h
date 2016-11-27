@@ -14,14 +14,12 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
-class vikaPhysDevice;
 
 class vikaCommandBuffer
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
-	vikaPhysDevice *m_physDevice;
 
 public: // simplify things..
     VkCommandPoolCreateInfo m_cmdPoolInfo = {};
@@ -33,7 +31,7 @@ public: // simplify things..
 	VkCommandBufferBeginInfo m_beginInfo = {};
 
 public:
-	vikaCommandBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
+	vikaCommandBuffer(vikaDevice *logDevice);
 	virtual ~vikaCommandBuffer();
 
 	bool create(uint32_t graphicsQueueIndex, uint32_t bufferCount = 1);
