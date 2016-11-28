@@ -64,20 +64,27 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_attachments[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	m_attachments[1].flags = 0;
 
+	m_attachRefs.resize(2);
+    m_attachRefs[0].attachment = 0;
+	m_attachRefs[0].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	m_attachRefs[1].attachment = 1;
+	m_attachRefs[1].layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	/*
     m_colorReference.attachment = 0;
 	m_colorReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
 	m_depthReference.attachment = 1;
 	m_depthReference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	*/
 
     m_subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     m_subpassDesc.flags = 0;
     m_subpassDesc.inputAttachmentCount = 0;
     m_subpassDesc.pInputAttachments = NULL;
     m_subpassDesc.colorAttachmentCount = 1;
-    m_subpassDesc.pColorAttachments = &m_colorReference;
+    m_subpassDesc.pColorAttachments = &m_attachRefs[0];
     m_subpassDesc.pResolveAttachments = NULL;
-    m_subpassDesc.pDepthStencilAttachment = &m_depthReference;
+    m_subpassDesc.pDepthStencilAttachment = &m_attachRefs[1];
     m_subpassDesc.preserveAttachmentCount = 0;
     m_subpassDesc.pPreserveAttachments = NULL;
 

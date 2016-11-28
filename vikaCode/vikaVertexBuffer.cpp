@@ -51,14 +51,6 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize)
     m_clearValues[1].depthStencil.depth = 1.0f;
     m_clearValues[1].depthStencil.stencil = 0;
 
-	/*
-	m_semaphore = new vikaSemaphore(m_logDevice->getDevice());
-	if (m_semaphore->create() == false)
-	{
-		return false;
-	}
-	*/
-
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
 	if (m_res != VK_SUCCESS)
 	{
@@ -116,15 +108,6 @@ void vikaVertexBuffer::destroy()
 	    vkDestroyBuffer(m_logDevice->getDevice(), m_buffer, NULL);
 		m_buffer = VK_NULL_HANDLE;
 	}
-
-	/*
-	if (m_semaphore != nullptr)
-	{
-		m_semaphore->destroy();
-		delete m_semaphore;
-		m_semaphore = nullptr;
-	}
-	*/
 }
 
 // parameter expected: vertex data and size of it
