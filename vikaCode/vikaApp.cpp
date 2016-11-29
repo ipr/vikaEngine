@@ -179,7 +179,8 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_descriptorSet(nullptr),
 	m_renderPass(nullptr),
 	m_framebuffer(nullptr),
-	m_vertexBuffer(nullptr)
+	m_vertexBuffer(nullptr),
+	m_shaderModule(nullptr)
 {
 	m_instance = new vikaInstance(appName, engineName, engineVersion, appVersion);
 }
@@ -226,13 +227,12 @@ bool vikaApp::create(uint32_t deviceIndex)
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
-	for (size_t i = 0; i < m_shaders.size(); i++)
+	if (m_shaderModule != nullptr)
 	{
-		vikaShaderModule *pShader = m_shaders[i];
-		pShader->destroy();
-		delete pShader;
+		m_shaderModule->destroy();
+		delete m_shaderModule;
+		m_shaderModule = nullptr;
 	}
-	m_shaders.clear();
 
 	if (m_vertexBuffer != nullptr)
 	{
@@ -424,7 +424,9 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 	//if (m_vertexBuffer->copyToMemory() == false)
 
-	if (m_pipeline->createInputAssembly(m_vertexBuffer, m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
+	m_pipeline->setVertexBuffer(m_vertexBuffer);
+	//m_pipeline->setShaders(m_shaderModule);
+	if (m_pipeline->createInputAssembly(m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
 	{
 		return false;
 	}

@@ -9,6 +9,7 @@
 #include "vikaUniformBuffer.h"
 #include "vikaVertexBuffer.h"
 #include "vikaRenderPass.h"
+#include "vikaShaderModule.h"
 
 #include <vulkan/vulkan.h>
 
@@ -132,7 +133,7 @@ bool vikaPipeline::createLayout(uint32_t descriptorSetCount)
 	return true;
 }
 
-bool vikaPipeline::createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRenderPass *renderpass, VkSampleCountFlagBits sampleCount, uint32_t viewportCount, uint32_t scissorsCount)
+void vikaPipeline::setVertexBuffer(vikaVertexBuffer *vertexBuffer)
 {
 	//VkPipelineVertexInputStateCreateInfo vi;
 	m_vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -142,7 +143,16 @@ bool vikaPipeline::createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRende
 	m_vertexInput.pVertexBindingDescriptions = &vertexBuffer->m_viBinding;
 	m_vertexInput.vertexAttributeDescriptionCount = vertexBuffer->m_viAttribs.size();
 	m_vertexInput.pVertexAttributeDescriptions = vertexBuffer->m_viAttribs.data();
+}
 
+void vikaPipeline::setShaders(vikaShaderModule *shaders)
+{
+	m_graphicsPipelineInfo.pStages = shaders->m_shaderStages.data();
+	m_graphicsPipelineInfo.stageCount = shaders->m_shaderStages.size();
+}
+
+bool vikaPipeline::createInputAssembly(vikaRenderPass *renderpass, VkSampleCountFlagBits sampleCount, uint32_t viewportCount, uint32_t scissorsCount)
+{
 	//VkPipelineColorBlendAttachmentState att_state[1];
 	m_blendAttachments.resize(1);
 	m_blendAttachments[0].colorWriteMask = 0xf;

@@ -16,6 +16,7 @@ class vikaDescriptorset;
 class vikaUniformBuffer;
 class vikaVertexBuffer;
 class vikaRenderPass;
+class vikaShaderModule;
 
 class vikaPipeline
 {
@@ -67,8 +68,11 @@ public:
 
 	bool createLayout(uint32_t descriptorSetCount = 1);
 
+	void setVertexBuffer(vikaVertexBuffer *vertexBuffer);
+	void setShaders(vikaShaderModule *shaders);
+
 	// count of viewports and scissor should be equal
-	bool createInputAssembly(vikaVertexBuffer *vertexBuffer, vikaRenderPass *renderpass, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT, uint32_t viewportCount = 1, uint32_t scissorsCount = 1);
+	bool createInputAssembly(vikaRenderPass *renderpass, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT, uint32_t viewportCount = 1, uint32_t scissorsCount = 1);
 };
 
 #endif

@@ -23,18 +23,18 @@ protected:
 	// compiled shader code (spir-v)
 	std::vector<unsigned int> m_spirv;
 
-	std::string m_stageName;
-	VkPipelineShaderStageCreateInfo m_shaderStage = {};
-
+public:
+	//std::string m_stageName;
+	std::vector<VkPipelineShaderStageCreateInfo> m_shaderStages;
+	//VkPipelineShaderStageCreateInfo m_shaderStage = {};
 	VkShaderModuleCreateInfo m_shaderInfo = {};
-	VkShaderModule m_shader;
 
 public:
 	vikaShaderModule(vikaDevice *logDevice);
 	virtual ~vikaShaderModule();
 
 	// VK_SHADER_STAGE_VERTEX_BIT or VK_SHADER_STAGE_FRAGMENT_BIT, "main", glsl code
-	bool addStage(VkShaderStageFlagBits stage, const char *name, const char *shaderText);
+	//bool addStage(VkShaderStageFlagBits stage, const char *name, const char *shaderText);
 	bool addStage(VkShaderStageFlagBits stage, const char *name, unsigned int *spirv, size_t size);
 
 	bool create();
