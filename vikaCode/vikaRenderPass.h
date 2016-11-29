@@ -37,9 +37,9 @@ protected:
 	vikaDescriptorset *m_descriptorSet;
 	vikaSemaphore *m_semaphore;
 
+public: // simplify..
 	uint32_t m_imageIndex;
 
-public: // simplify..
     VkImageMemoryBarrier m_imageMemoryBarrier = {};
 
 	std::vector<VkAttachmentDescription> m_attachments;
@@ -49,6 +49,8 @@ public: // simplify..
 
     VkRenderPassCreateInfo m_renderpassInfo = {};
 	VkRenderPass m_renderpass;
+
+	VkPresentInfoKHR m_presentInfo = {};
 
 public:
 	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet);
@@ -68,6 +70,8 @@ public:
 	void bindVertexBuffer();
 	void bindPipeline();
 	void bindDescriptorSets();
+
+	bool presentImage();
 };
 
 #endif 

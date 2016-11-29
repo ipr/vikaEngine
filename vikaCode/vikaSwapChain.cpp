@@ -156,6 +156,7 @@ bool vikaSwapChain::create(VkExtent2D &imageSize)
 			return false;
 		}
 	}
+
 	return true;
 }
 

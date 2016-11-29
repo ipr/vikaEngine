@@ -103,6 +103,15 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_renderpassInfo.pSubpasses = &m_subpassDesc;
 	m_renderpassInfo.dependencyCount = 0;
 	m_renderpassInfo.pDependencies = NULL;
+
+	m_presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	m_presentInfo.pNext = NULL;
+	m_presentInfo.swapchainCount = 1;
+	m_presentInfo.pSwapchains = NULL;
+	m_presentInfo.pImageIndices = NULL;
+	m_presentInfo.pWaitSemaphores = NULL;
+	m_presentInfo.waitSemaphoreCount = 0;
+	m_presentInfo.pResults = NULL;
 }
 
 vikaRenderPass::~vikaRenderPass()
@@ -276,5 +285,18 @@ void vikaRenderPass::bindDescriptorSets()
 							m_descriptorSet->m_descriptorset.size(),
 							m_descriptorSet->m_descriptorset.data(), 
 							0, NULL);
+}
+
+bool vikaRenderPass::presentImage()
+{
+	m_presentInfo.pSwapchains = &m_swapchain->m_swapchain;
+	m_presentInfo.pImageIndices = &m_imageIndex;
+
+	m_res = vkQueuePresentKHR(m_device->getPresentQueue(), &m_presentInfo);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
 }
 

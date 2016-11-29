@@ -13,6 +13,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include "vikaFence.h"
+
 class vikaDevice;
 
 class vikaCommandBuffer
@@ -43,7 +45,7 @@ public:
 	bool executeBegin(uint32_t bufferIndex = 0);
 	bool executeEnd(uint32_t bufferIndex = 0);
 
-	bool executeQueue();
+	bool executeQueue(vikaFence &fence);
 
 	void commandDraw(uint32_t verticesCount, uint32_t bufferIndex = 0);
 

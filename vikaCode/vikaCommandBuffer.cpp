@@ -7,7 +7,6 @@
 #include "stdafx.h"
 #include "vikaCommandBuffer.h"
 #include "vikaDevice.h"
-#include "vikaFence.h"
 
 #include <vulkan/vulkan.h>
 
@@ -116,15 +115,8 @@ bool vikaCommandBuffer::executeEnd(uint32_t bufferIndex)
 	return true;
 }
 
-bool vikaCommandBuffer::executeQueue()
+bool vikaCommandBuffer::executeQueue(vikaFence &fence)
 {
-	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
-	vikaFence fence(m_logDevice->getDevice(), 100000000);
-	if (fence.create() == false)
-	{
-		return false;
-	}
-
 	VkPipelineStageFlags pipeFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -139,11 +131,6 @@ bool vikaCommandBuffer::executeQueue()
 
 	m_res = vkQueueSubmit(m_logDevice->getGraphicsQueue(), 1, &submitInfo, fence.getFence());
 	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	if (fence.doWait() == false)
 	{
 		return false;
 	}

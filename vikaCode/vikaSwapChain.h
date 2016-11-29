@@ -34,7 +34,6 @@ public: // simplify things..
 	std::vector<VkImageView> m_swapchainViews;
 	std::vector<VkImageViewCreateInfo> m_swapchainCreateViews;
 
-
 public:
 	vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface);
 	virtual ~vikaSwapChain();

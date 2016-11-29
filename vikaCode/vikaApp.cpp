@@ -4,6 +4,8 @@
 
 #include "stdafx.h"
 #include "vikaApp.h"
+#include "vikaFence.h"
+
 #include <vulkan/vulkan.h>
 
 vikaInstance::vikaInstance(const char *appName, const char *engineName, uint32_t engineVersion, uint32_t appVersion) :
@@ -456,7 +458,27 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 
 	// TODO: execute "end" here?
 	m_commandBuffer->executeEnd();
-	m_commandBuffer->executeQueue();
+
+	/* Amount of time, in nanoseconds, to wait for a command buffer to complete */
+	vikaFence fence(m_logicalDevice->getDevice(), 100000000);
+	if (fence.create() == false)
+	{
+		return false;
+	}
+
+	// queue command
+	if (m_commandBuffer->executeQueue(fence) == false)
+	{
+		return false;
+	}
+
+	// wait until command finished
+	if (fence.doWait() == false)
+	{
+		return false;
+	}
+
+	m_renderPass->presentImage();
 	return true;
 }
 
