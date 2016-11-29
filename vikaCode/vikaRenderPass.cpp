@@ -25,6 +25,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_framebuffer(framebuffer),
 	m_vertexBuffer(vertexBuffer),
 	m_semaphore(nullptr),
+	m_imageIndex(0),
 	m_renderpass(VK_NULL_HANDLE)
 {
 	m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -121,17 +122,10 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	}
 
     // Acquire the swapchain image index in order to set its layout
-	uint32_t imageIndex = 0;
-    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
-                                &imageIndex);
-	if (m_res != VK_SUCCESS)
+	if (acquireImage() == false)
 	{
 		return false;
 	}
-	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
-
-	// should execute "end" here?
-	//m_commandBuffer->executeEnd();
 
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)
@@ -160,46 +154,41 @@ void vikaRenderPass::destroy()
 bool vikaRenderPass::acquireImage()
 {
     // Acquire the swapchain image index in order to set its layout
-	uint32_t imageIndex = 0;
-    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
-                                &imageIndex);
+	//uint32_t imageIndex = 0;
+    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, 
+								UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
+                                &m_imageIndex);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
-	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[imageIndex]);
+
+	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[m_imageIndex]);
 	return true;
 }
 
 bool vikaRenderPass::beginPass(VkSubpassContents subpass)
 {
-	//m_vertexBuffer
-	/*
 	//VkSubpassContents subpass = VK_SUBPASS_CONTENTS_INLINE;
 	VkRenderPassBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	beginInfo.pNext = NULL;
 	beginInfo.renderPass = m_renderpass;
-	beginInfo.framebuffer = m_framebuffer->getCurrentFB();
+	beginInfo.framebuffer = m_framebuffer->m_frameBuffers[m_imageIndex];
 	beginInfo.renderArea.offset.x = 0;
 	beginInfo.renderArea.offset.y = 0;
 	beginInfo.renderArea.extent.height = m_framebuffer->m_bufferInfo.height;
 	beginInfo.renderArea.extent.width = m_framebuffer->m_bufferInfo.width;
-
-	//beginInfo.clearValueCount = 2;
-	//beginInfo.pClearValues = NULL;
+	beginInfo.clearValueCount = m_vertexBuffer->m_clearValues.size();
+	beginInfo.pClearValues = m_vertexBuffer->m_clearValues.data();
 
 	vkCmdBeginRenderPass(m_commandBuffer->getCmd(0), &beginInfo, subpass);
-	*/
-
 	return true;
 }
 
 void vikaRenderPass::endPass()
 {
-	/*
 	vkCmdEndRenderPass(m_commandBuffer->getCmd(0));
-	*/
 }
 
 void vikaRenderPass::createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)

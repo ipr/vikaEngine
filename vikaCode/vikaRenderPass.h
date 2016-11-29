@@ -33,6 +33,8 @@ protected:
 	vikaVertexBuffer *m_vertexBuffer;
 	vikaSemaphore *m_semaphore;
 
+	uint32_t m_imageIndex;
+
 public: // simplify..
     VkImageMemoryBarrier m_imageMemoryBarrier = {};
 

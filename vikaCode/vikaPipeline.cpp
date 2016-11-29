@@ -159,6 +159,7 @@ void vikaPipeline::setVertexBuffer(vikaVertexBuffer *vertexBuffer)
 
 void vikaPipeline::setShaders(vikaShaderModule *shaders)
 {
+	//if (shaders->m_shaderStages.size() > 0)
 	m_graphicsPipelineInfo.pStages = shaders->m_shaderStages.data();
 	m_graphicsPipelineInfo.stageCount = shaders->m_shaderStages.size();
 }
