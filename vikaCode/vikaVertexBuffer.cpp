@@ -98,21 +98,6 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
 	}
 
 	return true;
-
-	//VkClearValue..
-
-	// TODO:
-	//m_renderPass->beginPass(VK_SUBPASS_CONTENTS_INLINE);
-
-	/*
-    vkCmdBindVertexBuffers(info.cmd, 0,             // Start Binding 
-                           1,                       // Binding Count 
-                           &info.vertex_buffer.buf, // pBuffers 
-                           offsets);                // pOffsets 
-						   */
-
-	//m_renderPass->endPass();
-	//return true;
 }
 
 void vikaVertexBuffer::destroy()

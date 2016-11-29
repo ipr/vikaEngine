@@ -18,6 +18,8 @@ class vikaCommandBuffer;
 class vikaDepthBuffer;
 class vikaFrameBuffer;
 class vikaVertexBuffer;
+class vikaPipeline;
+class vikaDescriptorset;
 class vikaSemaphore;
 
 class vikaRenderPass
@@ -31,6 +33,8 @@ protected:
 	vikaDepthBuffer *m_depthBuffer;
 	vikaFrameBuffer *m_framebuffer;
 	vikaVertexBuffer *m_vertexBuffer;
+	vikaPipeline *m_pipeline;
+	vikaDescriptorset *m_descriptorSet;
 	vikaSemaphore *m_semaphore;
 
 	uint32_t m_imageIndex;
@@ -47,7 +51,7 @@ public: // simplify..
 	VkRenderPass m_renderpass;
 
 public:
-	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer);
+	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet);
 	virtual ~vikaRenderPass();
 
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
@@ -59,6 +63,11 @@ public:
 	void endPass();
 
 	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
+
+	// must be within renderpass begin()/end() for this?
+	void bindVertexBuffer();
+	void bindPipeline();
+	void bindDescriptorSets();
 };
 
 #endif 

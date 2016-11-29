@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "vikaPipeline.h"
 #include "vikaDevice.h"
+#include "vikaCommandBuffer.h"
 #include "vikaDescriptorset.h"
 #include "vikaUniformBuffer.h"
 #include "vikaVertexBuffer.h"
@@ -230,18 +231,16 @@ bool vikaPipeline::createInputAssembly(vikaRenderPass *renderpass, VkSampleCount
 	m_graphicsPipelineInfo.pDynamicState = &m_dynamicState;
 	m_graphicsPipelineInfo.pViewportState = &m_viewport;
 	m_graphicsPipelineInfo.pDepthStencilState = &m_depthstencil;
-	//m_graphicsPipelineInfo.pStages = info.shaderStages;
+	//m_graphicsPipelineInfo.pStages = info.shaderStages; // set elsewhere
 	//m_graphicsPipelineInfo.stageCount = 2;
 	m_graphicsPipelineInfo.renderPass = renderpass->m_renderpass;
 	m_graphicsPipelineInfo.subpass = 0;
 
-	/* init not finished yet
     m_res = vkCreateGraphicsPipelines(m_logDevice->getDevice(), VK_NULL_HANDLE, 1, &m_graphicsPipelineInfo, NULL, &m_pipeline);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
-	*/
 	return true;
 }
 

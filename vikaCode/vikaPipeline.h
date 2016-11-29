@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaCommandBuffer;
 class vikaDescriptorset;
 class vikaUniformBuffer;
 class vikaVertexBuffer;

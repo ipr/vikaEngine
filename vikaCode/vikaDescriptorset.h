@@ -23,6 +23,7 @@ protected:
 	vikaPipeline *m_pipeline;
 	vikaUniformBuffer *m_uniBuffer;
 
+public: // simplify..
 	std::vector<VkDescriptorPoolSize> m_poolsize;
     VkDescriptorPoolCreateInfo m_descriptorPool = {};
 	VkDescriptorPool m_pool;

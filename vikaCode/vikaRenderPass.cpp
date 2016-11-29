@@ -11,11 +11,15 @@
 #include "vikaDepthBuffer.h"
 #include "vikaFrameBuffer.h"
 #include "vikaVertexBuffer.h"
+#include "vikaPipeline.h"
+#include "vikaDescriptorset.h"
 #include "vikaSemaphore.h"
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer) :
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, 
+	vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, 
+	vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet) :
 	m_res(VK_SUCCESS),
 	m_device(device),
 	m_surface(surface),
@@ -24,6 +28,8 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_depthBuffer(depthBuffer),
 	m_framebuffer(framebuffer),
 	m_vertexBuffer(vertexBuffer),
+	m_pipeline(pipeline),
+	m_descriptorSet(descriptorSet),
 	m_semaphore(nullptr),
 	m_imageIndex(0),
 	m_renderpass(VK_NULL_HANDLE)
@@ -241,3 +247,34 @@ void vikaRenderPass::createImageLayout(VkImageLayout oldLayout, VkImageLayout ne
 
     vkCmdPipelineBarrier(m_commandBuffer->getCmd(0), srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
 }
+
+// must be within renderpass begin()/end() for this?
+void vikaRenderPass::bindVertexBuffer()
+{
+	// not sure what to do with this..
+    const VkDeviceSize offsets[1] = {0};
+
+	vkCmdBindVertexBuffers(m_commandBuffer->getCmd(0), // likely same as used in renderpass (if more than one)
+							0,				// Start Binding 
+							1,				// Binding Count 
+							&m_vertexBuffer->m_buffer,		// pBuffers 
+							offsets);		// pOffsets 
+}
+
+void vikaRenderPass::bindPipeline()
+{
+	//m_pipeline(pipeline),
+	vkCmdBindPipeline(m_commandBuffer->getCmd(0), VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->m_pipeline);
+}
+
+void vikaRenderPass::bindDescriptorSets()
+{
+	//m_descriptorSet(descriptorSet),
+	vkCmdBindDescriptorSets(m_commandBuffer->getCmd(0), VK_PIPELINE_BIND_POINT_GRAPHICS,
+							m_pipeline->m_pipelineLayout, 
+							0, 
+							m_descriptorSet->m_descriptorset.size(),
+							m_descriptorSet->m_descriptorset.data(), 
+							0, NULL);
+}
+
