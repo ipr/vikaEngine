@@ -405,7 +405,7 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 		return false;
 	}
 
-	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain);
+	m_framebuffer = new vikaFrameBuffer(m_logicalDevice, m_depthBuffer, m_swapChain, m_commandBuffer);
 	m_vertexBuffer = new vikaVertexBuffer(m_logicalDevice, m_physDevice, m_commandBuffer);
 	m_renderPass = new vikaRenderPass(m_logicalDevice, m_surface, m_swapChain, m_commandBuffer, m_depthBuffer, m_framebuffer, m_vertexBuffer, m_pipeline, m_descriptorSet);
 	if (m_renderPass->create(VK_SAMPLE_COUNT_1_BIT) == false)
@@ -428,18 +428,30 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	m_pipeline->setVertexBuffer(m_vertexBuffer);
 	//m_pipeline->setShaders(m_shaderModule);
 
+	uint32_t viewportCount = 1;
+	uint32_t scissorsCount = 1;
+
+	// count of viewports and scissor should be equal
+	if (m_pipeline->createInputAssembly(m_renderPass, VK_SAMPLE_COUNT_1_BIT, viewportCount, scissorsCount) == false)
+	{
+		return false;
+	}
+
 	if (m_renderPass->beginPass(VK_SUBPASS_CONTENTS_INLINE) == true)
 	{
 		// must be within render pass to bind vertex buffer?
-		m_renderPass->bindVertexBuffer();
 		m_renderPass->bindPipeline();
 		m_renderPass->bindDescriptorSets();
-		m_renderPass->endPass();
-	}
+		m_renderPass->bindVertexBuffer();
 
-	if (m_pipeline->createInputAssembly(m_renderPass, VK_SAMPLE_COUNT_1_BIT, 1, 1) == false)
-	{
-		return false;
+		m_framebuffer->setViewports(viewportCount);
+		m_framebuffer->setScissors(scissorsCount);
+
+		// TODO:
+		//m_vertexBuffer->getVerticesCount()
+		m_commandBuffer->commandDraw(0);
+
+		m_renderPass->endPass();
 	}
 
 	// TODO: execute "end" here?

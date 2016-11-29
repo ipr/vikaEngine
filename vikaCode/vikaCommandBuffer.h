@@ -45,6 +45,8 @@ public:
 
 	bool executeQueue();
 
+	void commandDraw(uint32_t verticesCount, uint32_t bufferIndex = 0);
+
 	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };
 };
 

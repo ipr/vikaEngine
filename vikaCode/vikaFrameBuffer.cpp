@@ -8,14 +8,16 @@
 #include "vikaRenderPass.h"
 #include "vikaDepthBuffer.h"
 #include "vikaSwapChain.h"
+#include "vikaCommandBuffer.h"
 
 #include <vulkan/vulkan.h>
 
-vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain) :
+vikaFrameBuffer::vikaFrameBuffer(vikaDevice *logDevice, vikaDepthBuffer *depthBuffer, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
 	m_depthBuffer(depthBuffer),
-	m_swapchain(swapchain)
+	m_swapchain(swapchain),
+	m_commandBuffer(commandBuffer)
 {
 	m_attachments.resize(2);
 
@@ -66,3 +68,28 @@ void vikaFrameBuffer::destroy()
 	m_frameBuffers.clear();
 }
 
+void vikaFrameBuffer::setViewports(uint32_t viewportCount)
+{
+	VkViewport viewport;
+
+	viewport.height = (float)m_bufferInfo.height;
+	viewport.width = (float)m_bufferInfo.width;
+	viewport.minDepth = (float)0.0f;
+	viewport.maxDepth = (float)1.0f;
+	viewport.x = 0;
+	viewport.y = 0;
+
+	vkCmdSetViewport(m_commandBuffer->getCmd(0), 0, viewportCount, &viewport);
+}
+
+void vikaFrameBuffer::setScissors(uint32_t scissorsCount)
+{
+	VkRect2D scissorRect;
+
+	scissorRect.extent.width = m_bufferInfo.width;
+	scissorRect.extent.height = m_bufferInfo.height;
+	scissorRect.offset.x = 0;
+	scissorRect.offset.y = 0;
+
+	vkCmdSetScissor(m_commandBuffer->getCmd(0), 0, scissorsCount, &scissorRect);
+}

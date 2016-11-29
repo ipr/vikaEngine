@@ -149,3 +149,9 @@ bool vikaCommandBuffer::executeQueue()
 	}
 	return true;
 }
+
+void vikaCommandBuffer::commandDraw(uint32_t verticesCount, uint32_t bufferIndex)
+{
+	vkCmdDraw(m_cmdBuffers[bufferIndex], verticesCount, 1,
+				0, 0);
+}
