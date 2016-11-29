@@ -27,20 +27,20 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_semaphore(nullptr),
 	m_renderpass(VK_NULL_HANDLE)
 {
-    m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    m_imageMemoryBarrier.pNext = NULL;
-    m_imageMemoryBarrier.srcAccessMask = 0;
-    m_imageMemoryBarrier.dstAccessMask = 0;
-    //m_imageMemoryBarrier.oldLayout = oldLayout;
-    //m_imageMemoryBarrier.newLayout = newLayout;
-    m_imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    m_imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    //m_imageMemoryBarrier.image = image;
-    //m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
-    m_imageMemoryBarrier.subresourceRange.baseMipLevel = 0;
-    m_imageMemoryBarrier.subresourceRange.levelCount = 1;
-    m_imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
-    m_imageMemoryBarrier.subresourceRange.layerCount = 1;
+	m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	m_imageMemoryBarrier.pNext = NULL;
+	m_imageMemoryBarrier.srcAccessMask = 0;
+	m_imageMemoryBarrier.dstAccessMask = 0;
+	//m_imageMemoryBarrier.oldLayout = oldLayout;
+	//m_imageMemoryBarrier.newLayout = newLayout;
+	m_imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	m_imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//m_imageMemoryBarrier.image = image;
+	//m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
+	m_imageMemoryBarrier.subresourceRange.baseMipLevel = 0;
+	m_imageMemoryBarrier.subresourceRange.levelCount = 1;
+	m_imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+	m_imageMemoryBarrier.subresourceRange.layerCount = 1;
 
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
@@ -65,7 +65,7 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_attachments[1].flags = 0;
 
 	m_attachRefs.resize(2);
-    m_attachRefs[0].attachment = 0;
+	m_attachRefs[0].attachment = 0;
 	m_attachRefs[0].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	m_attachRefs[1].attachment = 1;
 	m_attachRefs[1].layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -77,25 +77,25 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_depthReference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	*/
 
-    m_subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    m_subpassDesc.flags = 0;
-    m_subpassDesc.inputAttachmentCount = 0;
-    m_subpassDesc.pInputAttachments = NULL;
-    m_subpassDesc.colorAttachmentCount = 1;
-    m_subpassDesc.pColorAttachments = &m_attachRefs[0];
-    m_subpassDesc.pResolveAttachments = NULL;
-    m_subpassDesc.pDepthStencilAttachment = &m_attachRefs[1];
-    m_subpassDesc.preserveAttachmentCount = 0;
-    m_subpassDesc.pPreserveAttachments = NULL;
+	m_subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	m_subpassDesc.flags = 0;
+	m_subpassDesc.inputAttachmentCount = 0;
+	m_subpassDesc.pInputAttachments = NULL;
+	m_subpassDesc.colorAttachmentCount = 1;
+	m_subpassDesc.pColorAttachments = &m_attachRefs[0];
+	m_subpassDesc.pResolveAttachments = NULL;
+	m_subpassDesc.pDepthStencilAttachment = &m_attachRefs[1];
+	m_subpassDesc.preserveAttachmentCount = 0;
+	m_subpassDesc.pPreserveAttachments = NULL;
 
-    m_renderpassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    m_renderpassInfo.pNext = NULL;
-    //m_renderpassInfo.attachmentCount = m_attachments.size();
-    //m_renderpassInfo.pAttachments = m_attachments.data();
-    m_renderpassInfo.subpassCount = 1;
-    m_renderpassInfo.pSubpasses = &m_subpassDesc;
-    m_renderpassInfo.dependencyCount = 0;
-    m_renderpassInfo.pDependencies = NULL;
+	m_renderpassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	m_renderpassInfo.pNext = NULL;
+	//m_renderpassInfo.attachmentCount = m_attachments.size();
+	//m_renderpassInfo.pAttachments = m_attachments.data();
+	m_renderpassInfo.subpassCount = 1;
+	m_renderpassInfo.pSubpasses = &m_subpassDesc;
+	m_renderpassInfo.dependencyCount = 0;
+	m_renderpassInfo.pDependencies = NULL;
 }
 
 vikaRenderPass::~vikaRenderPass()
@@ -110,8 +110,8 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	m_attachments[1].format = m_depthBuffer->m_depthFormat;
 	m_attachments[1].samples = sampleCount;
 
-    m_renderpassInfo.attachmentCount = m_attachments.size();
-    m_renderpassInfo.pAttachments = m_attachments.data();
+	m_renderpassInfo.attachmentCount = m_attachments.size();
+	m_renderpassInfo.pAttachments = m_attachments.data();
 
 	// expecting that depth buffer has been set before this..
 	m_semaphore = new vikaSemaphore(m_device->getDevice());

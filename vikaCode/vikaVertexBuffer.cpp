@@ -44,12 +44,12 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize)
 	m_bufferInfo.size = bufferSize; 
 
 	m_clearValues.resize(2);
-    m_clearValues[0].color.float32[0] = 0.2f;
-    m_clearValues[0].color.float32[1] = 0.2f;
-    m_clearValues[0].color.float32[2] = 0.2f;
-    m_clearValues[0].color.float32[3] = 0.2f;
-    m_clearValues[1].depthStencil.depth = 1.0f;
-    m_clearValues[1].depthStencil.stencil = 0;
+	m_clearValues[0].color.float32[0] = 0.2f;
+	m_clearValues[0].color.float32[1] = 0.2f;
+	m_clearValues[0].color.float32[2] = 0.2f;
+	m_clearValues[0].color.float32[3] = 0.2f;
+	m_clearValues[1].depthStencil.depth = 1.0f;
+	m_clearValues[1].depthStencil.stencil = 0;
 
     m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
 	if (m_res != VK_SUCCESS)

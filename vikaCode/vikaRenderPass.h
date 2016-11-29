@@ -39,11 +39,6 @@ public: // simplify..
 	std::vector<VkAttachmentDescription> m_attachments;
 	std::vector<VkAttachmentReference> m_attachRefs;
 
-	/*
-    VkAttachmentReference m_colorReference = {};
-    VkAttachmentReference m_depthReference = {};
-	*/
-
     VkSubpassDescription m_subpassDesc = {};
 
     VkRenderPassCreateInfo m_renderpassInfo = {};

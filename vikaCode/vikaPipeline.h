@@ -36,8 +36,8 @@ public: // simplify things..
     VkPipelineLayoutCreateInfo m_pipelineInfo = {};
 	VkPipelineLayout m_pipelineLayout;
 
-    VkDynamicState m_dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];
-    VkPipelineDynamicStateCreateInfo m_dynamicState = {};
+	VkDynamicState m_dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];
+	VkPipelineDynamicStateCreateInfo m_dynamicState = {};
 
 	VkPipelineVertexInputStateCreateInfo m_vertexInput = {};
 	VkPipelineInputAssemblyStateCreateInfo m_pipelineInput = {};
