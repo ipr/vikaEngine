@@ -6,24 +6,11 @@
 #include "vikaApp.h"
 #include <vulkan/vulkan.h>
 
-vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVersion, uint32_t appVersion) :
+vikaInstance::vikaInstance(const char *appName, const char *engineName, uint32_t engineVersion, uint32_t appVersion) :
 	m_instance(VK_NULL_HANDLE),
 	m_res(VK_SUCCESS),
 	m_appName(appName),
-	m_engineName(engineName),
-	m_deviceIndex(0),
-	m_physDevice(nullptr),
-	m_logicalDevice(nullptr),
-	m_commandBuffer(nullptr),
-	m_depthBuffer(nullptr),
-	m_surface(nullptr),
-	m_swapChain(nullptr),
-	m_uniformBuffer(nullptr),
-	m_pipeline(nullptr),
-	m_descriptorSet(nullptr),
-	m_renderPass(nullptr),
-	m_framebuffer(nullptr),
-	m_vertexBuffer(nullptr)
+	m_engineName(engineName)
 {
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME); // <- available at instance level
@@ -63,6 +50,89 @@ vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVer
 	m_instInfo.ppEnabledLayerNames = NULL;
 }
 
+vikaInstance::~vikaInstance()
+{
+	destroy();
+}
+
+bool vikaInstance::create()
+{
+	if (m_layerNames.size() > 0)
+	{
+		m_instInfo.enabledLayerCount = m_layerNames.size();
+		m_instInfo.ppEnabledLayerNames = m_layerNames.data();
+	}
+	if (m_extensionNames.size() > 0)
+	{
+		m_instInfo.enabledExtensionCount = m_extensionNames.size();
+		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
+	}
+
+	// in case of failure, no runtime installed?
+    m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	return enumeratePhysicalDevices();
+}
+
+void vikaInstance::destroy()
+{
+	if (m_instance != VK_NULL_HANDLE)
+	{
+	    vkDestroyInstance(m_instance, NULL);
+		m_instance = VK_NULL_HANDLE;
+	}
+}
+
+// after initializing, locate a suitable gpu
+bool vikaInstance::enumeratePhysicalDevices()
+{
+	uint32_t devCount = 0;
+
+	// first call: retrieve amount of gpu available
+    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, NULL);
+	if (m_res != VK_SUCCESS || devCount < 1)
+	{
+		return false;
+	}
+
+	m_devices.resize(devCount);
+
+	// second call: retrieve actual data of all gpu available (handles)
+    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, m_devices.data());
+	if (m_res != VK_SUCCESS || devCount < 1)
+	{
+		return false;
+	}
+	return true;
+}
+
+
+//////////////////////
+
+vikaApp::vikaApp(const char *appName, const char *engineName, uint32_t engineVersion, uint32_t appVersion) :
+	m_res(VK_SUCCESS),
+	m_deviceIndex(0),
+	m_instance(nullptr),
+	m_physDevice(nullptr),
+	m_logicalDevice(nullptr),
+	m_commandBuffer(nullptr),
+	m_depthBuffer(nullptr),
+	m_surface(nullptr),
+	m_swapChain(nullptr),
+	m_uniformBuffer(nullptr),
+	m_pipeline(nullptr),
+	m_descriptorSet(nullptr),
+	m_renderPass(nullptr),
+	m_framebuffer(nullptr),
+	m_vertexBuffer(nullptr)
+{
+	m_instance = new vikaInstance(appName, engineName, engineVersion, appVersion);
+}
+
 vikaApp::~vikaApp()
 {
 	destroy();
@@ -87,13 +157,6 @@ bool vikaApp::create(uint32_t deviceIndex)
 
 	// TODO: check that required extensions are supported
 
-	// ok, assume list if fine for now
-	if (m_extensionNames.size() > 0)
-	{
-		m_instInfo.enabledExtensionCount = m_extensionNames.size();
-		m_instInfo.ppEnabledExtensionNames = m_extensionNames.data();
-	}
-
 	// Note! must load list of layers to get win32 surface extension working properly?
 	// driver bug possibly?
 	if (enumerateLayers() == false)
@@ -101,20 +164,7 @@ bool vikaApp::create(uint32_t deviceIndex)
 		return false;
 	}
 
-	if (m_layerNames.size() > 0)
-	{
-		m_instInfo.enabledLayerCount = m_layerNames.size();
-		m_instInfo.ppEnabledLayerNames = m_layerNames.data();
-	}
-
-	// in case of failure, no runtime installed?
-    m_res = vkCreateInstance(&m_instInfo, NULL, &m_instance);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	if (enumeratePhysicalDevices() == false)
+	if (m_instance->create() == false)
 	{
 		return false;
 	}
@@ -126,7 +176,7 @@ bool vikaApp::create(uint32_t deviceIndex)
 	m_deviceIndex = deviceIndex;
 
 	// assume the selected device is fine
-	m_physDevice = new vikaPhysDevice(this, m_devices[m_deviceIndex], deviceIndex);
+	m_physDevice = new vikaPhysDevice(this, m_instance->m_devices[m_deviceIndex], deviceIndex);
 	if (m_physDevice->getQueueProperties() == false)
 	{
 		// not suitable for graphics?
@@ -210,18 +260,17 @@ void vikaApp::destroy()
 		delete m_surface;
 		m_surface = nullptr;
 	}
-
 	if (m_physDevice != nullptr)
 	{
 		//m_physDevice->destroy();
 		delete m_physDevice;
 		m_physDevice = nullptr;
 	}
-
-	if (m_instance != VK_NULL_HANDLE)
+	if (m_instance != nullptr)
 	{
-	    vkDestroyInstance(m_instance, NULL);
-		m_instance = VK_NULL_HANDLE;
+		m_instance->destroy();
+		delete m_instance;
+		m_instance = nullptr;
 	}
 }
 
@@ -238,29 +287,6 @@ bool vikaApp::enumerateLayers()
 	m_layers.resize(layerCount);
 	m_res = vkEnumerateInstanceLayerProperties(&layerCount, m_layers.data());
 	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-	return true;
-}
-
-// also pretty obvious: after initializing, locate a suitable gpu
-bool vikaApp::enumeratePhysicalDevices()
-{
-	uint32_t devCount = 0;
-
-	// first call: retrieve amount of gpu available
-    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, NULL);
-	if (m_res != VK_SUCCESS || devCount < 1)
-	{
-		return false;
-	}
-
-	m_devices.resize(devCount);
-
-	// second call: retrieve actual data of all gpu available (handles)
-    m_res = vkEnumeratePhysicalDevices(m_instance, &devCount, m_devices.data());
-	if (m_res != VK_SUCCESS || devCount < 1)
 	{
 		return false;
 	}

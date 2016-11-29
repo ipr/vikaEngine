@@ -25,17 +25,56 @@
 #include "vikaFrameBuffer.h"
 #include "vikaVertexBuffer.h"
 
-class vikaApp
+class vikaInstance
 {
 protected:
-    VkApplicationInfo m_appInfo = {};
-    VkInstanceCreateInfo m_instInfo = {};
-
-    VkInstance m_instance;
 	VkResult m_res;
+    VkInstance m_instance;
+
+public:
+	// list of layers to be loaded with the instance
+	std::vector<const char *> m_layerNames;
+
+	// list of various extensions needed
+	std::vector<const char *> m_extensionNames;
 
 	std::string m_appName;
 	std::string m_engineName;
+
+    VkApplicationInfo m_appInfo = {};
+    VkInstanceCreateInfo m_instInfo = {};
+
+	std::vector<VkPhysicalDevice> m_devices; // actual gpus
+	//uint32_t m_devCount; // aka. gpu count
+
+public:
+	vikaInstance(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
+	virtual ~vikaInstance();
+
+	// add needed things before calling create() (which will load them)
+	void addLayer(const char *layer)
+	{
+		m_layerNames.push_back(layer);
+	}
+	void addExtension(const char *extension)
+	{
+		m_extensionNames.push_back(extension);
+	}
+
+	bool create();
+	void destroy();
+
+	bool enumeratePhysicalDevices();
+
+	VkResult getResult() const { return m_res; };
+	VkInstance& getInstance() { return m_instance; };
+	//VkPhysicalDevice& getDevice() { };
+};
+
+class vikaApp
+{
+protected:
+	VkResult m_res;
 
 	// size/resolution used in multiple cases
 	VkExtent2D m_imageSize = {};
@@ -43,20 +82,16 @@ protected:
 	// layers known to loader
 	std::vector<VkLayerProperties> m_layers;
 
-	// layers to be loaded with the instance
-	std::vector<const char *> m_layerNames;
-
 	// extensions supported
 	std::vector<VkExtensionProperties> m_instanceExtensions;
 
-	// list of various extensions needed
-	std::vector<const char *> m_extensionNames;
-
-	std::vector<VkPhysicalDevice> m_devices; // actual gpus
+	//std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	//uint32_t m_devCount; // aka. gpu count
 
 	// TODO: multi-gpu support?
 	uint32_t m_deviceIndex;
+
+	vikaInstance *m_instance;
 
 	vikaPhysDevice *m_physDevice;
 	vikaDevice *m_logicalDevice;
@@ -77,14 +112,16 @@ public:
 	virtual ~vikaApp();
 
 	// add needed things before calling create() (which will load them)
+	/*
 	void addLayer(const char *layer)
 	{
-		m_layerNames.push_back(layer);
+		m_instance->addLayer(layer);
 	}
 	void addExtension(const char *extension)
 	{
-		m_extensionNames.push_back(extension);
+		m_instance->addExtension(extension);
 	}
+	*/
 
 	// screen/image size
 	void setSize(const uint32_t width, const uint32_t height);
@@ -93,14 +130,13 @@ public:
 	void destroy();
 
 	bool enumerateLayers();
-	bool enumeratePhysicalDevices();
 	bool enumerateInstanceExtensions();
 
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
 
 	VkResult getResult() const { return m_res; };
-	VkInstance& getInstance() { return m_instance; };
+	VkInstance& getInstance() { return m_instance->getInstance(); };
 	vikaDevice* getLogicalDevice() { return m_logicalDevice; };
 
 	// note: physical device needs to be selected before this, do we need logical device too?
