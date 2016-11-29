@@ -57,6 +57,21 @@ vikaInstance::~vikaInstance()
 
 bool vikaInstance::create()
 {
+	// TODO: check that required extensions are supported
+
+	// check supported extensions before trying to create instance
+	if (enumerateInstanceExtensions() == false)
+	{
+		return false;
+	}
+
+	// Note! must load list of layers to get win32 surface extension working properly?
+	// driver bug possibly?
+	if (enumerateLayers() == false)
+	{
+		return false;
+	}
+
 	if (m_layerNames.size() > 0)
 	{
 		m_instInfo.enabledLayerCount = m_layerNames.size();
@@ -110,6 +125,42 @@ bool vikaInstance::enumeratePhysicalDevices()
 	return true;
 }
 
+// enumerate layers known to loader
+bool vikaInstance::enumerateLayers()
+{
+	uint32_t layerCount = 0;
+	m_res = vkEnumerateInstanceLayerProperties(&layerCount, NULL);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	m_layers.resize(layerCount);
+	m_res = vkEnumerateInstanceLayerProperties(&layerCount, m_layers.data());
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool vikaInstance::enumerateInstanceExtensions()
+{
+	uint32_t extensionsCount = 0;
+	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, NULL);
+	if (m_res != VK_SUCCESS || extensionsCount < 1)
+	{
+		return false;
+	}
+
+	m_instanceExtensions.resize(extensionsCount);
+	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, m_instanceExtensions.data());
+	if (m_res != VK_SUCCESS || extensionsCount < 1)
+	{
+		return false;
+	}
+	return true;
+}
 
 //////////////////////
 
@@ -149,21 +200,6 @@ void vikaApp::setSize(const uint32_t width, const uint32_t height)
 // TODO: improve device selection method, multi-GPU support?
 bool vikaApp::create(uint32_t deviceIndex)
 {
-	// check supported extensions before trying to create instance
-	if (enumerateInstanceExtensions() == false)
-	{
-		return false;
-	}
-
-	// TODO: check that required extensions are supported
-
-	// Note! must load list of layers to get win32 surface extension working properly?
-	// driver bug possibly?
-	if (enumerateLayers() == false)
-	{
-		return false;
-	}
-
 	if (m_instance->create() == false)
 	{
 		return false;
@@ -282,42 +318,6 @@ void vikaApp::destroy()
 	}
 }
 
-// enumerate layers known to loader
-bool vikaApp::enumerateLayers()
-{
-	uint32_t layerCount = 0;
-	m_res = vkEnumerateInstanceLayerProperties(&layerCount, NULL);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	m_layers.resize(layerCount);
-	m_res = vkEnumerateInstanceLayerProperties(&layerCount, m_layers.data());
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool vikaApp::enumerateInstanceExtensions()
-{
-	uint32_t extensionsCount = 0;
-	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, NULL);
-	if (m_res != VK_SUCCESS || extensionsCount < 1)
-	{
-		return false;
-	}
-
-	m_instanceExtensions.resize(extensionsCount);
-	m_res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, m_instanceExtensions.data());
-	if (m_res != VK_SUCCESS || extensionsCount < 1)
-	{
-		return false;
-	}
-	return true;
-}
 
 // note: physical device needs to be selected before this, 
 // also create logical device from physical device

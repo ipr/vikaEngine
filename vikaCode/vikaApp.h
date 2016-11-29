@@ -48,6 +48,12 @@ public:
 	std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	//uint32_t m_devCount; // aka. gpu count
 
+	// layers known to loader
+	std::vector<VkLayerProperties> m_layers;
+
+	// extensions supported
+	std::vector<VkExtensionProperties> m_instanceExtensions;
+
 public:
 	vikaInstance(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
 	virtual ~vikaInstance();
@@ -66,6 +72,8 @@ public:
 	void destroy();
 
 	bool enumeratePhysicalDevices();
+	bool enumerateLayers();
+	bool enumerateInstanceExtensions();
 
 	VkResult getResult() const { return m_res; };
 	VkInstance& getInstance() { return m_instance; };
@@ -79,12 +87,6 @@ protected:
 
 	// size/resolution used in multiple cases
 	VkExtent2D m_imageSize = {};
-
-	// layers known to loader
-	std::vector<VkLayerProperties> m_layers;
-
-	// extensions supported
-	std::vector<VkExtensionProperties> m_instanceExtensions;
 
 	//std::vector<VkPhysicalDevice> m_devices; // actual gpus
 	//uint32_t m_devCount; // aka. gpu count
@@ -131,9 +133,6 @@ public:
 
 	bool create(uint32_t deviceIndex = 0);
 	void destroy();
-
-	bool enumerateLayers();
-	bool enumerateInstanceExtensions();
 
 	// caller can select different physical device by looking at m_deviceProperties
 	//bool setPhysicalDevice(uint32_t deviceIndex = 0) { m_deviceIndex = deviceIndex; };
