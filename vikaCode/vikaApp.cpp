@@ -190,6 +190,14 @@ bool vikaApp::create(uint32_t deviceIndex)
 // obvious, last method to call to cleanup
 void vikaApp::destroy()
 {
+	for (size_t i = 0; i < m_shaders.size(); i++)
+	{
+		vikaShaderModule *pShader = m_shaders[i];
+		pShader->destroy();
+		delete pShader;
+	}
+	m_shaders.clear();
+
 	if (m_vertexBuffer != nullptr)
 	{
 		m_vertexBuffer->destroy();

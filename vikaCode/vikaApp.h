@@ -24,6 +24,7 @@
 #include "vikaRenderPass.h"
 #include "vikaFrameBuffer.h"
 #include "vikaVertexBuffer.h"
+#include "vikaShaderModule.h"
 
 class vikaInstance
 {
@@ -106,6 +107,8 @@ protected:
 	vikaRenderPass *m_renderPass;
 	vikaFrameBuffer *m_framebuffer;
 	vikaVertexBuffer *m_vertexBuffer;
+
+	std::vector<vikaShaderModule*> m_shaders;
 
 public:
 	vikaApp(const char *appName, const char *engineName, uint32_t engineVersion = 1, uint32_t appVersion = 1);
