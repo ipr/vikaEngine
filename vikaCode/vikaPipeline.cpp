@@ -82,6 +82,22 @@ vikaPipeline::vikaPipeline(vikaDevice *logDevice) :
     m_dynamicState.pNext = NULL;
     m_dynamicState.pDynamicStates = m_dynamicStateEnables;
     m_dynamicState.dynamicStateCount = 0;
+
+	//VkPipelineVertexInputStateCreateInfo vi;
+	m_vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	m_vertexInput.pNext = NULL;
+	m_vertexInput.flags = 0;
+	m_vertexInput.vertexBindingDescriptionCount = 0;
+	m_vertexInput.pVertexBindingDescriptions = NULL;
+	m_vertexInput.vertexAttributeDescriptionCount = 0;
+	m_vertexInput.pVertexAttributeDescriptions = NULL;
+
+	//VkGraphicsPipelineCreateInfo pipeline;
+	m_graphicsPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	m_graphicsPipelineInfo.pNext = NULL;
+	m_graphicsPipelineInfo.pStages = NULL;
+	m_graphicsPipelineInfo.stageCount = 0;
+
 }
 
 vikaPipeline::~vikaPipeline()
@@ -135,12 +151,8 @@ bool vikaPipeline::createLayout(uint32_t descriptorSetCount)
 
 void vikaPipeline::setVertexBuffer(vikaVertexBuffer *vertexBuffer)
 {
-	//VkPipelineVertexInputStateCreateInfo vi;
-	m_vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	m_vertexInput.pNext = NULL;
-	m_vertexInput.flags = 0;
-	m_vertexInput.vertexBindingDescriptionCount = 1;
-	m_vertexInput.pVertexBindingDescriptions = &vertexBuffer->m_viBinding;
+	m_vertexInput.vertexBindingDescriptionCount = vertexBuffer->m_viBindings.size();
+	m_vertexInput.pVertexBindingDescriptions = vertexBuffer->m_viBindings.data();
 	m_vertexInput.vertexAttributeDescriptionCount = vertexBuffer->m_viAttribs.size();
 	m_vertexInput.pVertexAttributeDescriptions = vertexBuffer->m_viAttribs.data();
 }

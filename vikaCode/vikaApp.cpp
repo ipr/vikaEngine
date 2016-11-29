@@ -418,7 +418,8 @@ bool vikaApp::createRenderPass(uint32_t cmdBufferCount)
 	}
 
 	uint64_t vertexDataSize = 0;
-	if (m_vertexBuffer->create(vertexDataSize) == false)
+	uint32_t vertexStrideSize = 0;
+	if (m_vertexBuffer->create(vertexDataSize, vertexStrideSize) == false)
 	{
 		return false;
 	}

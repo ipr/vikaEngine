@@ -37,14 +37,15 @@ public: // simplify things..
 
 	std::vector<VkClearValue> m_clearValues;
 
-	VkVertexInputBindingDescription m_viBinding = {};
+	//VkVertexInputBindingDescription m_viBinding = {};
+	std::vector<VkVertexInputBindingDescription> m_viBindings;
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
 
 public:
 	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);
 	virtual ~vikaVertexBuffer();
 
-	bool create(VkDeviceSize bufferSize);
+	bool create(VkDeviceSize bufferSize, uint32_t strideSize);
 	void destroy();
 
 	// parameter expected: vertex data and size of it

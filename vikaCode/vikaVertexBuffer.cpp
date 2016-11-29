@@ -32,6 +32,9 @@ vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDe
 	m_memInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	m_memInfo.pNext = NULL;
 	m_memInfo.memoryTypeIndex = 0;
+
+	//m_viBindings.resize(1);
+	//m_viAttribs.resize(1);
 }
 
 vikaVertexBuffer::~vikaVertexBuffer()
@@ -39,9 +42,26 @@ vikaVertexBuffer::~vikaVertexBuffer()
 	destroy();
 }
 
-bool vikaVertexBuffer::create(VkDeviceSize bufferSize)
+// buffersize: total vertex data
+// stridesize: single element size in the buffer
+bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
 {
 	m_bufferInfo.size = bufferSize; 
+
+	m_viBindings.resize(1);
+	m_viBindings[0].binding = 0;
+	m_viBindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	m_viBindings[0].stride = strideSize;
+
+	m_viAttribs.resize(2);
+    m_viAttribs[0].binding = 0;
+    m_viAttribs[0].location = 0;
+    m_viAttribs[0].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+    m_viAttribs[0].offset = 0;
+    m_viAttribs[1].binding = 0;
+    m_viAttribs[1].location = 1;
+    m_viAttribs[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+    m_viAttribs[1].offset = 16;
 
 	m_clearValues.resize(2);
 	m_clearValues[0].color.float32[0] = 0.2f;
