@@ -17,22 +17,7 @@
 
 #include <vulkan/vulkan.h>
 
-vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, 
-	vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, 
-	vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet) :
-	m_res(VK_SUCCESS),
-	m_device(device),
-	m_surface(surface),
-	m_swapchain(swapchain),
-	m_commandBuffer(commandBuffer),
-	m_depthBuffer(depthBuffer),
-	m_framebuffer(framebuffer),
-	m_vertexBuffer(vertexBuffer),
-	m_pipeline(pipeline),
-	m_descriptorSet(descriptorSet),
-	m_semaphore(nullptr),
-	m_imageIndex(0),
-	m_renderpass(VK_NULL_HANDLE)
+vikaImageMemoryBarrier::vikaImageMemoryBarrier(VkCommandBuffer &cmd, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
 {
 	m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	m_imageMemoryBarrier.pNext = NULL;
@@ -49,6 +34,80 @@ vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwa
 	m_imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
 	m_imageMemoryBarrier.subresourceRange.layerCount = 1;
 
+    m_imageMemoryBarrier.oldLayout = oldLayout;
+    m_imageMemoryBarrier.newLayout = newLayout;
+    m_imageMemoryBarrier.image = image;
+    m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
+
+	switch (oldLayout)
+	{
+	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_PREINITIALIZED:
+        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+		break;
+	default:
+		m_imageMemoryBarrier.srcAccessMask = 0;
+		break;
+	}
+
+	switch (newLayout)
+	{
+	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+		break;
+	default:
+		m_imageMemoryBarrier.dstAccessMask = 0;
+		break;
+	}
+
+    VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+    VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+
+    vkCmdPipelineBarrier(cmd, srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
+}
+
+vikaImageMemoryBarrier::~vikaImageMemoryBarrier()
+{
+}
+
+
+////////////////////
+
+vikaRenderPass::vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, 
+	vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, 
+	vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet) :
+	m_res(VK_SUCCESS),
+	m_device(device),
+	m_surface(surface),
+	m_swapchain(swapchain),
+	m_commandBuffer(commandBuffer),
+	m_depthBuffer(depthBuffer),
+	m_framebuffer(framebuffer),
+	m_vertexBuffer(vertexBuffer),
+	m_pipeline(pipeline),
+	m_descriptorSet(descriptorSet),
+	m_semaphore(nullptr),
+	m_imageMemoryBarrier(nullptr),
+	m_imageIndex(0),
+	m_renderpass(VK_NULL_HANDLE)
+{
 	// attachments for render target and depth buffer
 	m_attachments.resize(2);
 	//m_attachments[0].format = m_surface->m_format;
@@ -137,10 +196,20 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 	}
 
     // Acquire the swapchain image index in order to set its layout
-	if (acquireImage() == false)
+	//uint32_t imageIndex = 0;
+    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, 
+								UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
+                                &m_imageIndex);
+	if (m_res != VK_SUCCESS)
 	{
 		return false;
 	}
+
+	m_imageMemoryBarrier = new vikaImageMemoryBarrier(m_commandBuffer->getCmd(0), 
+													VK_IMAGE_LAYOUT_UNDEFINED, 
+													VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 
+													VK_IMAGE_ASPECT_COLOR_BIT, 
+													m_swapchain->m_swapchainImages[m_imageIndex]);
 
     m_res = vkCreateRenderPass(m_device->getDevice(), &m_renderpassInfo, NULL, &m_renderpass);
     if (m_res != VK_SUCCESS)
@@ -152,6 +221,12 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 
 void vikaRenderPass::destroy()
 {
+	if (m_imageMemoryBarrier != nullptr)
+	{
+		delete m_imageMemoryBarrier;
+		m_imageMemoryBarrier = nullptr;
+	}
+
 	if (m_renderpass != VK_NULL_HANDLE)
 	{
 		vkDestroyRenderPass(m_device->getDevice(), m_renderpass, NULL);
@@ -164,22 +239,6 @@ void vikaRenderPass::destroy()
 		delete m_semaphore;
 		m_semaphore = nullptr;
 	}
-}
-
-bool vikaRenderPass::acquireImage()
-{
-    // Acquire the swapchain image index in order to set its layout
-	//uint32_t imageIndex = 0;
-    m_res = vkAcquireNextImageKHR(m_device->getDevice(), m_swapchain->m_swapchain, 
-								UINT64_MAX, m_semaphore->getSemaphore(), VK_NULL_HANDLE,
-                                &m_imageIndex);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	createImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_swapchain->m_swapchainImages[m_imageIndex]);
-	return true;
 }
 
 bool vikaRenderPass::beginPass(VkSubpassContents subpass)
@@ -204,57 +263,6 @@ bool vikaRenderPass::beginPass(VkSubpassContents subpass)
 void vikaRenderPass::endPass()
 {
 	vkCmdEndRenderPass(m_commandBuffer->getCmd(0));
-}
-
-void vikaRenderPass::createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
-{
-    m_imageMemoryBarrier.oldLayout = oldLayout;
-    m_imageMemoryBarrier.newLayout = newLayout;
-    m_imageMemoryBarrier.image = image;
-    m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
-
-	switch (oldLayout)
-	{
-	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        m_imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
-		break;
-	default:
-		m_imageMemoryBarrier.srcAccessMask = 0;
-		break;
-	}
-
-	switch (newLayout)
-	{
-	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		break;
-	case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-        m_imageMemoryBarrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-		break;
-	default:
-		m_imageMemoryBarrier.dstAccessMask = 0;
-		break;
-	}
-
-    VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-    VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-
-    vkCmdPipelineBarrier(m_commandBuffer->getCmd(0), srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
 }
 
 // must be within renderpass begin()/end() for this?

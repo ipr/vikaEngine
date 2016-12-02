@@ -22,6 +22,17 @@ class vikaPipeline;
 class vikaDescriptorset;
 class vikaSemaphore;
 
+// image memory barrier
+class vikaImageMemoryBarrier
+{
+protected:
+    VkImageMemoryBarrier m_imageMemoryBarrier = {};
+
+public:
+	vikaImageMemoryBarrier(VkCommandBuffer &cmd, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
+	~vikaImageMemoryBarrier();
+};
+
 class vikaRenderPass
 {
 protected:
@@ -37,10 +48,10 @@ protected:
 	vikaDescriptorset *m_descriptorSet;
 	vikaSemaphore *m_semaphore;
 
+	vikaImageMemoryBarrier *m_imageMemoryBarrier;
+
 public: // simplify..
 	uint32_t m_imageIndex;
-
-    VkImageMemoryBarrier m_imageMemoryBarrier = {};
 
 	std::vector<VkAttachmentDescription> m_attachments;
 	std::vector<VkAttachmentReference> m_attachRefs;
@@ -59,12 +70,8 @@ public:
 	bool create(VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT);
 	void destroy();
 
-	bool acquireImage();
-
 	bool beginPass(VkSubpassContents subpass);
 	void endPass();
-
-	void createImageLayout(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
 
 	// must be within renderpass begin()/end() for this?
 	void bindVertexBuffer();
