@@ -22,7 +22,8 @@ class vikaPipeline;
 class vikaDescriptorset;
 class vikaSemaphore;
 
-// image memory barrier
+// image memory barrier:
+// synchronize set of commands
 class vikaImageMemoryBarrier
 {
 protected:

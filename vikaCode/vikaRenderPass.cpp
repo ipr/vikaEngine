@@ -17,6 +17,8 @@
 
 #include <vulkan/vulkan.h>
 
+// image memory barrier:
+// synchronize set of commands
 vikaImageMemoryBarrier::vikaImageMemoryBarrier(VkCommandBuffer &cmd, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
 {
 	m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;

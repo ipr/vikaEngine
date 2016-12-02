@@ -157,6 +157,7 @@
     <ClInclude Include="..\vikaCode\vikaFrameBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaPipeline.h" />
     <ClInclude Include="..\vikaCode\vikaRenderPass.h" />
+    <ClInclude Include="..\vikaCode\vikaSampler.h" />
     <ClInclude Include="..\vikaCode\vikaSemaphore.h" />
     <ClInclude Include="..\vikaCode\vikaShaderModule.h" />
     <ClInclude Include="..\vikaCode\vikaUniformBuffer.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="..\vikaCode\vikaFrameBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaPipeline.cpp" />
     <ClCompile Include="..\vikaCode\vikaRenderPass.cpp" />
+    <ClCompile Include="..\vikaCode\vikaSampler.cpp" />
     <ClCompile Include="..\vikaCode\vikaSemaphore.cpp" />
     <ClCompile Include="..\vikaCode\vikaShaderModule.cpp" />
     <ClCompile Include="..\vikaCode\vikaUniformBuffer.cpp" />
