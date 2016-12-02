@@ -52,20 +52,53 @@ public:
 		}
 	}
 
-	/*
 	bool isSet()
 	{
-		VKResult status = vkGetEventStatus(m_device, m_event);
+		m_res = vkGetEventStatus(m_device, m_event);
+		if (m_res == VK_EVENT_SET)
+		{
+			return true;
+		}
+		if (m_res == VK_EVENT_RESET)
+		{
+			return false;
+		}
+		// failure case
+		return false;
 	}
 	bool setEvent()
-	{}
+	{
+		m_res = vkSetEvent(m_device, m_event);
+		if (m_res != VK_SUCCESS)
+		{
+			return false;
+		}
+		return true;
+	}
 	bool resetEvent()
-	{}
-	*/
+	{
+		m_res = vkResetEvent(m_device, m_event);
+		if (m_res != VK_SUCCESS)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	void cmdSetEvent(VkCommandBuffer &cmdBuf, VkPipelineStageFlags stageMask)
+	{
+		vkCmdSetEvent(cmdBuf, m_event, stageMask);
+	}
+	void cmdResetEvent(VkCommandBuffer &cmdBuf, VkPipelineStageFlags stageMask)
+	{
+		vkCmdResetEvent(cmdBuf, m_event, stageMask);
+	}
 
 	/*
 	bool doWait()
 	{
+		vkCmdWaitEvents()
+
 		do 
 		{
 		} while (m_res == VK_TIMEOUT);

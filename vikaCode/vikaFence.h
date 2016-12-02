@@ -23,6 +23,9 @@ protected:
 
 	VkFenceCreateInfo m_fenceInfo = {};
 
+	// just one for now..
+	const uint32_t m_fenceCount = 1;
+
 public:
 	vikaFence(VkDevice &device, uint64_t timeOut = 100000000) : 
 		m_res(VK_SUCCESS),
@@ -56,11 +59,38 @@ public:
 		}
 	}
 
+	bool getFenceStatus()
+	{
+		m_res = vkGetFenceStatus(m_device, m_fence);
+		if (m_res == VK_SUCCESS)
+		{
+			// signalled status
+			return true;
+		}
+		if (m_res == VK_NOT_READY)
+		{
+			// not signalled status
+			return false;
+		}
+
+		// otherwise error status (throw exception instead?)
+		return false;
+	}
+	bool resetFence()
+	{
+		m_res = vkResetFences(m_device, m_fenceCount, &m_fence);
+		if (m_res != VK_SUCCESS)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	bool doWait()
 	{
 		do 
 		{
-			m_res = vkWaitForFences(m_device, 1, &m_fence, VK_TRUE, m_fenceTimeout);
+			m_res = vkWaitForFences(m_device, m_fenceCount, &m_fence, VK_TRUE, m_fenceTimeout);
 		} while (m_res == VK_TIMEOUT);
 
 		if (m_res != VK_SUCCESS)
