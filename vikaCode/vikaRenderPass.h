@@ -21,18 +21,7 @@ class vikaVertexBuffer;
 class vikaPipeline;
 class vikaDescriptorset;
 class vikaSemaphore;
-
-// image memory barrier:
-// synchronize set of commands
-class vikaImageMemoryBarrier
-{
-protected:
-    VkImageMemoryBarrier m_imageMemoryBarrier = {};
-
-public:
-	vikaImageMemoryBarrier(VkCommandBuffer &cmd, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image);
-	~vikaImageMemoryBarrier();
-};
+class vikaBarrier;
 
 class vikaRenderPass
 {
@@ -49,7 +38,7 @@ protected:
 	vikaDescriptorset *m_descriptorSet;
 	vikaSemaphore *m_semaphore;
 
-	vikaImageMemoryBarrier *m_imageMemoryBarrier;
+	vikaBarrier *m_imageMemoryBarrier;
 
 public: // simplify..
 	uint32_t m_imageIndex;
