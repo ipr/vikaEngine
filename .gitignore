@@ -1,12 +1,8 @@
-vikaEngine/.vs/vikaEngine/v14/.suo
 *.aps
-vikaEngine/vikaEngine.VC.db
 *.opendb
 *.ipch
-vikaEngine/Debug/
-vikaEngine/x64/
-vikaTestApp/Debug/
-vikaTestApp/x64/
+vikaTestAppWindows/Debug/
+vikaTestAppWindows/x64/
 *.suo
-vikaTestApp/vikaEngine.VC.db
-vikaTestApp/vikaTestApp.VC.db
+vikaTestAppWindows/vikaEngine.VC.db
+vikaTestAppWindows/vikaTestApp.VC.db

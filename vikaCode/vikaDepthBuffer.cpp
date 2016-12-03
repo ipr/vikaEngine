@@ -33,6 +33,7 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
     m_imageInfo.mipLevels = 1;
     m_imageInfo.arrayLayers = 1;
     //m_imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	//m_imageInfo.tiling = VK_IMAGE_TILING_LINEAR;
     m_imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     m_imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
     m_imageInfo.queueFamilyIndexCount = 0;

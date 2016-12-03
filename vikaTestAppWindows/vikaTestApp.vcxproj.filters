@@ -87,6 +87,12 @@
     <ClInclude Include="..\vikaCode\vikaBarrier.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaEvent.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaImage.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -147,6 +153,12 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="..\vikaCode\vikaBarrier.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaEvent.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaImage.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
