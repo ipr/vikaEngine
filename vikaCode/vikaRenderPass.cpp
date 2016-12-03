@@ -198,14 +198,7 @@ void vikaRenderPass::endPass()
 // must be within renderpass begin()/end() for this?
 void vikaRenderPass::bindVertexBuffer()
 {
-	// not sure what to do with this..
-    const VkDeviceSize offsets[1] = {0};
-
-	vkCmdBindVertexBuffers(m_commandBuffer->getCmd(0), // likely same as used in renderpass (if more than one)
-							0,				// Start Binding 
-							1,				// Binding Count 
-							&m_vertexBuffer->m_buffer,		// pBuffers 
-							offsets);		// pOffsets 
+	m_vertexBuffer->bindVertexBuffer();
 }
 
 void vikaRenderPass::bindPipeline()

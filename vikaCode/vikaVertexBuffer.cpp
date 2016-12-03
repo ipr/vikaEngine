@@ -8,6 +8,7 @@
 #include "vikaPhysDevice.h"
 #include "vikaCommandBuffer.h"
 //#include "vikaSemaphore.h"
+#include "vikaBuffer.h"
 
 #include <vulkan/vulkan.h>
 
@@ -17,41 +18,14 @@ vikaVertexBuffer::vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDe
 	m_physDevice(physDevice),
 	m_commandBuffer(commandBuffer),
 	//m_semaphore(nullptr),
-	m_buffer(VK_NULL_HANDLE),
-	m_devMemory(VK_NULL_HANDLE)
+	m_buffer(nullptr)
 {
-	m_bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	m_bufferInfo.pNext = NULL;
-	m_bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-	m_bufferInfo.size = 0; 
-	m_bufferInfo.queueFamilyIndexCount = 0;
-	m_bufferInfo.pQueueFamilyIndices = NULL;
-	m_bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	m_bufferInfo.flags = 0;
-
-	m_memInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	m_memInfo.pNext = NULL;
-	m_memInfo.memoryTypeIndex = 0;
-
-	//m_viBindings.resize(1);
-	//m_viAttribs.resize(1);
-}
-
-vikaVertexBuffer::~vikaVertexBuffer()
-{
-	destroy();
-}
-
-// buffersize: total vertex data
-// stridesize: single element size in the buffer
-bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
-{
-	m_bufferInfo.size = bufferSize; 
+	m_buffer = new vikaBuffer(logDevice, physDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
 
 	m_viBindings.resize(1);
 	m_viBindings[0].binding = 0;
 	m_viBindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-	m_viBindings[0].stride = strideSize;
+	//m_viBindings[0].stride = strideSize;
 
 	m_viAttribs.resize(2);
     m_viAttribs[0].binding = 0;
@@ -70,70 +44,55 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
 	m_clearValues[0].color.float32[3] = 0.2f;
 	m_clearValues[1].depthStencil.depth = 1.0f;
 	m_clearValues[1].depthStencil.stencil = 0;
+}
 
-    m_res = vkCreateBuffer(m_logDevice->getDevice(), &m_bufferInfo, NULL, &m_buffer);
-	if (m_res != VK_SUCCESS)
+vikaVertexBuffer::~vikaVertexBuffer()
+{
+	destroy();
+}
+
+// buffersize: total vertex data
+// stridesize: single element size in the buffer
+bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
+{
+	m_viBindings[0].stride = strideSize;
+
+	if (m_buffer->create(bufferSize, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == false)
 	{
 		return false;
 	}
 
-	m_descInfo.buffer = m_buffer;
+	m_descInfo.buffer = m_buffer->m_buffer;
 	m_descInfo.offset = 0;
-	m_descInfo.range = m_bufferInfo.size;
-
-	vkGetBufferMemoryRequirements(m_logDevice->getDevice(), m_buffer, &m_memReqs);
-
-	// use m_memReqs.memoryTypeBits to get m_memInfo.memoryTypeIndex
-	m_memInfo.allocationSize = m_memReqs.size;
-	if (m_physDevice->memtypeBitsToIndex(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
-										m_memReqs.memoryTypeBits, m_memInfo.memoryTypeIndex) == false)
-	{
-		return false;
-	}
-
-	m_res = vkAllocateMemory(m_logDevice->getDevice(), &m_memInfo, NULL, &m_devMemory);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
+	m_descInfo.range = m_buffer->m_bufferInfo.size;
 
 	return true;
 }
 
 void vikaVertexBuffer::destroy()
 {
-	if (m_devMemory != VK_NULL_HANDLE)
+	if (m_buffer != nullptr)
 	{
-		vkFreeMemory(m_logDevice->getDevice(), m_devMemory, NULL);
-		m_devMemory = VK_NULL_HANDLE;
-	}
-
-	if (m_buffer != VK_NULL_HANDLE)
-	{
-	    vkDestroyBuffer(m_logDevice->getDevice(), m_buffer, NULL);
-		m_buffer = VK_NULL_HANDLE;
+		m_buffer->destroy();
+		delete m_buffer;
+		m_buffer = nullptr;
 	}
 }
 
 // parameter expected: vertex data and size of it
 bool vikaVertexBuffer::copyToMemory(uint32_t sizeVertices, void *dataVertices)
 {
-	uint8_t *pMapping = nullptr; // pointer to mapping in user space (actually in device memory)
-	m_res = vkMapMemory(m_logDevice->getDevice(), m_devMemory, 0, m_memReqs.size, 0, (void**)&pMapping);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	// copy to device via our mapping
-	memcpy(pMapping, dataVertices, sizeVertices);
-	vkUnmapMemory(m_logDevice->getDevice(), m_devMemory);
-
-	m_res = vkBindBufferMemory(m_logDevice->getDevice(), m_buffer, m_devMemory, 0);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-	return true;
+	return m_buffer->copyToMemory(sizeVertices, dataVertices);
 }
 
+void vikaVertexBuffer::bindVertexBuffer(uint32_t cmdBufferIndex)
+{
+	// not sure what to do with this..
+    const VkDeviceSize offsets[1] = {0};
+
+	vkCmdBindVertexBuffers(m_commandBuffer->getCmd(cmdBufferIndex), // likely same as used in renderpass (if more than one)
+							0,						// Start Binding 
+							m_viBindings.size(),	// Binding Count 
+							&m_buffer->m_buffer,	// pBuffers 
+							offsets);				// pOffsets 
+}

@@ -15,6 +15,7 @@ class vikaDevice;
 class vikaPhysDevice;
 class vikaCommandBuffer;
 //class vikaSemaphore;
+class vikaBuffer;
 
 class vikaVertexBuffer
 {
@@ -24,15 +25,9 @@ protected:
 	vikaPhysDevice *m_physDevice;
 	vikaCommandBuffer *m_commandBuffer;
 	//vikaSemaphore *m_semaphore;
+	vikaBuffer *m_buffer;
 
 public: // simplify things..
-    VkBufferCreateInfo m_bufferInfo = {};
-	VkBuffer m_buffer;
-
-	VkDeviceMemory m_devMemory;
-	VkMemoryRequirements m_memReqs = {};
-	VkMemoryAllocateInfo m_memInfo = {};
-
 	VkDescriptorBufferInfo m_descInfo = {};
 
 	std::vector<VkClearValue> m_clearValues;
@@ -50,6 +45,8 @@ public:
 
 	// parameter expected: vertex data and size of it
 	bool copyToMemory(uint32_t sizeVertices, void *dataVertices);
+
+	void bindVertexBuffer(uint32_t cmdBufferIndex = 0);
 };
 
 #endif
