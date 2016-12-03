@@ -12,6 +12,8 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaPhysDevice;
+class vikaDevMemory;
 class vikaImage;
 
 class vikaSampler
@@ -19,6 +21,8 @@ class vikaSampler
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaPhysDevice *m_physDevice;
+	vikaDevMemory *m_devMemory;
 	vikaImage *m_image;
 
 public:
@@ -26,7 +30,7 @@ public:
 	VkSampler m_sampler;
 
 public:
-	vikaSampler(vikaDevice *logDevice);
+	vikaSampler(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaSampler();
 
 	bool create();

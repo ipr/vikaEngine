@@ -5,13 +5,17 @@
 #include "stdafx.h"
 #include "vikaSampler.h"
 #include "vikaDevice.h"
+#include "vikaPhysDevice.h"
+#include "vikaBuffer.h"
 #include "vikaImage.h"
 
 #include <vulkan/vulkan.h>
 
-vikaSampler::vikaSampler(vikaDevice *logDevice) :
+vikaSampler::vikaSampler(vikaDevice *logDevice, vikaPhysDevice *physDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
+	m_physDevice(physDevice),
+	m_devMemory(nullptr),
 	m_image(nullptr),
 	m_sampler(VK_NULL_HANDLE)
 {
@@ -62,6 +66,19 @@ bool vikaSampler::create()
 	{
 		return false;
 	}
+    //vkGetImageMemoryRequirements(m_logDevice->getDevice(), m_image->m_image, &m_image->m_memReqs);
+
+	m_devMemory = new vikaDevMemory(m_logDevice, m_physDevice);
+	if (m_physDevice->memtypeBitsToIndex(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+										m_image->m_memReqs.memoryTypeBits, 
+										m_devMemory->m_memInfo.memoryTypeIndex) == false)
+	{
+		return false;
+	}
+	if (m_devMemory->create(m_image->m_memReqs.size) == false)
+	{
+		return false;
+	}
 
 	m_res = vkCreateSampler(m_logDevice->getDevice(), &m_samplerInfo, NULL, &m_sampler);
 	if (m_res != VK_SUCCESS)
@@ -85,6 +102,13 @@ void vikaSampler::destroy()
 		m_image->destroy();
 		delete m_image;
 		m_image = nullptr;
+	}
+
+	if (m_devMemory != nullptr)
+	{
+		m_devMemory->destroy();
+		delete m_devMemory;
+		m_devMemory = nullptr;
 	}
 }
 
