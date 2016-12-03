@@ -95,19 +95,9 @@ public:
 	}
 
 	/*
-	bool doWait()
+	void doWait(VkCommandBuffer &cmdBuf)
 	{
-		vkCmdWaitEvents()
-
-		do 
-		{
-		} while (m_res == VK_TIMEOUT);
-
-		if (m_res != VK_SUCCESS)
-		{
-			return false;
-		}
-		return true;
+		vkCmdWaitEvents(cmdBuf, 1, &m_event, ..)
 	}
 	*/
 
