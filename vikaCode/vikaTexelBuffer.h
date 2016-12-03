@@ -26,6 +26,9 @@ protected:
 public: // simplify things..
 	VkDescriptorBufferInfo m_descInfo = {};
 
+	VkBufferViewCreateInfo m_viewInfo = {};
+	VkBufferView m_bufferView;
+
 public:
 	vikaTexelBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
 	virtual ~vikaTexelBuffer();

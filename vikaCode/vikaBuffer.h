@@ -63,6 +63,7 @@ public:
 	void destroy();
 
 	bool copyToMemory(uint32_t size, void *data);
+	bool bindMemory();
 };
 
 #endif

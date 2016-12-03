@@ -151,6 +151,11 @@ bool vikaBuffer::copyToMemory(uint32_t size, void *data)
 	memcpy(pMapping, data, size);
 	m_devMemory->unmapMem();
 
+	return bindMemory();
+}
+
+bool vikaBuffer::bindMemory()
+{
 	m_res = vkBindBufferMemory(m_logDevice->getDevice(), m_buffer, m_devMemory->m_devMemory, 0);
 	if (m_res != VK_SUCCESS)
 	{
