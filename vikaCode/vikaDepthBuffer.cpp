@@ -6,7 +6,7 @@
 #include "vikaDepthBuffer.h"
 #include "vikaDevice.h"
 #include "vikaPhysDevice.h"
-//#include "vikaBuffer.h"
+#include "vikaBuffer.h"
 #include "vikaImage.h"
 
 #include <vulkan/vulkan.h>
@@ -16,17 +16,12 @@ vikaDepthBuffer::vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevi
 	m_logDevice(logDevice),
 	m_physDevice(physDevice),
 	m_depthFormat(VK_FORMAT_D16_UNORM),
+	m_devMemory(nullptr),
 	m_image(nullptr),
-	//m_image(VK_NULL_HANDLE),
-	m_view(VK_NULL_HANDLE),
-	m_devMemory(VK_NULL_HANDLE)
+	m_view(VK_NULL_HANDLE)
 {
+	m_devMemory = new vikaDevMemory(logDevice, physDevice);
 	m_image = new vikaImage(logDevice);
-
-	m_memInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	m_memInfo.pNext = NULL;
-    m_memInfo.allocationSize = 0;
-    m_memInfo.memoryTypeIndex = 0;
 
 	m_viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	m_viewInfo.pNext = NULL;
@@ -87,19 +82,16 @@ bool vikaDepthBuffer::create(VkExtent2D &imageSize, VkSampleCountFlagBits sample
 
 	// no flags..
 	// use m_memReqs.memoryTypeBits to get m_memInfo.memoryTypeIndex
-	m_memInfo.allocationSize = m_image->m_memReqs.size;
-	if (m_physDevice->memtypeBitsToIndex(0, m_image->m_memReqs.memoryTypeBits, m_memInfo.memoryTypeIndex) == false)
+	if (m_physDevice->memtypeBitsToIndex(0, m_image->m_memReqs.memoryTypeBits, m_devMemory->m_memInfo.memoryTypeIndex) == false)
+	{
+		return false;
+	}
+	if (m_devMemory->create(m_image->m_memReqs.size) == false)
 	{
 		return false;
 	}
 
-	m_res = vkAllocateMemory(m_logDevice->getDevice(), &m_memInfo, NULL, &m_devMemory);
-	if (m_res != VK_SUCCESS)
-	{
-		return false;
-	}
-
-	m_res = vkBindImageMemory(m_logDevice->getDevice(), m_image->m_image, m_devMemory, 0);
+	m_res = vkBindImageMemory(m_logDevice->getDevice(), m_image->m_image, m_devMemory->m_devMemory, 0);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
@@ -131,10 +123,11 @@ void vikaDepthBuffer::destroy()
 		m_image = nullptr;
 	}
 
-	if (m_devMemory != VK_NULL_HANDLE)
+	if (m_devMemory != nullptr)
 	{
-	    vkFreeMemory(m_logDevice->getDevice(), m_devMemory, NULL);
-		m_devMemory = VK_NULL_HANDLE;
+		m_devMemory->destroy();
+		delete m_devMemory;
+		m_devMemory = nullptr;
 	}
 }
 

@@ -13,7 +13,7 @@
 
 class vikaDevice;
 class vikaPhysDevice;
-//class vikaBuffer;
+class vikaDevMemory;
 class vikaImage;
 
 class vikaDepthBuffer
@@ -22,7 +22,7 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
-	//vikaBuffer *m_buffer;
+	vikaDevMemory *m_devMemory;
 	vikaImage *m_image;
 
 public: // simplify things..
@@ -31,10 +31,7 @@ public: // simplify things..
 
 	VkImageView m_view;
 	VkImageViewCreateInfo m_viewInfo = {};
-
-	VkDeviceMemory m_devMemory;
 	VkMemoryRequirements m_memReqs = {};
-	VkMemoryAllocateInfo m_memInfo = {};
 
 public:
 	vikaDepthBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice);
