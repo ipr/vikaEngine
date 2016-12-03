@@ -95,6 +95,11 @@ bool vikaCommandBuffer::resetBuffer(uint32_t bufferIndex)
 	return true;
 }
 
+void vikaCommandBuffer::dispatch(uint32_t x, uint32_t y, uint32_t z, uint32_t bufferIndex)
+{
+	vkCmdDispatch(m_cmdBuffers[bufferIndex], x, y, z);
+}
+
 bool vikaCommandBuffer::executeBegin(uint32_t bufferIndex)
 {
 	m_res = vkBeginCommandBuffer(m_cmdBuffers[bufferIndex], &m_beginInfo);
