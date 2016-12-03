@@ -18,7 +18,9 @@ class vikaPhysDevice;
 class vikaDevice
 {
 protected:
-    VkDeviceQueueCreateInfo m_queueInfo = {};
+    //VkDeviceQueueCreateInfo m_queueInfo = {};
+	std::vector<VkDeviceQueueCreateInfo> m_queueInfo;
+
     VkDeviceCreateInfo m_deviceInfo = {};
 
 	VkResult m_res;
@@ -50,6 +52,9 @@ public:
 
 	bool create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex);
 	void destroy();
+
+	// no other logical place for this currently
+	bool waitQueueIdle(VkQueue &queue);
 
 	vikaApp *getApp() { return m_parent; };
 	VkResult getResult() const { return m_res; };

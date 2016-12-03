@@ -25,15 +25,16 @@ vikaDevice::vikaDevice(vikaApp *parent, vikaPhysDevice *physDevice) :
 	// stuff you need later: list of extensions to load
 	m_extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME); // <- available at device level
 
-    m_queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    m_queueInfo.pNext = NULL;
-    //m_queueInfo.queueCount = m_queuePriorities.size();
-    //m_queueInfo.pQueuePriorities = m_queuePriorities.data();
+	m_queueInfo.resize(1);
+    m_queueInfo[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    m_queueInfo[0].pNext = NULL;
+    //m_queueInfo[0].queueCount = m_queuePriorities.size();
+    //m_queueInfo[0].pQueuePriorities = m_queuePriorities.data();
 
     m_deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     m_deviceInfo.pNext = NULL;
-    m_deviceInfo.queueCreateInfoCount = 1;
-    m_deviceInfo.pQueueCreateInfos = &m_queueInfo;
+    //m_deviceInfo.queueCreateInfoCount = m_queueInfo.size();
+    //m_deviceInfo.pQueueCreateInfos = m_queueInfo.data();
     m_deviceInfo.enabledExtensionCount = 0;
     m_deviceInfo.ppEnabledExtensionNames = NULL;
     m_deviceInfo.enabledLayerCount = 0;
@@ -48,8 +49,11 @@ vikaDevice::~vikaDevice()
 
 bool vikaDevice::create(uint32_t graphicsQueueIndex, uint32_t presentQueueIndex)
 {
-    m_queueInfo.queueCount = m_queuePriorities.size();
-    m_queueInfo.pQueuePriorities = m_queuePriorities.data();
+	m_queueInfo[0].queueCount = m_queuePriorities.size();
+	m_queueInfo[0].pQueuePriorities = m_queuePriorities.data();
+
+	m_deviceInfo.queueCreateInfoCount = m_queueInfo.size();
+	m_deviceInfo.pQueueCreateInfos = m_queueInfo.data();
 
 	// TODO: check that required extensions are supported by the physical device before creating logical device
 
@@ -93,3 +97,14 @@ void vikaDevice::destroy()
 	}
 }
 
+// no other logical place for this currently
+bool vikaDevice::waitQueueIdle(VkQueue &queue)
+{
+	// wait completion for infinite timeout
+	m_res = vkQueueWaitIdle(queue);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
