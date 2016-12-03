@@ -165,6 +165,7 @@
     <ClInclude Include="..\vikaCode\vikaSampler.h" />
     <ClInclude Include="..\vikaCode\vikaSemaphore.h" />
     <ClInclude Include="..\vikaCode\vikaShaderModule.h" />
+    <ClInclude Include="..\vikaCode\vikaTexelBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaUniformBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaVertexBuffer.h" />
     <ClInclude Include="Resource.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="..\vikaCode\vikaSampler.cpp" />
     <ClCompile Include="..\vikaCode\vikaSemaphore.cpp" />
     <ClCompile Include="..\vikaCode\vikaShaderModule.cpp" />
+    <ClCompile Include="..\vikaCode\vikaTexelBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaUniformBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaVertexBuffer.cpp" />
     <ClCompile Include="stdafx.cpp">
