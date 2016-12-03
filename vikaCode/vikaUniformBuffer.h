@@ -24,6 +24,7 @@ struct mat4
 
 class vikaDevice;
 class vikaPhysDevice;
+class vikaBuffer;
 
 class vikaUniformBuffer
 {
@@ -31,15 +32,9 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
+	vikaBuffer *m_buffer;
 
 public: // simplify things..
-    VkBufferCreateInfo m_bufferInfo = {};
-	VkBuffer m_buffer;
-
-	VkDeviceMemory m_devMemory;
-	VkMemoryRequirements m_memReqs = {};
-	VkMemoryAllocateInfo m_memInfo = {};
-
 	VkDescriptorBufferInfo m_descInfo = {};
 
 public:

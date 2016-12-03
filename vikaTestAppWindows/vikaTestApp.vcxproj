@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\VulkanSDK\1.0.30.0\Include\vulkan\vulkan.h" />
     <ClInclude Include="..\vikaCode\vikaBarrier.h" />
+    <ClInclude Include="..\vikaCode\vikaBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaDescriptorset.h" />
     <ClInclude Include="..\vikaCode\vikaEvent.h" />
     <ClInclude Include="..\vikaCode\vikaFence.h" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\vikaCode\vikaBarrier.cpp" />
+    <ClCompile Include="..\vikaCode\vikaBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaDescriptorset.cpp" />
     <ClCompile Include="..\vikaCode\vikaEvent.cpp" />
     <ClCompile Include="..\vikaCode\vikaFence.cpp" />
