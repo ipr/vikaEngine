@@ -32,6 +32,9 @@ public: // simplify things..
 
 	VkCommandBufferBeginInfo m_beginInfo = {};
 
+	std::vector<VkViewport> m_viewports;
+	std::vector<VkRect2D> m_scissors;
+
 public:
 	vikaCommandBuffer(vikaDevice *logDevice);
 	virtual ~vikaCommandBuffer();
