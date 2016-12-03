@@ -5,12 +5,14 @@
 #include "stdafx.h"
 #include "vikaSampler.h"
 #include "vikaDevice.h"
+#include "vikaImage.h"
 
 #include <vulkan/vulkan.h>
 
 vikaSampler::vikaSampler(vikaDevice *logDevice) :
 	m_res(VK_SUCCESS),
 	m_logDevice(logDevice),
+	m_image(nullptr),
 	m_sampler(VK_NULL_HANDLE)
 {
 	m_samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -37,6 +39,30 @@ vikaSampler::~vikaSampler()
 
 bool vikaSampler::create()
 {
+	// TODO: determine these
+	bool needStaging = true;
+	VkExtent2D texSize;
+
+	m_image = new vikaImage(m_logDevice);
+	m_image->m_imageInfo.tiling = VK_IMAGE_TILING_LINEAR;
+	m_image->m_imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    m_image->m_imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+    m_image->m_imageInfo.initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+	m_image->m_imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+	if (needStaging == false)
+	{
+		m_image->m_imageInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+	}
+
+	// TODO:
+    //m_image->m_imageInfo.extent.width = texSize.width;
+    //m_image->m_imageInfo.extent.height = texSize.height;
+
+	if (m_image->create() == false)
+	{
+		return false;
+	}
+
 	m_res = vkCreateSampler(m_logDevice->getDevice(), &m_samplerInfo, NULL, &m_sampler);
 	if (m_res != VK_SUCCESS)
 	{
@@ -52,6 +78,13 @@ void vikaSampler::destroy()
 	{
 		vkDestroySampler(m_logDevice->getDevice(), m_sampler, NULL);
 		m_sampler = VK_NULL_HANDLE;
+	}
+
+	if (m_image != nullptr)
+	{
+		m_image->destroy();
+		delete m_image;
+		m_image = nullptr;
 	}
 }
 

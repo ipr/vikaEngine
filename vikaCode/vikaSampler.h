@@ -12,12 +12,14 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaImage;
 
 class vikaSampler
 {
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaImage *m_image;
 
 public:
 	VkSamplerCreateInfo m_samplerInfo = {};
