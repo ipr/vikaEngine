@@ -145,3 +145,50 @@ void vikaCommandBuffer::commandDraw(uint32_t verticesCount, uint32_t bufferIndex
 				0,  // first vertex
 				0); // first instance
 }
+
+void vikaCommandBuffer::commandLineWidth(float lineWidth, uint32_t bufferIndex)
+{
+	vkCmdSetLineWidth(m_cmdBuffers[bufferIndex], lineWidth);
+}
+
+void vikaCommandBuffer::commandDepthBias(float cFactor, float clamp, float slope, uint32_t bufferIndex)
+{
+	vkCmdSetDepthBias(m_cmdBuffers[bufferIndex], cFactor, clamp, slope);
+}
+
+void vikaCommandBuffer::setViewports(uint32_t width, uint32_t height, uint32_t viewportCount, uint32_t bufferIndex)
+{
+	VkViewport viewport;
+
+	viewport.width = (float)width;
+	viewport.height = (float)height;
+	viewport.minDepth = (float)0.0f;
+	viewport.maxDepth = (float)1.0f;
+	viewport.x = 0;
+	viewport.y = 0;
+
+	vkCmdSetViewport(m_cmdBuffers[bufferIndex], 0, viewportCount, &viewport);
+}
+
+void vikaCommandBuffer::setScissors(uint32_t width, uint32_t height, uint32_t scissorsCount, uint32_t bufferIndex)
+{
+	VkRect2D scissorRect;
+
+	scissorRect.extent.width = width;
+	scissorRect.extent.height = height;
+	scissorRect.offset.x = 0;
+	scissorRect.offset.y = 0;
+
+	vkCmdSetScissor(m_cmdBuffers[bufferIndex], 0, scissorsCount, &scissorRect);
+}
+
+void vikaCommandBuffer::setBlendFactors(float constants[4], uint32_t bufferIndex)
+{
+	//float blendConstants[4] = {0};
+	vkCmdSetBlendConstants(m_cmdBuffers[bufferIndex], constants);
+}
+
+void vikaCommandBuffer::setDepthBounds(float min, float max, uint32_t bufferIndex)
+{
+	vkCmdSetDepthBounds(m_cmdBuffers[bufferIndex], min, max);
+}

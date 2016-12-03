@@ -48,6 +48,14 @@ public:
 	bool executeQueue(vikaFence &fence);
 
 	void commandDraw(uint32_t verticesCount, uint32_t bufferIndex = 0);
+	void commandLineWidth(float lineWidth, uint32_t bufferIndex = 0);
+	void commandDepthBias(float cFactor, float clamp, float slope, uint32_t bufferIndex = 0);
+
+	// count of viewports and scissor should be equal
+	void setViewports(uint32_t width, uint32_t height, uint32_t viewportCount = 1, uint32_t bufferIndex = 0);
+	void setScissors(uint32_t width, uint32_t height, uint32_t scissorsCount = 1, uint32_t bufferIndex = 0);
+	void setBlendFactors(float constants[4], uint32_t bufferIndex = 0);
+	void setDepthBounds(float min, float max, uint32_t bufferIndex = 0);
 
 	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };
 };
