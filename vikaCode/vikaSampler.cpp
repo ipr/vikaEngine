@@ -84,6 +84,7 @@ bool vikaSampler::create()
 	{
 		return false;
 	}
+	m_image->getResourceLayout(); // 
 
 	m_res = vkCreateSampler(m_logDevice->getDevice(), &m_samplerInfo, NULL, &m_sampler);
 	if (m_res != VK_SUCCESS)

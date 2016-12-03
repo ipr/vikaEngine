@@ -19,12 +19,16 @@ class vikaImage
 protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
+	vikaDevMemory *m_devMemory;
 
 public: // simplify things..
 	VkImage m_image;
     VkImageCreateInfo m_imageInfo = {};
 
 	VkMemoryRequirements m_memReqs = {};
+
+    VkImageSubresource m_subResource = {};
+	VkSubresourceLayout m_layout = {};
 
 public:
 	vikaImage(vikaDevice *logDevice);
@@ -34,6 +38,8 @@ public:
 	void destroy();
 
 	bool bindToMemory(vikaDevMemory *devMemory);
+
+	void getResourceLayout();
 };
 
 #endif
