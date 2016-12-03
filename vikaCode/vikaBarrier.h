@@ -16,29 +16,57 @@
 class vikaBarrier
 {
 protected:
-    VkImageMemoryBarrier m_imageMemoryBarrier = {};
+	// TODO: other possibilities:
+	//VkMemoryBarrier m_globalMemoryBarrier = {};
+	//VkBufferMemoryBarrier m_bufferMemoryBarrier = {};
+
+	VkImageMemoryBarrier m_imageMemoryBarrier = {};
 
 public:
+	/*
+	// global memory barrier
+	vikaBarrier()
+	{
+		m_globalMemoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+		m_globalMemoryBarrier.pNext = NULL;
+		m_globalMemoryBarrier.srcAccessMask = 0;
+		m_globalMemoryBarrier.dstAccessMask = 0;
+	}
+	*/
+
+	/*
+	// buffer memory barrier
+	vikaBarrier(VkBuffer &buffer, VkDeviceSize size, VkDeviceSize offset = 0)
+	{
+		m_bufferMemoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+		m_bufferMemoryBarrier.pNext = NULL;
+		m_bufferMemoryBarrier.srcAccessMask = 0;
+		m_bufferMemoryBarrier.dstAccessMask = 0;
+		m_bufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		m_bufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		m_bufferMemoryBarrier.buffer = buffer;
+		m_bufferMemoryBarrier.offset = offset;
+		m_bufferMemoryBarrier.size = size;
+	}
+	*/
+
+	// image memory barrier
 	vikaBarrier(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
 	{
 		m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 		m_imageMemoryBarrier.pNext = NULL;
 		m_imageMemoryBarrier.srcAccessMask = 0;
 		m_imageMemoryBarrier.dstAccessMask = 0;
-		//m_imageMemoryBarrier.oldLayout = oldLayout;
-		//m_imageMemoryBarrier.newLayout = newLayout;
+		m_imageMemoryBarrier.oldLayout = oldLayout;
+		m_imageMemoryBarrier.newLayout = newLayout;
 		m_imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		m_imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		//m_imageMemoryBarrier.image = image;
+		m_imageMemoryBarrier.image = image;
 		m_imageMemoryBarrier.subresourceRange.aspectMask = aspectMask;
 		m_imageMemoryBarrier.subresourceRange.baseMipLevel = 0;
 		m_imageMemoryBarrier.subresourceRange.levelCount = 1;
 		m_imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
 		m_imageMemoryBarrier.subresourceRange.layerCount = 1;
-
-		m_imageMemoryBarrier.oldLayout = oldLayout;
-		m_imageMemoryBarrier.newLayout = newLayout;
-		m_imageMemoryBarrier.image = image;
 
 		switch (oldLayout)
 		{
@@ -83,13 +111,13 @@ public:
 		destroy();
 	}
 
-	bool create(VkCommandBuffer &cmdBuf)
+	void create(VkCommandBuffer &cmdBuf, VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT)
 	{
-		VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-		VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+		// TODO: support for other possibilities
+		//vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 1, &m_globalMemoryBarrier, 0, NULL, 0, NULL);
+		//vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 1, &m_bufferMemoryBarrier, 0, NULL);
 
 		vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
-		return true;
 	}
 	void destroy()
 	{
