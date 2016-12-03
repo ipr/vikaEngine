@@ -80,8 +80,7 @@ bool vikaSampler::create()
 		return false;
 	}
 
-	m_res = vkBindImageMemory(m_logDevice->getDevice(), m_image->m_image, m_devMemory->m_devMemory, 0);
-	if (m_res != VK_SUCCESS)
+	if (m_image->bindToMemory(m_devMemory) == false)
 	{
 		return false;
 	}

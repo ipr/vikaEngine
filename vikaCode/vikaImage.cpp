@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "vikaImage.h"
 #include "vikaDevice.h"
+#include "vikaBuffer.h"
 
 #include <vulkan/vulkan.h>
 
@@ -68,3 +69,12 @@ void vikaImage::destroy()
 	}
 }
 
+bool vikaImage::bindToMemory(vikaDevMemory *devMemory)
+{
+	m_res = vkBindImageMemory(m_logDevice->getDevice(), m_image, devMemory->m_devMemory, 0);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}

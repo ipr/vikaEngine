@@ -12,6 +12,7 @@
 #include <vulkan/vulkan.h>
 
 class vikaDevice;
+class vikaDevMemory;
 
 class vikaImage
 {
@@ -31,6 +32,8 @@ public:
 
 	bool create();
 	void destroy();
+
+	bool bindToMemory(vikaDevMemory *devMemory);
 };
 
 #endif
