@@ -13,6 +13,8 @@
 
 class vikaDevice;
 class vikaPhysDevice;
+//class vikaBuffer;
+class vikaImage;
 
 class vikaDepthBuffer
 {
@@ -20,13 +22,12 @@ protected:
 	VkResult m_res;
 	vikaDevice *m_logDevice;
 	vikaPhysDevice *m_physDevice;
+	//vikaBuffer *m_buffer;
+	vikaImage *m_image;
 
 public: // simplify things..
 	VkFormatProperties m_formatProp = {};
 	VkFormat m_depthFormat;
-
-	VkImage m_image;
-    VkImageCreateInfo m_imageInfo = {};
 
 	VkImageView m_view;
 	VkImageViewCreateInfo m_viewInfo = {};

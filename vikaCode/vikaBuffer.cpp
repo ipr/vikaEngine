@@ -27,6 +27,7 @@ vikaBuffer::vikaBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, VkBuff
 
 	m_memInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	m_memInfo.pNext = NULL;
+	m_memInfo.allocationSize = 0;
 	m_memInfo.memoryTypeIndex = 0;
 }
 

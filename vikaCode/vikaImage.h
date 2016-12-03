@@ -29,7 +29,7 @@ public:
 	vikaImage(vikaDevice *logDevice);
 	virtual ~vikaImage();
 
-	bool create(VkExtent2D &imageSize, VkImageUsageFlagBits usage, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT, VkFormat format = VK_FORMAT_D16_UNORM);
+	bool create();
 	void destroy();
 };
 

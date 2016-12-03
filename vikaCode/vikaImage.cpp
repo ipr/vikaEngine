@@ -40,12 +40,14 @@ vikaImage::~vikaImage()
 // Number of samples needs to be the same at image creation,
 // renderpass creation and pipeline creation.
 //
-bool vikaImage::create(VkExtent2D &imageSize, VkImageUsageFlagBits usage, VkSampleCountFlagBits sampleCount, VkFormat format)
+bool vikaImage::create()
 {
+	/* expect caller to set these and other necessary stuff first
 	m_imageInfo.format = format;
     m_imageInfo.samples = sampleCount;
     m_imageInfo.extent.width = imageSize.width;
     m_imageInfo.extent.height = imageSize.height;
+	*/
 
     m_res = vkCreateImage(m_logDevice->getDevice(), &m_imageInfo, NULL, &m_image);
 	if (m_res != VK_SUCCESS)
