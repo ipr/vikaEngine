@@ -139,6 +139,9 @@ bool vikaCommandBuffer::executeQueue(vikaFence &fence)
 
 void vikaCommandBuffer::commandDraw(uint32_t verticesCount, uint32_t bufferIndex)
 {
-	vkCmdDraw(m_cmdBuffers[bufferIndex], verticesCount, 1,
-				0, 0);
+	vkCmdDraw(m_cmdBuffers[bufferIndex], 
+				verticesCount, // vertex count
+				1, // instance count
+				0,  // first vertex
+				0); // first instance
 }

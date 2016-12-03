@@ -159,6 +159,7 @@
     <ClInclude Include="..\vikaCode\vikaFence.h" />
     <ClInclude Include="..\vikaCode\vikaFrameBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaImage.h" />
+    <ClInclude Include="..\vikaCode\vikaInstance.h" />
     <ClInclude Include="..\vikaCode\vikaPipeline.h" />
     <ClInclude Include="..\vikaCode\vikaRenderPass.h" />
     <ClInclude Include="..\vikaCode\vikaSampler.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="..\vikaCode\vikaFence.cpp" />
     <ClCompile Include="..\vikaCode\vikaFrameBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaImage.cpp" />
+    <ClCompile Include="..\vikaCode\vikaInstance.cpp" />
     <ClCompile Include="..\vikaCode\vikaPipeline.cpp" />
     <ClCompile Include="..\vikaCode\vikaRenderPass.cpp" />
     <ClCompile Include="..\vikaCode\vikaSampler.cpp" />
