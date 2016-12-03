@@ -192,3 +192,30 @@ void vikaCommandBuffer::setDepthBounds(float min, float max, uint32_t bufferInde
 {
 	vkCmdSetDepthBounds(m_cmdBuffers[bufferIndex], min, max);
 }
+
+void vikaCommandBuffer::setStencilCompareMask(uint32_t bufferIndex)
+{
+	/*
+	VkStencilFaceFlags flags;
+
+	vkCmdSetStencilCompareMask(m_cmdBuffers[bufferIndex]);
+	*/
+}
+
+void vikaCommandBuffer::setStencilWriteMask(uint32_t bufferIndex)
+{
+	/*
+	VkStencilFaceFlags flags;
+
+	vkCmdSetStencilWriteMask(m_cmdBuffers[bufferIndex]);
+	*/
+}
+
+void vikaCommandBuffer::setStencilReference(uint32_t bufferIndex)
+{
+	/*
+	VkStencilFaceFlags flags;
+
+	vkCmdSetStencilReference(m_cmdBuffers[bufferIndex]);
+	*/
+}

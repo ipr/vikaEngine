@@ -56,6 +56,9 @@ public:
 	void setScissors(uint32_t width, uint32_t height, uint32_t scissorsCount = 1, uint32_t bufferIndex = 0);
 	void setBlendFactors(float constants[4], uint32_t bufferIndex = 0);
 	void setDepthBounds(float min, float max, uint32_t bufferIndex = 0);
+	void setStencilCompareMask(uint32_t bufferIndex = 0);
+	void setStencilWriteMask(uint32_t bufferIndex = 0);
+	void setStencilReference(uint32_t bufferIndex = 0);
 
 	VkCommandBuffer& getCmd(uint32_t bufferIndex = 0) { return m_cmdBuffers[bufferIndex]; };
 };
