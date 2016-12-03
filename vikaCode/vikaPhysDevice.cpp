@@ -103,6 +103,24 @@ bool vikaPhysDevice::enumerateDeviceLayers()
 	return true;
 }
 
+bool vikaPhysDevice::enumerateDisplayProperties()
+{
+	uint32_t propCount = 0;
+	m_res = vkGetPhysicalDeviceDisplayPropertiesKHR(m_physDevice, &propCount, NULL);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	m_displayProperties.resize(propCount);
+	m_res = vkGetPhysicalDeviceDisplayPropertiesKHR(m_physDevice, &propCount, m_displayProperties.data());
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+	return true;
+}
+
 // this method is pretty directly from the API-sample under Apache license
 // note: set reqmask to zero if not needed
 bool vikaPhysDevice::memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const

@@ -158,3 +158,4 @@ bool vikaBuffer::copyToMemory(uint32_t size, void *data)
 	}
 	return true;
 }
+

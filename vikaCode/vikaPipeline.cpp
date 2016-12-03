@@ -59,6 +59,11 @@ vikaPipeline::vikaPipeline(vikaDevice *logDevice) :
 	m_pipelineInput.primitiveRestartEnable = VK_FALSE;
 	m_pipelineInput.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
+	m_tesselationState.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+	m_tesselationState.pNext = NULL;
+	m_tesselationState.flags = 0;
+	m_tesselationState.patchControlPoints = 0;
+
 	m_depthstencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 	m_depthstencil.pNext = NULL;
 	m_depthstencil.flags = 0;
@@ -226,7 +231,7 @@ bool vikaPipeline::createInputAssembly(vikaRenderPass *renderpass, VkSampleCount
 	m_graphicsPipelineInfo.pInputAssemblyState = &m_pipelineInput;
 	m_graphicsPipelineInfo.pRasterizationState = &m_pipelineRaster;
 	m_graphicsPipelineInfo.pColorBlendState = &m_colorBlend;
-	m_graphicsPipelineInfo.pTessellationState = NULL;
+	m_graphicsPipelineInfo.pTessellationState = NULL; //&m_tesselationState;
 	m_graphicsPipelineInfo.pMultisampleState = &m_multisample;
 	m_graphicsPipelineInfo.pDynamicState = &m_dynamicState;
 	m_graphicsPipelineInfo.pViewportState = &m_viewport;
@@ -235,6 +240,9 @@ bool vikaPipeline::createInputAssembly(vikaRenderPass *renderpass, VkSampleCount
 	//m_graphicsPipelineInfo.stageCount = 2;
 	m_graphicsPipelineInfo.renderPass = renderpass->m_renderpass;
 	m_graphicsPipelineInfo.subpass = 0;
+
+	// crash at the moment
+	return false;
 
     m_res = vkCreateGraphicsPipelines(m_logDevice->getDevice(), VK_NULL_HANDLE, 1, &m_graphicsPipelineInfo, NULL, &m_pipeline);
 	if (m_res != VK_SUCCESS)

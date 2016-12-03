@@ -151,6 +151,16 @@ void vikaCommandBuffer::commandDraw(uint32_t verticesCount, uint32_t bufferIndex
 				0); // first instance
 }
 
+void vikaCommandBuffer::commandDrawIndexed(uint32_t indexCount, uint32_t bufferIndex)
+{
+	vkCmdDrawIndexed(m_cmdBuffers[bufferIndex], 
+					indexCount, // index count,
+					1, // instance count
+					0, // first index
+					0, // vertex offset
+					0); // first instance
+}
+
 void vikaCommandBuffer::commandLineWidth(float lineWidth, uint32_t bufferIndex)
 {
 	vkCmdSetLineWidth(m_cmdBuffers[bufferIndex], lineWidth);

@@ -66,6 +66,9 @@ bool vikaApp::create(uint32_t deviceIndex)
 	}
 	m_physDevice->enumerateDeviceExtensions();
 	m_physDevice->enumerateDeviceLayers();
+
+	// TODO: check displays and capabilities available
+	//m_physDevice->enumerateDisplayProperties();
 	return true;
 }
 

@@ -53,6 +53,8 @@ public:
 	bool executeQueue(vikaFence &fence);
 
 	void commandDraw(uint32_t verticesCount, uint32_t bufferIndex = 0);
+	void commandDrawIndexed(uint32_t indexCount, uint32_t bufferIndex = 0);
+
 	void commandLineWidth(float lineWidth, uint32_t bufferIndex = 0);
 	void commandDepthBias(float cFactor, float clamp, float slope, uint32_t bufferIndex = 0);
 

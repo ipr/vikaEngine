@@ -34,6 +34,12 @@ public: // make things simpler..
 	std::vector<VkExtensionProperties> m_extensionProperties;
 	std::vector<VkLayerProperties> m_layerProperties;
 
+	std::vector<VkDisplayPropertiesKHR> m_displayProperties;
+
+	// TODO: separate handling for display modes etc.
+	//std::vector<VkDisplayPlanePropertiesKHR> m_displayPlaneProperties;
+	//std::vector<VkDisplayModePropertiesKHR> m_displayModeProperties;
+
 public:
 	vikaPhysDevice(vikaApp *parent, VkPhysicalDevice &physDev, uint32_t deviceIndex);
 	~vikaPhysDevice();
@@ -41,6 +47,8 @@ public:
 	bool getQueueProperties();
 	bool enumerateDeviceExtensions();
 	bool enumerateDeviceLayers();
+
+	bool enumerateDisplayProperties();
 
 	bool memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const;
 

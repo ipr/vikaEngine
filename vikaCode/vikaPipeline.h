@@ -48,6 +48,8 @@ public: // simplify things..
 	std::vector<VkPipelineColorBlendAttachmentState> m_blendAttachments;
 	VkPipelineColorBlendStateCreateInfo m_colorBlend = {};
 
+	VkPipelineTessellationStateCreateInfo m_tesselationState = {};
+
 	// count of viewports and scissor should be equal
 	//uint32_t m_viewportCount;
 	//uint32_t m_scissorsCount;
