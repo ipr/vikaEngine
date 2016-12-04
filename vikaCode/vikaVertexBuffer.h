@@ -27,6 +27,12 @@ protected:
 	//vikaSemaphore *m_semaphore;
 	vikaBuffer *m_buffer;
 
+	//std::vector<vikaBuffer*> m_buffers;
+
+	// TODO: support array of buffers for better batching
+	std::vector<VkBuffer> m_buffers; // for binding
+	std::vector<VkDeviceSize> m_offsets; // for binding
+
 public: // simplify things..
 	std::vector<VkClearValue> m_clearValues;
 
@@ -34,10 +40,6 @@ public: // simplify things..
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
 
 	std::vector<VkDescriptorBufferInfo> m_descInfo;
-
-	// TODO: support array of buffers for better batching
-	//std::vector<VkBuffer> m_buffers; // for binding
-	//std::vector<VkDeviceSize> m_offsets; // for binding
 
 public:
 	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);

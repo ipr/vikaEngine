@@ -231,3 +231,7 @@ bool vikaRenderPass::presentImage()
 	return true;
 }
 
+void vikaRenderPass::getGranularity()
+{
+	vkGetRenderAreaGranularity(m_device->getDevice(), m_renderpass, &m_granularity);
+}

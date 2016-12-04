@@ -66,6 +66,9 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
 	m_descInfo[0].buffer = m_buffer->m_buffer;
 	m_descInfo[0].offset = 0;
 	m_descInfo[0].range = m_buffer->m_bufferInfo.size;
+
+	m_buffers.push_back(m_buffer->m_buffer);
+	m_offsets.push_back(0);
 	return true;
 }
 
@@ -87,13 +90,10 @@ bool vikaVertexBuffer::copyToMemory(uint32_t sizeVertices, void *dataVertices)
 
 void vikaVertexBuffer::bindVertexBuffer(uint32_t cmdBufferIndex)
 {
-	// not sure what to do with this..
-    const VkDeviceSize offsets[1] = {0};
-
 	vkCmdBindVertexBuffers(m_commandBuffer->getCmd(cmdBufferIndex), // likely same as used in renderpass (if more than one)
 							0,						// Start Binding 
 							m_viBindings.size(),	// Binding Count 
-							&m_buffer->m_buffer,	// pBuffers 
-							offsets);				// pOffsets 
+							m_buffers.data(),		// pBuffers 
+							m_offsets.data());		// pOffsets 
 }
 

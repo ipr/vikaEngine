@@ -53,6 +53,8 @@ public: // simplify..
 
 	VkPresentInfoKHR m_presentInfo = {};
 
+	VkExtent2D m_granularity;
+
 public:
 	vikaRenderPass(vikaDevice *device, vikaSurface *surface, vikaSwapChain *swapchain, vikaCommandBuffer *commandBuffer, vikaDepthBuffer *depthBuffer, vikaFrameBuffer *framebuffer, vikaVertexBuffer *vertexBuffer, vikaPipeline *pipeline, vikaDescriptorset *descriptorSet);
 	virtual ~vikaRenderPass();
@@ -69,6 +71,8 @@ public:
 	void bindDescriptorSets();
 
 	bool presentImage();
+
+	void getGranularity();
 };
 
 #endif 
