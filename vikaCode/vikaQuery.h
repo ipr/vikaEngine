@@ -26,6 +26,8 @@ protected:
 	vikaBuffer *m_queryBuffer;
 
 public: // simplify things..
+	VkQueryPoolCreateInfo m_poolInfo = {};
+	VkQueryPool m_pool;
 
 public:
 	vikaQuery(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);
