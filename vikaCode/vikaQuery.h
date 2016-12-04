@@ -44,6 +44,8 @@ public:
 
 	void copyResults(uint32_t cmdBufferIndex = 0);
 	bool getResults();
+
+	void writeTimestamp(uint32_t slot, uint32_t bufferIndex = 0);
 };
 
 #endif // 

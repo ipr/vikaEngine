@@ -135,3 +135,14 @@ bool vikaQuery::getResults()
 	m_queryBuffer->unmapMem();
 	return true;
 }
+
+void vikaQuery::writeTimestamp(uint32_t slot, uint32_t bufferIndex)
+{
+	/*
+	vkCmdWriteTimestamp(m_commandBuffer->getCmd(bufferIndex), 
+						0, // flags
+						m_pool, 
+						slot);
+						*/
+}
+

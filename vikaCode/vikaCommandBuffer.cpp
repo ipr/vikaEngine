@@ -236,3 +236,4 @@ void vikaCommandBuffer::setStencilReference(uint32_t bufferIndex)
 	vkCmdSetStencilReference(m_cmdBuffers[bufferIndex]);
 	*/
 }
+
