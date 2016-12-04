@@ -97,13 +97,3 @@ void vikaVertexBuffer::bindVertexBuffer(uint32_t cmdBufferIndex)
 							offsets);				// pOffsets 
 }
 
-// TODO: add separate handler?
-void vikaVertexBuffer::bindIndexBuffer(uint32_t cmdBufferIndex)
-{
-	/*
-	vkCmdBindIndexBuffer(m_commandBuffer->getCmd(cmdBufferIndex), // likely same as used in renderpass (if more than one)
-						&buffer,
-						0, // offset
-						0); // index type
-						*/
-}
