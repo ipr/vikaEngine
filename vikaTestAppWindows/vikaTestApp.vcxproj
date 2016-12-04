@@ -162,6 +162,7 @@
     <ClInclude Include="..\vikaCode\vikaIndexBuffer.h" />
     <ClInclude Include="..\vikaCode\vikaInstance.h" />
     <ClInclude Include="..\vikaCode\vikaPipeline.h" />
+    <ClInclude Include="..\vikaCode\vikaQuery.h" />
     <ClInclude Include="..\vikaCode\vikaRenderPass.h" />
     <ClInclude Include="..\vikaCode\vikaSampler.h" />
     <ClInclude Include="..\vikaCode\vikaSemaphore.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="..\vikaCode\vikaIndexBuffer.cpp" />
     <ClCompile Include="..\vikaCode\vikaInstance.cpp" />
     <ClCompile Include="..\vikaCode\vikaPipeline.cpp" />
+    <ClCompile Include="..\vikaCode\vikaQuery.cpp" />
     <ClCompile Include="..\vikaCode\vikaRenderPass.cpp" />
     <ClCompile Include="..\vikaCode\vikaSampler.cpp" />
     <ClCompile Include="..\vikaCode\vikaSemaphore.cpp" />
