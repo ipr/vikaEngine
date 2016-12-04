@@ -67,7 +67,8 @@ bool vikaApp::create(uint32_t deviceIndex)
 	m_physDevice->enumerateDeviceExtensions();
 	m_physDevice->enumerateDeviceLayers();
 
-	// TODO: check displays and capabilities available
+	// depends on extension not available on all platforms?
+	// (direct display usage, only on embedded devices?)
 	//m_physDevice->enumerateDisplayProperties();
 	return true;
 }

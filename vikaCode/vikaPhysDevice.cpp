@@ -25,6 +25,8 @@ vikaPhysDevice::~vikaPhysDevice()
 bool vikaPhysDevice::getQueueProperties()
 {
 	vkGetPhysicalDeviceMemoryProperties(m_physDevice, &m_memoryProperties);
+
+	// includes VkPhysicalDeviceLimits
 	vkGetPhysicalDeviceProperties(m_physDevice, &m_deviceProperties);
 
 	// first call: retrieve count
@@ -103,6 +105,9 @@ bool vikaPhysDevice::enumerateDeviceLayers()
 	return true;
 }
 
+// depends on: VK_KHR_display (VK_KHR_DISPLAY_EXTENSION_NAME)
+// but not available on Windows at least?
+// (only some embedded devices?)
 bool vikaPhysDevice::enumerateDisplayProperties()
 {
 	uint32_t propCount = 0;
@@ -110,6 +115,11 @@ bool vikaPhysDevice::enumerateDisplayProperties()
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
+	}
+
+	if (propCount < 1)
+	{
+		return true;
 	}
 
 	m_displayProperties.resize(propCount);

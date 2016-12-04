@@ -23,6 +23,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	g_hInst = hInstance;
 	if (createWindow(wClassName, wTitleName) == false)
 	{
+		::OutputDebugString(_T("Failed to create window\r\n"));
 		return 0;
 	}
 
@@ -38,6 +39,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	if (app.create() == false)
 	{
+		::OutputDebugString(_T("Failed to create instance\r\n"));
 		app.destroy();
 		::DestroyWindow(g_hWnd);
 		return app.getResult();
@@ -47,6 +49,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	// -> need to load appropriate extension
 	if (app.createSurface(g_hInst, g_hWnd) == false)
 	{
+		::OutputDebugString(_T("Failed to create surface\r\n"));
 		app.destroy();
 		::DestroyWindow(g_hWnd);
 		return app.getResult();
@@ -54,6 +57,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	if (app.createRenderPass() == false)
 	{
+		::OutputDebugString(_T("Failed to create render pass etc.\r\n"));
 		app.destroy();
 		::DestroyWindow(g_hWnd);
 		return app.getResult();
@@ -67,6 +71,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         DispatchMessage(&msg);
     }
 
+	::OutputDebugString(_T("Exiting..\r\n"));
 	app.destroy();
 	::DestroyWindow(g_hWnd);
 	return app.getResult();

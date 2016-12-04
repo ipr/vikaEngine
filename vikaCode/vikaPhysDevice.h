@@ -27,10 +27,9 @@ public: // make things simpler..
 
 	VkPhysicalDevice m_physDevice;
 
-	// TODO: query limits
-	//VkPhysicalDeviceLimits m_limits = {};
-
+	// see also: VkPhysicalDeviceLimits
 	VkPhysicalDeviceProperties m_deviceProperties = {};
+
 	VkPhysicalDeviceMemoryProperties m_memoryProperties = {};
 	std::vector<VkQueueFamilyProperties> m_queueProperties;
 
