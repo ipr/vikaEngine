@@ -66,4 +66,21 @@ public:
 	bool bindMemory();
 };
 
+// TODO: support for allocator callbacks
+class vikaHostMemory
+{
+protected:
+	VkAllocationCallbacks m_callbacks = {};
+
+    //PFN_vkAllocationFunction                pfnAllocation;
+    //PFN_vkReallocationFunction              pfnReallocation;
+    //PFN_vkFreeFunction                      pfnFree;
+    //PFN_vkInternalAllocationNotification    pfnInternalAllocation;
+    //PFN_vkInternalFreeNotification          pfnInternalFree;
+
+public:
+	vikaHostMemory() {}
+	~vikaHostMemory() {}
+};
+
 #endif

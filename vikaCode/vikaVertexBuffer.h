@@ -47,6 +47,7 @@ public:
 	bool copyToMemory(uint32_t sizeVertices, void *dataVertices);
 
 	void bindVertexBuffer(uint32_t cmdBufferIndex = 0);
+	void bindIndexBuffer(uint32_t cmdBufferIndex = 0);
 };
 
 #endif

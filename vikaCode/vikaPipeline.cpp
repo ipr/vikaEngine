@@ -61,8 +61,8 @@ vikaPipeline::vikaPipeline(vikaDevice *logDevice) :
 
 	m_tesselationState.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
 	m_tesselationState.pNext = NULL;
-	m_tesselationState.flags = 0;
-	m_tesselationState.patchControlPoints = 0;
+	m_tesselationState.flags = 0; // reserved for future use
+	m_tesselationState.patchControlPoints = 0; // >0, <= VkPhysicalDeviceLimits::maxTessellationPatchSize
 
 	m_depthstencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 	m_depthstencil.pNext = NULL;
