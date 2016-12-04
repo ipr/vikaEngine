@@ -21,7 +21,7 @@ class vikaVertexBuffer;
 class vikaPipeline;
 class vikaDescriptorset;
 class vikaSemaphore;
-class vikaBarrier;
+class vikaImageMemoryBarrier;
 
 class vikaRenderPass
 {
@@ -38,7 +38,7 @@ protected:
 	vikaDescriptorset *m_descriptorSet;
 	vikaSemaphore *m_semaphore;
 
-	vikaBarrier *m_imageMemoryBarrier;
+	vikaImageMemoryBarrier *m_imageMemoryBarrier;
 
 public: // simplify..
 	uint32_t m_imageIndex;

@@ -134,7 +134,7 @@ bool vikaRenderPass::create(VkSampleCountFlagBits sampleCount)
 		return false;
 	}
 
-	m_imageMemoryBarrier = new vikaBarrier(VK_IMAGE_LAYOUT_UNDEFINED, 
+	m_imageMemoryBarrier = new vikaImageMemoryBarrier(VK_IMAGE_LAYOUT_UNDEFINED, 
 											VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 
 											VK_IMAGE_ASPECT_COLOR_BIT, 
 											m_swapchain->m_swapchainImages[m_imageIndex]);

@@ -11,32 +11,42 @@
 
 #include <vulkan/vulkan.h>
 
-// image memory barrier:
-// synchronize set of commands
-class vikaBarrier
+class vikaGlobalMemoryBarrier
 {
 protected:
-	// TODO: other possibilities:
-	//VkMemoryBarrier m_globalMemoryBarrier = {};
-	//VkBufferMemoryBarrier m_bufferMemoryBarrier = {};
-
-	VkImageMemoryBarrier m_imageMemoryBarrier = {};
+	VkMemoryBarrier m_globalMemoryBarrier = {};
 
 public:
-	/*
 	// global memory barrier
-	vikaBarrier()
+	vikaGlobalMemoryBarrier()
 	{
 		m_globalMemoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
 		m_globalMemoryBarrier.pNext = NULL;
 		m_globalMemoryBarrier.srcAccessMask = 0;
 		m_globalMemoryBarrier.dstAccessMask = 0;
 	}
-	*/
+	~vikaGlobalMemoryBarrier()
+	{
+		destroy();
+	}
 
-	/*
+	void create(VkCommandBuffer &cmdBuf, VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT)
+	{
+		vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 1, &m_globalMemoryBarrier, 0, NULL, 0, NULL);
+	}
+	void destroy()
+	{
+	}
+};
+
+class vikaBufferMemoryBarrier
+{
+protected:
+	VkBufferMemoryBarrier m_bufferMemoryBarrier = {};
+
+public:
 	// buffer memory barrier
-	vikaBarrier(VkBuffer &buffer, VkDeviceSize size, VkDeviceSize offset = 0)
+	vikaBufferMemoryBarrier(VkBuffer &buffer, VkDeviceSize size, VkDeviceSize offset = 0)
 	{
 		m_bufferMemoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 		m_bufferMemoryBarrier.pNext = NULL;
@@ -48,10 +58,28 @@ public:
 		m_bufferMemoryBarrier.offset = offset;
 		m_bufferMemoryBarrier.size = size;
 	}
-	*/
+	~vikaBufferMemoryBarrier()
+	{
+		destroy();
+	}
 
+	void create(VkCommandBuffer &cmdBuf, VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT)
+	{
+		vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 1, &m_bufferMemoryBarrier, 0, NULL);
+	}
+	void destroy()
+	{
+	}
+};
+
+class vikaImageMemoryBarrier
+{
+protected:
+	VkImageMemoryBarrier m_imageMemoryBarrier = {};
+
+public:
 	// image memory barrier
-	vikaBarrier(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
+	vikaImageMemoryBarrier(VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, VkImage &image)
 	{
 		m_imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 		m_imageMemoryBarrier.pNext = NULL;
@@ -106,17 +134,13 @@ public:
 			break;
 		}
 	}
-	~vikaBarrier()
+	~vikaImageMemoryBarrier()
 	{
 		destroy();
 	}
 
 	void create(VkCommandBuffer &cmdBuf, VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT)
 	{
-		// TODO: support for other possibilities
-		//vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 1, &m_globalMemoryBarrier, 0, NULL, 0, NULL);
-		//vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 1, &m_bufferMemoryBarrier, 0, NULL);
-
 		vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &m_imageMemoryBarrier);
 	}
 	void destroy()
