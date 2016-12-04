@@ -28,6 +28,8 @@ protected:
 public: // make things simpler..
 	//std::vector<const char *> m_requiredExtensions;
 
+	// theoretically, the same build might support 
+	// different window systems on Linux so allow that possibility
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 	VkWin32SurfaceCreateInfoKHR m_win32Info = {};
 #endif
