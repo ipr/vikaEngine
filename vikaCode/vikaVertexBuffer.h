@@ -28,13 +28,16 @@ protected:
 	vikaBuffer *m_buffer;
 
 public: // simplify things..
-	VkDescriptorBufferInfo m_descInfo = {};
-
 	std::vector<VkClearValue> m_clearValues;
 
-	//VkVertexInputBindingDescription m_viBinding = {};
 	std::vector<VkVertexInputBindingDescription> m_viBindings;
 	std::vector<VkVertexInputAttributeDescription> m_viAttribs;
+
+	std::vector<VkDescriptorBufferInfo> m_descInfo;
+
+	// TODO: support array of buffers for better batching
+	//std::vector<VkBuffer> m_buffers; // for binding
+	//std::vector<VkDeviceSize> m_offsets; // for binding
 
 public:
 	vikaVertexBuffer(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);

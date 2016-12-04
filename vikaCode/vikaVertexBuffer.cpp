@@ -62,10 +62,10 @@ bool vikaVertexBuffer::create(VkDeviceSize bufferSize, uint32_t strideSize)
 		return false;
 	}
 
-	m_descInfo.buffer = m_buffer->m_buffer;
-	m_descInfo.offset = 0;
-	m_descInfo.range = m_buffer->m_bufferInfo.size;
-
+	m_descInfo.resize(1);
+	m_descInfo[0].buffer = m_buffer->m_buffer;
+	m_descInfo[0].offset = 0;
+	m_descInfo[0].range = m_buffer->m_bufferInfo.size;
 	return true;
 }
 

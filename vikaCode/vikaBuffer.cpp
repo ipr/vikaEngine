@@ -156,7 +156,8 @@ bool vikaBuffer::copyToMemory(uint32_t size, void *data)
 
 bool vikaBuffer::bindMemory()
 {
-	m_res = vkBindBufferMemory(m_logDevice->getDevice(), m_buffer, m_devMemory->m_devMemory, 0);
+	VkDeviceSize offset = 0; // check, set as member or parameter?
+	m_res = vkBindBufferMemory(m_logDevice->getDevice(), m_buffer, m_devMemory->m_devMemory, offset);
 	if (m_res != VK_SUCCESS)
 	{
 		return false;
