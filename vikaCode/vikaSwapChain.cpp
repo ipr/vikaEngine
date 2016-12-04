@@ -29,7 +29,7 @@ vikaSwapChain::vikaSwapChain(vikaDevice *logicalDev, vikaSurface *surface) :
     m_swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
     m_swapchainInfo.clipped = true;
     m_swapchainInfo.imageColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    m_swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    m_swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT; // also VK_IMAGE_USAGE_TRANSFER_DST_BIT ?
     m_swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     m_swapchainInfo.queueFamilyIndexCount = 0;
     m_swapchainInfo.pQueueFamilyIndices = NULL;

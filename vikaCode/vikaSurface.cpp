@@ -238,6 +238,14 @@ bool vikaSurface::enumerateCapabilities()
 	{}
 	*/
 
+	/*
+	// cannot be blit image destination?
+	if (!(m_caps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
+	{
+		return false;
+	}
+	*/
+
 	return true;
 }
 
