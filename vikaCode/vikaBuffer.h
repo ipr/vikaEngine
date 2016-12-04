@@ -64,6 +64,9 @@ public:
 
 	bool copyToMemory(uint32_t size, void *data);
 	bool bindMemory();
+
+	uint8_t *mapMem();
+	void unmapMem();
 };
 
 // TODO: support for allocator callbacks

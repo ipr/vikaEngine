@@ -165,3 +165,12 @@ bool vikaBuffer::bindMemory()
 	return true;
 }
 
+uint8_t *vikaBuffer::mapMem()
+{
+	return m_devMemory->mapMem(m_memReqs.size);
+}
+
+void vikaBuffer::unmapMem()
+{
+	m_devMemory->unmapMem();
+}

@@ -29,12 +29,21 @@ public: // simplify things..
 	VkQueryPoolCreateInfo m_poolInfo = {};
 	VkQueryPool m_pool;
 
+	// number of "slots" in query
+	//uint32_t m_queryCount;
+
 public:
 	vikaQuery(vikaDevice *logDevice, vikaPhysDevice *physDevice, vikaCommandBuffer *commandBuffer);
 	virtual ~vikaQuery();
 
-	bool create();
+	bool create(uint32_t cmdBufferIndex = 0);
 	void destroy();
+
+	void beginQuery(uint32_t slot, uint32_t cmdBufferIndex = 0);
+	void endQuery(uint32_t slot, uint32_t cmdBufferIndex = 0);
+
+	void copyResults(uint32_t cmdBufferIndex = 0);
+	bool getResults();
 };
 
 #endif // 

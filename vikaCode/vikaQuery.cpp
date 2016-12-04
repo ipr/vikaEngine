@@ -34,9 +34,9 @@ vikaQuery::~vikaQuery()
 	destroy();
 }
 
-bool vikaQuery::create()
+bool vikaQuery::create(uint32_t cmdBufferIndex)
 {
-	uint32_t bufsize = 4 * sizeof(float); // temp
+	uint32_t bufsize = 4 * sizeof(uint64_t); // temp
 	if (m_queryBuffer->create(bufsize, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == false)
 	{
 		return false;
@@ -51,10 +51,10 @@ bool vikaQuery::create()
 		return false;
 	}
 
-	vkCmdResetQueryPool(m_commandBuffer->getCmd(0), // same cmd as elsewhere?
+	vkCmdResetQueryPool(m_commandBuffer->getCmd(cmdBufferIndex), // same cmd as elsewhere?
 						m_pool, 
 						0, // first query
-						2); // count
+						m_poolInfo.queryCount); // count
 
 	// should be within render pass for rest?
 	return true;
@@ -76,3 +76,62 @@ void vikaQuery::destroy()
 	}
 }
 
+void vikaQuery::beginQuery(uint32_t slot, uint32_t cmdBufferIndex)
+{
+	vkCmdBeginQuery(m_commandBuffer->getCmd(cmdBufferIndex), 
+					m_pool, 
+					slot, // slot
+					0); // flags
+}
+
+void vikaQuery::endQuery(uint32_t slot, uint32_t cmdBufferIndex)
+{
+	vkCmdEndQuery(m_commandBuffer->getCmd(cmdBufferIndex), 
+				m_pool, 
+				slot); // slot
+}
+
+void vikaQuery::copyResults(uint32_t cmdBufferIndex)
+{
+	vkCmdCopyQueryPoolResults(m_commandBuffer->getCmd(cmdBufferIndex),
+							m_pool,
+							0, // first query
+							m_poolInfo.queryCount, // count
+							m_queryBuffer->m_buffer,
+							0, // dst offset
+							sizeof(uint64_t), // stride
+							VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
+}
+
+bool vikaQuery::getResults()
+{
+	uint64_t samples_passed[4];
+    samples_passed[0] = 0;
+    samples_passed[1] = 0;
+
+	m_res = vkGetQueryPoolResults(m_logDevice->getDevice(), 
+								m_pool, 
+								0, // first query
+								m_poolInfo.queryCount, // count
+								4 * sizeof(uint64_t),
+								samples_passed,
+								sizeof(uint64_t), // stride
+								VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
+	if (m_res != VK_SUCCESS)
+	{
+		return false;
+	}
+
+	// read back results from buffer
+	uint64_t *mapping = (uint64_t*)m_queryBuffer->mapMem();
+	if (mapping == nullptr)
+	{
+		return false;
+	}
+
+	uint64_t res1 = mapping[0];
+	uint64_t res2 = mapping[1];
+
+	m_queryBuffer->unmapMem();
+	return true;
+}
