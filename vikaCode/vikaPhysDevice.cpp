@@ -108,6 +108,7 @@ bool vikaPhysDevice::enumerateDeviceLayers()
 // depends on: VK_KHR_display (VK_KHR_DISPLAY_EXTENSION_NAME)
 // but not available on Windows at least?
 // (only some embedded devices?)
+/*
 bool vikaPhysDevice::enumerateDisplayProperties()
 {
 	uint32_t propCount = 0;
@@ -130,6 +131,7 @@ bool vikaPhysDevice::enumerateDisplayProperties()
 	}
 	return true;
 }
+*/
 
 // this method is pretty directly from the API-sample under Apache license
 // note: set reqmask to zero if not needed

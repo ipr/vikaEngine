@@ -50,7 +50,9 @@ public:
 	bool enumerateDeviceExtensions();
 	bool enumerateDeviceLayers();
 
+	/*
 	bool enumerateDisplayProperties();
+	*/
 
 	bool memtypeBitsToIndex(const VkFlags reqMask, const uint32_t memReqsTypeBits, uint32_t &typeIndex) const;
 
