@@ -108,6 +108,9 @@
     <ClInclude Include="..\vikaCode\vikaQuery.h">
       <Filter>vikaCode</Filter>
     </ClInclude>
+    <ClInclude Include="..\vikaCode\vikaSubpass.h">
+      <Filter>vikaCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -189,6 +192,9 @@
       <Filter>vikaCode</Filter>
     </ClCompile>
     <ClCompile Include="..\vikaCode\vikaQuery.cpp">
+      <Filter>vikaCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vikaCode\vikaSubpass.cpp">
       <Filter>vikaCode</Filter>
     </ClCompile>
   </ItemGroup>
